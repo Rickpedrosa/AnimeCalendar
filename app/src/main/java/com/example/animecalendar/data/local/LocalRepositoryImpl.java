@@ -1,4 +1,4 @@
 package com.example.animecalendar.data.local;
 
-public class LocalRepositoryImpl {
+public class LocalRepositoryImpl implements LocalRepository {
 }

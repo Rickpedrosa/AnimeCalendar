@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AnimeCalendar</string>
     <string name="this_is_the_detail_fragment">x</string>
+    <string name="search_hint">Anime title...</string>
 </resources>

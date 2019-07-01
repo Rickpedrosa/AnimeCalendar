@@ -1,36 +1,45 @@
 package com.example.animecalendar.ui.search;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.animecalendar.R;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.example.animecalendar.databinding.FragmentSearchBinding;
+import com.example.animecalendar.provider.Providers;
 
 public class SearchFragment extends Fragment {
 
     private NavController navController;
+    private FragmentSearchBinding b;
+    private SearchFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this,
+                Providers.viewModelFragmentFactory(requireActivity(),
+                        SearchFragment.class.getSimpleName()))
+                .get(SearchFragmentViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        b = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false);
+        return b.getRoot();
     }
 
     @Override
@@ -41,14 +50,14 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = ViewCompat.requireViewById(requireView(), R.id.toolbar_detailFragment);
-        CollapsingToolbarLayout collapsingToolbarLayout = ViewCompat.requireViewById(requireView(), R.id.collapsingToolbar);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(
                         R.id.myAnimeSeriesFragment,
                         R.id.calendarFragment,
                         R.id.searchFragment)
                         .build();
-        NavigationUI.setupWithNavController(collapsingToolbarLayout, toolbar, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(b.toolbarSearchFragment,
+                navController,
+                appBarConfiguration);
     }
 }
