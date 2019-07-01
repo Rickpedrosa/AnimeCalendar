@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@+id/searchFragment">
 
+    <fragment
+        android:id="@+id/myAnimeSeriesFragment"
+        android:name="com.example.animecalendar.ui.series.MyAnimeSeriesFragment"
+        android:label="MyAnimeSeriesFragment" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.example.animecalendar.ui.calendar.CalendarFragment"
+        android:label="CalendarFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.animecalendar.ui.search.SearchFragment"
+        android:label="Search" />
 </navigation>

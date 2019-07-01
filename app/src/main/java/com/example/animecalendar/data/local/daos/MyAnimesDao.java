@@ -21,10 +21,10 @@ public interface MyAnimesDao {
     LiveData<MyAnime> getAnimeForDetail(int id);
 
     @Insert()
-    void addAnime();
+    void addAnime(MyAnime myAnime);
 
     @Delete
-    void deleteAnime();
+    void deleteAnime(MyAnime myAnime);
 
     //TODO Update anime app status?
 }
