@@ -6,22 +6,22 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.animecalendar.data.local.LocalRepository;
+import com.example.animecalendar.data.local.AppDatabase;
 
 public class MainActivityViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final LocalRepository repository;
+    private final AppDatabase appDatabase;
 
-    public MainActivityViewModelFactory(Application application, LocalRepository repository) {
+    public MainActivityViewModelFactory(Application application, AppDatabase appDatabase) {
         this.application = application;
-        this.repository = repository;
+        this.appDatabase = appDatabase;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new MainActivityViewModel(application, repository);
+        return (T) new MainActivityViewModel(application, appDatabase);
     }
 }

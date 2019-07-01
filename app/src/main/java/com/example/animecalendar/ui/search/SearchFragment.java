@@ -30,8 +30,8 @@ public class SearchFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this,
-                Providers.viewModelFragmentFactory(requireActivity(),
-                        SearchFragment.class.getSimpleName()))
+                Providers.viewModelFragmentFactory(this,
+                        Providers.FRAGMENTS.SEARCH))
                 .get(SearchFragmentViewModel.class);
     }
 

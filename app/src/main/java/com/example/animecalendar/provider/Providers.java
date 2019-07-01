@@ -1,10 +1,13 @@
 package com.example.animecalendar.provider;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.animecalendar.base.vm.ViewModelFragmentFactory;
+import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepositoryImpl;
+import com.example.animecalendar.data.remote.pojos.anime_episode.AnimeEpisode;
 import com.example.animecalendar.ui.calendar.CalendarFragment;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragment;
 import com.example.animecalendar.ui.detail_episode.DetailAnimeEpisodeFragment;
@@ -13,18 +16,30 @@ import com.example.animecalendar.ui.main.MainActivityViewModelFactory;
 import com.example.animecalendar.ui.search.SearchFragment;
 import com.example.animecalendar.ui.series.MyAnimeSeriesFragment;
 
+import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+import retrofit2.Response;
+
 public class Providers {
 
-    public static final String SEARCH_FRAGMENT_CLASS_NAME = SearchFragment.class.getSimpleName();
-    public static final String CALENDAR_FRAGMENT_CLASS_NAME = CalendarFragment.class.getSimpleName();
-    public static final String ANIME_SERIES_FRAGMENT_CLASS_NAME = MyAnimeSeriesFragment.class.getSimpleName();
-    public static final String DETAIL_ANIME_CLASS_NAME = DetailAnimeFragment.class.getSimpleName();
-    public static final String DETAIL_EPISODE_CLASS_NAME = DetailAnimeEpisodeFragment.class.getSimpleName();
+    public enum FRAGMENTS {
+        SEARCH, CALENDAR, SERIES, DETAIL_ANIME, DETAIL_EPISODE
+    }
 
-    public static ViewModelFragmentFactory viewModelFragmentFactory(FragmentActivity f, String className) {
-        return new ViewModelFragmentFactory(ViewModelProviders.of(f,
-                new MainActivityViewModelFactory(f.getApplication(), new LocalRepositoryImpl()))
-                .get(MainActivityViewModel.class), className);
+    public static ViewModelFragmentFactory viewModelFragmentFactory(Fragment fragment, FRAGMENTS enumFragment) {
+        return new ViewModelFragmentFactory(ViewModelProviders.of(fragment,
+                new MainActivityViewModelFactory(fragment.requireActivity().getApplication(),
+                        AppDatabase.getInstance(fragment.requireContext())))
+                .get(MainActivityViewModel.class), enumFragment);
+    }
+
+    public static Observable<AnimeEpisode> episodeObservableFlatMapped(Observable<Response<AnimeEpisode>> observable) {
+        return observable.flatMap((Function<Response<AnimeEpisode>,
+                ObservableSource<AnimeEpisode>>) animeEpisodeResponse
+                -> Observable.just(Objects.requireNonNull(animeEpisodeResponse.body())));
     }
 
     private Providers() {
