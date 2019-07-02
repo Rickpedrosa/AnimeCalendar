@@ -1,4 +1,4 @@
-package com.example.animecalendar.utils;
+package com.example.animecalendar.providers;
 
 import com.example.animecalendar.data.remote.pojos.anime_episode.AnimeEpisode;
 

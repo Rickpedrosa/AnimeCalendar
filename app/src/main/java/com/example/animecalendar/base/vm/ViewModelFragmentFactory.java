@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.animecalendar.provider.Providers;
+import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.ui.calendar.CalendarFragmentViewModel;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragmentViewModel;
 import com.example.animecalendar.ui.detail_episode.DetailAnimeEpisodeFragmentViewModel;
@@ -15,9 +15,9 @@ import com.example.animecalendar.ui.series.MyAnimeSeriesFragmentViewModel;
 public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
 
     private final MainActivityViewModel mainActivityViewModel;
-    private Providers.FRAGMENTS enumFragment;
+    private VMProvider.FRAGMENTS enumFragment;
 
-    public ViewModelFragmentFactory(MainActivityViewModel mainActivityViewModel, Providers.FRAGMENTS enumFragment) {
+    public ViewModelFragmentFactory(MainActivityViewModel mainActivityViewModel, VMProvider.FRAGMENTS enumFragment) {
         this.mainActivityViewModel = mainActivityViewModel;
         this.enumFragment = enumFragment;
     }
