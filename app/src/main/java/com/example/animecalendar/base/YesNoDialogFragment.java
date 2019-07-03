@@ -1,6 +1,7 @@
 package com.example.animecalendar.base;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -8,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import org.jetbrains.annotations.NotNull;
 
 public class YesNoDialogFragment extends DialogFragment {
     private static final String ARG_TITLE = "ARG_TITLE";
@@ -29,7 +33,7 @@ public class YesNoDialogFragment extends DialogFragment {
     }
 
     public static YesNoDialogFragment newInstance(String title, String message, String yesText,
-                                                  String noText) {
+                                                  String noText, Fragment target, int requestCode) {
         YesNoDialogFragment frg = new YesNoDialogFragment();
         Bundle arguments = new Bundle();
         arguments.putString(ARG_TITLE, title);
@@ -37,6 +41,7 @@ public class YesNoDialogFragment extends DialogFragment {
         arguments.putString(ARG_YES_TEXT, yesText);
         arguments.putString(ARG_NO_TEXT, noText);
         frg.setArguments(arguments);
+        frg.setTargetFragment(target, requestCode);
         return frg;
     }
 
@@ -68,7 +73,17 @@ public class YesNoDialogFragment extends DialogFragment {
         return b.create();
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
+    @Override
+    public void onAttach(@NotNull Context activity) {
+        super.onAttach(activity);
+        try {
+            if (getTargetFragment() != null) {
+                listener = (Listener) getTargetFragment();
+            } else {
+                listener = (Listener) activity;
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Listener must implement YesNoDialogFragment.Listener");
+        }
     }
 }

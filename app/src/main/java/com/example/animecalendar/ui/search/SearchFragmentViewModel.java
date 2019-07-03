@@ -22,6 +22,7 @@ public class SearchFragmentViewModel extends ViewModel {
     private final MainActivityViewModel viewModel;
     private MutableLiveData<List<MyAnime>> animeList = new MutableLiveData<>();
     private Disposable disposable;
+    private int itemPosition;
 
     public SearchFragmentViewModel(MainActivityViewModel mainActivityViewModel) {
         this.viewModel = mainActivityViewModel;
@@ -64,6 +65,14 @@ public class SearchFragmentViewModel extends ViewModel {
 
     void addAnimeToDatabase(MyAnime anime){
         viewModel.getLocalRepository().addAnime(anime);
+    }
+
+    int getItemPosition() {
+        return itemPosition;
+    }
+
+    void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 
     //INNER METHODS ------------------------------------------------------------------------------

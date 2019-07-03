@@ -30,7 +30,7 @@ import com.example.animecalendar.utils.KeyboardUtils;
 
 import java.util.Locale;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements YesNoDialogFragment.Listener {
 
     private NavController navController;
     private FragmentSearchBinding b;
@@ -79,6 +79,7 @@ public class SearchFragment extends Fragment {
         listAdapter = new SearchFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> {
             String format = "Add %s (%d eps) to your list?";
+            viewModel.setItemPosition(position);
             YesNoDialogFragment yn = YesNoDialogFragment.newInstance(
                     listAdapter.getItem(position).getCanonicalTitle(),
                     String.format(Locale.US,
@@ -86,19 +87,10 @@ public class SearchFragment extends Fragment {
                             listAdapter.getItem(position).getCanonicalTitle(),
                             listAdapter.getItem(position).getEpisodeCount()),
                     "YEA BOI",
-                    "NAY BOI"
+                    "NAY BOI",
+                    this,
+                    1
             );
-            yn.setListener(new YesNoDialogFragment.Listener() {
-                @Override
-                public void onPositiveButtonClick(DialogInterface dialog) {
-                    viewModel.addAnimeToDatabase(listAdapter.getItem(position));
-                }
-
-                @Override
-                public void onNegativeButtonClick(DialogInterface dialog) {
-                    dialog.dismiss();
-                }
-            });
             yn.show(requireFragmentManager(), "YesNoDialogFragment");
         });
         b.listSearch.setHasFixedSize(true);
@@ -126,5 +118,15 @@ public class SearchFragment extends Fragment {
     private void observeAnimeData() {
         viewModel.getAnimeList().observe(getViewLifecycleOwner(), myAnimes ->
                 listAdapter.submitList(myAnimes));
+    }
+
+    @Override
+    public void onPositiveButtonClick(DialogInterface dialog) {
+        viewModel.addAnimeToDatabase(listAdapter.getItem(viewModel.getItemPosition()));
+    }
+
+    @Override
+    public void onNegativeButtonClick(DialogInterface dialog) {
+        dialog.dismiss();
     }
 }
