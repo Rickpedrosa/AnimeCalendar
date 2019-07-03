@@ -16,14 +16,14 @@ import com.example.animecalendar.data.remote.repos.AnimeRepositoryImpl;
 public class MainActivityViewModel extends AndroidViewModel {
 
     private final Application application;
-    private final LocalRepository repository;
+    private final LocalRepository localRepository;
     private final AnimeRepository animeRepository;
     private MutableLiveData<Boolean> progressBarController = new MutableLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
         this.application = application;
-        this.repository = new LocalRepositoryImpl();
+        this.localRepository = new LocalRepositoryImpl(appDatabase.myAnimesEpisodesDao(), appDatabase.myAnimesDao());
         this.animeRepository = new AnimeRepositoryImpl();
     }
 
@@ -41,5 +41,9 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void progressBarStop(){
         progressBarController.postValue(false);
+    }
+
+    public LocalRepository getLocalRepository() {
+        return localRepository;
     }
 }

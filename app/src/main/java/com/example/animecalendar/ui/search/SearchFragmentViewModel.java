@@ -62,6 +62,10 @@ public class SearchFragmentViewModel extends ViewModel {
         }
     }
 
+    void addAnimeToDatabase(MyAnime anime){
+        viewModel.getLocalRepository().addAnime(anime);
+    }
+
     //INNER METHODS ------------------------------------------------------------------------------
 
     private void submitAnimeList(List<Datum> listResponse) {

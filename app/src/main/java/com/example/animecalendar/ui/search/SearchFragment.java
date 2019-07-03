@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.search;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,15 +15,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.YesNoDialogFragment;
 import com.example.animecalendar.databinding.FragmentSearchBinding;
+import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.KeyboardUtils;
+
+import java.util.Locale;
 
 public class SearchFragment extends Fragment {
 
@@ -51,7 +55,6 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
-        setupProgressBar();
         setupToolbar();
         setupRecyclerView();
         setupSearchText();
@@ -64,25 +67,38 @@ public class SearchFragment extends Fragment {
         viewModel.disposeObservable();
     }
 
-    private void setupProgressBar() {
-//        b.progressCircular.setVisibility(View.INVISIBLE);
-//        b.lblEmpty.setText(getResources().getString(R.string.lbl_search));
-    }
-
     private void setupToolbar() {
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(
-                        R.id.myAnimeSeriesFragment,
-                        R.id.calendarFragment,
-                        R.id.searchFragment)
-                        .build();
         NavigationUI.setupWithNavController(b.toolbarSearchFragment,
                 navController,
-                appBarConfiguration);
+                AppbarConfigProvider.getAppBarConfiguration());
     }
 
     private void setupRecyclerView() {
         listAdapter = new SearchFragmentViewAdapter();
+        listAdapter.setOnItemClickListener((view, position) -> {
+            String format = "Add %s (%d eps) to your list?";
+            YesNoDialogFragment yn = YesNoDialogFragment.newInstance(
+                    listAdapter.getItem(position).getCanonicalTitle(),
+                    String.format(Locale.US,
+                            format,
+                            listAdapter.getItem(position).getCanonicalTitle(),
+                            listAdapter.getItem(position).getEpisodeCount()),
+                    "YEA BOI",
+                    "NAY BOI"
+            );
+            yn.setListener(new YesNoDialogFragment.Listener() {
+                @Override
+                public void onPositiveButtonClick(DialogInterface dialog) {
+                    viewModel.addAnimeToDatabase(listAdapter.getItem(position));
+                }
+
+                @Override
+                public void onNegativeButtonClick(DialogInterface dialog) {
+                    dialog.dismiss();
+                }
+            });
+            yn.show(requireFragmentManager(), "YesNoDialogFragment");
+        });
         b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
         b.listSearch.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -106,11 +122,6 @@ public class SearchFragment extends Fragment {
 
     private void observeAnimeData() {
         viewModel.getAnimeList().observe(getViewLifecycleOwner(), myAnimes ->
-        {
-//            b.lblEmpty.setVisibility(myAnimes.size() == 0 ? View.VISIBLE : View.INVISIBLE);
-            listAdapter.submitList(myAnimes);
-        });
-//        viewModel.progressBarController().observe(getViewLifecycleOwner(), aBoolean ->
-//                b.progressCircular.setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE));
+                listAdapter.submitList(myAnimes));
     }
 }

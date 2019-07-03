@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
@@ -20,7 +21,7 @@ public interface MyAnimesDao {
     @Query("SELECT * FROM anime WHERE id = :id")
     LiveData<MyAnime> getAnimeForDetail(int id);
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     void addAnime(MyAnime myAnime);
 
     @Delete

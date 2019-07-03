@@ -1,4 +1,60 @@
 package com.example.animecalendar.data.local;
 
+import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+
+import com.example.animecalendar.data.local.daos.MyAnimesDao;
+import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
+import com.example.animecalendar.data.local.entity.MyAnime;
+import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.MyAnimeEpisodesList;
+import com.example.animecalendar.model.MyAnimeList;
+
+import java.util.List;
+
 public class LocalRepositoryImpl implements LocalRepository {
+
+    private final MyAnimesEpisodesDao myAnimesEpisodesDao;
+    private final MyAnimesDao myAnimesDao;
+
+    public LocalRepositoryImpl(MyAnimesEpisodesDao myAnimesEpisodesDao, MyAnimesDao myAnimesDao) {
+        this.myAnimesEpisodesDao = myAnimesEpisodesDao;
+        this.myAnimesDao = myAnimesDao;
+    }
+
+    @Override
+    public LiveData<List<MyAnimeList>> getAnimesToExpose() {
+        return myAnimesDao.getAnimesToExpose();
+    }
+
+    @Override
+    public LiveData<MyAnime> getAnimeForDetail(int id) {
+        return myAnimesDao.getAnimeForDetail(id);
+    }
+
+    @Override
+    public void addAnime(MyAnime myAnime) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.addAnime(myAnime));
+    }
+
+    @Override
+    public void deleteAnime(MyAnime myAnime) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.deleteAnime(myAnime));
+    }
+
+    @Override
+    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id) {
+        return myAnimesEpisodesDao.getAnimeEpisodes(id);
+    }
+
+    @Override
+    public void addEpisodes(List<MyAnimeEpisode> episodes) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.addEpisodes(episodes));
+    }
+
+    @Override
+    public void updateEpisode(MyAnimeEpisode myAnimeEpisode) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisode(myAnimeEpisode));
+    }
 }

@@ -19,9 +19,9 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addEpisode(MyAnimeEpisode episode);
+    @Insert
+    void addEpisodes(List<MyAnimeEpisode> episodes);
 
-    @Update()
+    @Update
     void updateEpisode(MyAnimeEpisode myAnimeEpisode);
 }
