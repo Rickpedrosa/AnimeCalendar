@@ -14,4 +14,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="collapse">
+        <item name="android:textColor">@color/colorBottomItem</item>
+    </style>
+
+    <style name="item_search">
+        <item name="android:textColor">@android:color/background_light</item>
+        <item name="android:shadowColor">@color/colorPrimaryDark</item>
+        <item name="android:shadowDx">5</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
+
 </resources>

@@ -21,7 +21,7 @@ public interface MyAnimesDao {
     @Query("SELECT * FROM anime WHERE id = :id")
     LiveData<MyAnime> getAnimeForDetail(int id);
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert()
     void addAnime(MyAnime myAnime);
 
     @Delete

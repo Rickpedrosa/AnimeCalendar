@@ -8,6 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        app:cardBackgroundColor="@color/colorPrimary"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,34 +21,36 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/item_search"
                 android:id="@+id/lbl_avg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@android:color/background_light"
                 android:textStyle="bold|italic"
                 app:layout_constraintEnd_toEndOf="@+id/img_coverTiny"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/item_search"
                 android:id="@+id/lbl_episodeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@android:color/background_light"
                 android:textStyle="bold|italic"
                 app:layout_constraintEnd_toEndOf="@+id/img_coverTiny"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_avg" />
 
             <TextView
+                style="@style/item_search"
                 android:id="@+id/lbl_canonicalTitle"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -55,11 +58,11 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:textColor="@android:color/background_light"
+                android:text="aidadhadiadada"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/lbl_episodeCount"
+                app:layout_constraintEnd_toStartOf="@+id/lbl_avg"
                 app:layout_constraintStart_toStartOf="@+id/img_coverTiny"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,6 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_episodeCount"
                 app:srcCompat="@drawable/ic_favorite_black_24dp" />

@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/myAnimeSeriesFragment"
         android:name="com.example.animecalendar.ui.series.MyAnimeSeriesFragment"
-        android:label="MyAnimeSeriesFragment" />
+        android:label="My animes" />
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.animecalendar.ui.calendar.CalendarFragment"

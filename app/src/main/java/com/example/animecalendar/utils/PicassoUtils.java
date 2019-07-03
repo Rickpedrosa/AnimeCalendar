@@ -10,7 +10,6 @@ public class PicassoUtils {
     public static void loadPicasso(Context context, String url, ImageView img) {
         Picasso.with(context)
                 .load(url)
-                .error(android.R.color.background_dark)
                 .into(img);
     }
 

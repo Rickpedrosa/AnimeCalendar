@@ -17,7 +17,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.YesNoDialogFragment;
@@ -101,6 +103,7 @@ public class SearchFragment extends Fragment {
         });
         b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
+        b.listSearch.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listSearch.setLayoutManager(new LinearLayoutManager(requireContext()));
         b.listSearch.setAdapter(listAdapter);
     }
