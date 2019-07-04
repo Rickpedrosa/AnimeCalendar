@@ -41,7 +41,7 @@
                     android:hint="@string/search_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
-                    android:padding="8dp"
+                    android:padding="6dp"
                     tools:ignore="Autofill" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>

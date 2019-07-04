@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/myAnimeSeriesFragment"
         android:name="com.example.animecalendar.ui.series.MyAnimeSeriesFragment"
-        android:label="My animes" />
+        android:label="My animes" >
+        <action
+            android:id="@+id/action_myAnimeSeriesFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.animecalendar.ui.calendar.CalendarFragment"
@@ -16,4 +20,13 @@
         android:id="@+id/searchFragment"
         android:name="com.example.animecalendar.ui.search.SearchFragment"
         android:label="Search" />
+    <fragment
+        android:id="@+id/detailAnimeFragment"
+        android:name="com.example.animecalendar.ui.detail_anime.DetailAnimeFragment"
+        android:label="DetailAnimeFragment" >
+        <argument
+            android:name="animeId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>
