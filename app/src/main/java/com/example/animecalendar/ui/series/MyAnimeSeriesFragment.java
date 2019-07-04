@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -68,6 +70,9 @@ public class MyAnimeSeriesFragment extends Fragment {
     private void setupRecyclerView() {
         listAdapter = new MyAnimeSeriesFragmentViewAdapter();
         //TODO ADAPTER LISTENERS
+        listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
+                .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
+                .setAnimeId(listAdapter.getItem(position).getId())));
         b.listAnimes.setHasFixedSize(true);
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
