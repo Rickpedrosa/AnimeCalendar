@@ -8,8 +8,8 @@ import com.example.animecalendar.data.local.daos.MyAnimesDao;
 import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
-import com.example.animecalendar.model.MyAnimeList;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<MyAnimeList>> getAnimesToExpose() {
+    public LiveData<List<AnimesForSeries>> getAnimesToExpose() {
         return myAnimesDao.getAnimesToExpose();
     }
 

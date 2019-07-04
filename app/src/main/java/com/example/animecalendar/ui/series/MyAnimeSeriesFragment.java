@@ -13,6 +13,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
@@ -24,6 +28,7 @@ public class MyAnimeSeriesFragment extends Fragment {
     private FragmentMyanimesBinding b;
     private NavController navController;
     private MyAnimeSeriesFragmentViewModel viewModel;
+    private MyAnimeSeriesFragmentViewAdapter listAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,5 +57,13 @@ public class MyAnimeSeriesFragment extends Fragment {
                 b.appbar,
                 navController,
                 AppbarConfigProvider.getAppBarConfiguration());
+    }
+
+    private void setupRecyclerView() {
+        listAdapter = new MyAnimeSeriesFragmentViewAdapter();
+        b.listAnimes.setHasFixedSize(true);
+        b.listAnimes.setItemAnimator(new DefaultItemAnimator());
+        b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listAnimes.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 }

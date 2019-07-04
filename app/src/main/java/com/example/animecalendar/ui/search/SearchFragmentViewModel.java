@@ -50,12 +50,7 @@ public class SearchFragmentViewModel extends ViewModel {
         return animeList;
     }
 
-    LiveData<Boolean> progressBarController(){
-        return viewModel.getProgressBarController();
-    }
-
     void disposeObservable() {
-        //TODO HMMMM
         if (disposable != null) {
             if (!disposable.isDisposed()) {
                 disposable.dispose();
@@ -80,7 +75,6 @@ public class SearchFragmentViewModel extends ViewModel {
     private void submitAnimeList(List<Datum> listResponse) {
         List<MyAnime> am = new ArrayList<>();
         int id, epcount;
-        //TODO COVERIMAGE EL OBJETO PUEDE VENIR NULL CONTROLAR ANTES DE HACER EL GETTINY
         float avg;
         String synopsis, title, status, ptiny, pmedium, ctiny;
         for (int i = 0; i < Objects.requireNonNull(listResponse).size(); i++) {

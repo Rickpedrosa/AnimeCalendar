@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
-import com.example.animecalendar.model.MyAnimeList;
 
 import java.util.List;
 
 public interface LocalRepository {
-    LiveData<List<MyAnimeList>> getAnimesToExpose();
+    LiveData<List<AnimesForSeries>> getAnimesToExpose();
     LiveData<MyAnime> getAnimeForDetail(int id);
     void addAnime(MyAnime myAnime);
     void deleteAnime(MyAnime myAnime);

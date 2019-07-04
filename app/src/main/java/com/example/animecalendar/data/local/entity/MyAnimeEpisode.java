@@ -20,6 +20,8 @@ import static androidx.room.ForeignKey.CASCADE;
         ))
 public class MyAnimeEpisode {
 
+    //SELECT anime.*,
+
     @PrimaryKey()
     private long id;
     @ColumnInfo(name = "animeId")

@@ -25,7 +25,6 @@ public class YesNoDialogFragment extends DialogFragment {
     private String yesText;
     private String noText;
 
-    @SuppressWarnings("UnusedParameters")
     public interface Listener {
         void onPositiveButtonClick(DialogInterface dialog);
 
