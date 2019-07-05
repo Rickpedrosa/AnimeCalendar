@@ -39,10 +39,13 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:hint="@string/search_hint"
-                    android:imeOptions="actionSearch"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:padding="6dp"
-                    tools:ignore="Autofill" />
+                    tools:ignore="Autofill">
+
+                    <requestFocus />
+                </EditText>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,7 +53,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

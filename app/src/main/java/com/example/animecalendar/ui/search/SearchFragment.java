@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void setupSearchText() {
         b.editSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 KeyboardUtils.hideSoftKeyboard(requireActivity());
                 if (!TextUtils.isEmpty(b.editSearch.getText().toString())) {
                     viewModel.searchAnimes(b.editSearch.getText().toString());

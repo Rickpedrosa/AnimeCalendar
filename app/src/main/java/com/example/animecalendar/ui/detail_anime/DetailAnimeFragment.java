@@ -96,7 +96,7 @@ public class DetailAnimeFragment extends Fragment {
         viewModel.getAnime(animeId).observe(getViewLifecycleOwner(),
                 myAnime -> {
                     b.collapsingToolbar.setTitle(myAnime.getCanonicalTitle());
-                    b.animeDetailed.lblSynopsis.setText(myAnime.getSynopsis());
+                    //b.animeDetailed.lblSynopsis.setText(myAnime.getSynopsis());
                     PicassoUtils.loadPicasso(requireContext(), myAnime.getMediumPosterImage(), b.header);
                 });
 
