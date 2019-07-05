@@ -1,7 +1,5 @@
 package com.example.animecalendar.ui.detail_anime;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -129,7 +127,6 @@ public class DetailAnimeFragmentViewModel extends ViewModel {
                 offset,
                 AnimeService.LIMIT))
                 .concatMap(animeEpisode -> {
-                    // updateCallProgress(animeEpisode, total);
                     progressTrigger.postValue(true);
                     if (animeEpisode.getLinks().getNext() == null) {
                         return RXJavaProvider.episodeObservableFlatMapped(
