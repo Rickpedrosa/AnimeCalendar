@@ -1,7 +1,6 @@
 package com.example.animecalendar.ui.series;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,13 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
-import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-
-import java.util.List;
 
 public class MyAnimeSeriesFragment extends Fragment {
 
@@ -83,9 +76,6 @@ public class MyAnimeSeriesFragment extends Fragment {
     }
 
     private void observeData(){
-        viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> {
-            listAdapter.submitList(animesForSeries);
-            Log.d("RECYCLERISSUE", String.valueOf(animesForSeries.size()));
-        });
+        viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> listAdapter.submitList(animesForSeries));
     }
 }

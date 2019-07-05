@@ -93,7 +93,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
             );
             yn.show(requireFragmentManager(), "YesNoDialogFragment");
         });
-        b.listSearch.setHasFixedSize(true);
+        //b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
         b.listSearch.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listSearch.setLayoutManager(new LinearLayoutManager(requireContext()));
