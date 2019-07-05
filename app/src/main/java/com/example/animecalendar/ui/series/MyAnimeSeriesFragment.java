@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.series;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,19 +69,23 @@ public class MyAnimeSeriesFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
+        LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         listAdapter = new MyAnimeSeriesFragmentViewAdapter();
-        //TODO ADAPTER LISTENERS
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
                 .setAnimeId(listAdapter.getItem(position).getId())));
-        b.listAnimes.setHasFixedSize(true);
+        //b.listAnimes.setHasFixedSize(true);
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.listAnimes.setLayoutManager(new LinearLayoutManager(requireContext()));
+        b.listAnimes.setLayoutManager(manager);
+        //b.listAnimes.setNestedScrollingEnabled(true);
         b.listAnimes.setAdapter(listAdapter);
     }
 
     private void observeData(){
-        viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> listAdapter.submitList(animesForSeries));
+        viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> {
+            listAdapter.submitList(animesForSeries);
+            Log.d("RECYCLERISSUE", String.valueOf(animesForSeries.size()));
+        });
     }
 }
