@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
+import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
@@ -63,19 +65,17 @@ public class MyAnimeSeriesFragment extends Fragment {
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-        listAdapter = new MyAnimeSeriesFragmentViewAdapter();
+        listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> Toast.makeText(requireContext(), String.valueOf(position), Toast.LENGTH_LONG).show());
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
                 .setAnimeId(listAdapter.getItem(position).getId())));
-        //b.listAnimes.setHasFixedSize(true);
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listAnimes.setLayoutManager(manager);
-        //b.listAnimes.setNestedScrollingEnabled(true);
         b.listAnimes.setAdapter(listAdapter);
     }
 
-    private void observeData(){
+    private void observeData() {
         viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> listAdapter.submitList(animesForSeries));
     }
 }

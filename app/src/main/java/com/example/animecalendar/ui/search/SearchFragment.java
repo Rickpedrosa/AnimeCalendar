@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.YesNoDialogFragment;
+import com.example.animecalendar.base.dialogs.YesNoDialogFragment;
 import com.example.animecalendar.databinding.FragmentSearchBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;

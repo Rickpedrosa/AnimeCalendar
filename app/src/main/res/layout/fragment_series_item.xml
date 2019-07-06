@@ -38,7 +38,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/lbl_status"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/img_itemOpts"
                 app:layout_constraintStart_toEndOf="@+id/img_poster"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,6 +50,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/lbl_epCounts"
                 app:layout_constraintStart_toEndOf="@+id/img_poster"
                 app:layout_constraintTop_toBottomOf="@id/lbl_title" />
@@ -62,11 +63,12 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_poster" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/lbl_next_episode"
                 style="@style/item_search"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -74,13 +76,23 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Next episode: 05/08/2019"
                 android:textAlignment="viewEnd"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/lbl_epCounts"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_title" />
+
+            <ImageView
+                android:id="@+id/img_itemOpts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/lbl_next_episode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down_w_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -1,4 +1,4 @@
-package com.example.animecalendar.base;
+package com.example.animecalendar.base.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

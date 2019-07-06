@@ -57,4 +57,9 @@ public class LocalRepositoryImpl implements LocalRepository {
     public void updateEpisode(MyAnimeEpisode myAnimeEpisode) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisode(myAnimeEpisode));
     }
+
+    @Override
+    public void updateAnimeStatus(String status, int animeId) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.updateAnimeStatus(status, animeId));
+    }
 }

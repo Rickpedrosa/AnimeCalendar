@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.animecalendar.data.local.LocalRepository;
+
 @Entity(tableName = "anime",
         indices = {@Index(value = "canonicalTitle")})
 public class MyAnime {
