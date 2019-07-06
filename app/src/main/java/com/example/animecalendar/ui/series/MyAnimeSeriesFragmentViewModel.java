@@ -13,12 +13,29 @@ import java.util.List;
 public class MyAnimeSeriesFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
+    private int itemPosition;
 
     public MyAnimeSeriesFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
-    public LiveData<List<AnimesForSeries>> getAnimesToExpose() {
+    LiveData<List<AnimesForSeries>> getAnimesToExpose() {
         return viewModel.getLocalRepository().getAnimesToExpose();
+    }
+
+    int getItemPosition() {
+        return itemPosition;
+    }
+
+    void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
+    }
+
+    void deleteAnime(int id) {
+        viewModel.getLocalRepository().deleteAnime(id);
+    }
+
+    void updateStatus(String status, int id) {
+        viewModel.getLocalRepository().updateAnimeStatus(status, id);
     }
 }

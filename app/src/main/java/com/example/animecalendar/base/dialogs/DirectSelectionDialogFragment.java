@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.animecalendar.R;
+
 import org.jetbrains.annotations.NotNull;
 
 public class DirectSelectionDialogFragment extends DialogFragment {
@@ -40,7 +42,7 @@ public class DirectSelectionDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         obtainArguments();
-        setCancelable(false);
+        setCancelable(true);
     }
 
 

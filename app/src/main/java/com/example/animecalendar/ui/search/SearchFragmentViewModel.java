@@ -115,7 +115,7 @@ public class SearchFragmentViewModel extends ViewModel {
                 pmedium = "-";
             } else {
                 ptiny = listResponse.get(i).getAttributes().getPosterImage().getTiny();
-                pmedium = listResponse.get(i).getAttributes().getPosterImage().getMedium();
+                pmedium = listResponse.get(i).getAttributes().getPosterImage().getLarge();
             }
 
             if (listResponse.get(i).getAttributes().getCoverImage() == null) {

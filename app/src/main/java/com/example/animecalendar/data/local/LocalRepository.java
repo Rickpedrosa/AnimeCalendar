@@ -22,7 +22,7 @@ public interface LocalRepository {
 
     void addAnime(MyAnime myAnime);
 
-    void deleteAnime(MyAnime myAnime);
+    void deleteAnime(int id);
 
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 

@@ -2,11 +2,9 @@ package com.example.animecalendar.data.local.daos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.model.AnimesForSeries;
@@ -25,14 +23,12 @@ public interface MyAnimesDao {
     @Query("SELECT * FROM anime WHERE id = :id")
     LiveData<MyAnime> getAnimeForDetail(int id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addAnime(MyAnime myAnime);
 
-    @Delete
-    void deleteAnime(MyAnime myAnime);
+    @Query("DELETE FROM anime WHERE id = :id")
+    void deleteAnime(int id);
 
     @Query("UPDATE anime SET status = :status WHERE id = :animeId")
     void updateAnimeStatus(String status, int animeId);
-
-    //TODO Update anime app status?
 }

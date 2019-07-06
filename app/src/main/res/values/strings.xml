@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">AnimeCalendar</string>
     <string name="this_is_the_detail_fragment">x</string>
-    <string name="search_hint">Anime title...</string>
+    <string name="search_hint">Anime title…</string>
     <string name="lbl_search">Search some animes!</string>
+    <array name="dialog_opts_1">
+        <item>Follow</item>
+        <item>Delete</item>
+    </array>
+    <array name="dialog_opts_2">
+        <item>Unfollow</item>
+        <item>Delete</item>
+    </array>
+    <array name="dialog_opts_3">
+        <item>Delete</item>
+    </array>
+    <string name="update_anime_status">%1$s has been updated to %2$s</string>
 </resources>

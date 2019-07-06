@@ -39,7 +39,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void deleteAnime(MyAnime myAnime) {
+    public void deleteAnime(int myAnime) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.deleteAnime(myAnime));
     }
 

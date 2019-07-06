@@ -26,4 +26,10 @@
         <item name="android:shadowRadius">3</item>
     </style>
 
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
+        <item name="android:textColor">@color/colorBottomItem</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

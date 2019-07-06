@@ -81,12 +81,18 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         }
 
         private void setStyles(AnimesForSeries type) {
+           cleanLabels();
             if (type.getStatus().equals(LocalRepository.STATUS_CURRENT)) {
                 b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
             } else if (type.getStatus().equals(LocalRepository.STATUS_FOLLOWING)) {
                 b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
-                b.lblNextEpisode.setText("Next episode: X/X/X");
+                b.lblNextEpisode.setText("Next episode: 06/07/2019");
             }
+        }
+
+        private void cleanLabels() {
+            b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(android.R.color.background_light));
+            b.lblNextEpisode.setText("");
         }
     }
 }
