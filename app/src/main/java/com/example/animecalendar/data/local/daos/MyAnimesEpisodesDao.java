@@ -19,6 +19,12 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 
+    @Query("SELECT ani.id, ep.canonicalTitle, ep.length, ep.number, ep.watchToDate, ep.wasWatched " +
+            "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
+            "GROUP BY ani.id, ep.number " +
+            "ORDER BY ani.id, ep.number")
+    //TODO
+
     @Insert
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
