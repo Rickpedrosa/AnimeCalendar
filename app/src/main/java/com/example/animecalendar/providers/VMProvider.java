@@ -1,6 +1,7 @@
 package com.example.animecalendar.providers;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.animecalendar.base.vm.ViewModelFragmentFactory;
 import com.example.animecalendar.data.local.AppDatabase;
@@ -17,6 +18,13 @@ public class VMProvider {
         return new ViewModelFragmentFactory(androidx.lifecycle.ViewModelProviders.of(fragment,
                 new MainActivityViewModelFactory(fragment.requireActivity().getApplication(),
                         AppDatabase.getInstance(fragment.requireContext())))
+                .get(MainActivityViewModel.class), enumFragment);
+    }
+
+    public static ViewModelFragmentFactory viewModelFragmentFactory(FragmentActivity activity, FRAGMENTS enumFragment) {
+        return new ViewModelFragmentFactory(androidx.lifecycle.ViewModelProviders.of(activity,
+                new MainActivityViewModelFactory(activity.getApplication(),
+                        AppDatabase.getInstance(activity.getApplicationContext())))
                 .get(MainActivityViewModel.class), enumFragment);
     }
 
