@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimesForSeries;
+import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -31,5 +32,6 @@ public interface LocalRepository {
     void updateEpisode(MyAnimeEpisode myAnimeEpisode);
 
     void updateAnimeStatus(String status, int animeId);
+    LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar();
 
 }

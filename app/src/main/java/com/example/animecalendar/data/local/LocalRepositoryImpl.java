@@ -9,6 +9,7 @@ import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimesForSeries;
+import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -61,5 +62,10 @@ public class LocalRepositoryImpl implements LocalRepository {
     @Override
     public void updateAnimeStatus(String status, int animeId) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.updateAnimeStatus(status, animeId));
+    }
+
+    @Override
+    public LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar() {
+        return myAnimesEpisodesDao.getAnimeEpisodesForCalendar();
     }
 }

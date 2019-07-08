@@ -20,8 +20,10 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 
-    @Query("SELECT ani.id AS animeId, ep.id AS episodeId, ep.canonicalTitle AS title, ep.length, ep.number, ep.watchToDate, ep.wasWatched " +
+    @Query("SELECT ani.id AS animeId, ani.canonicalTitle AS animeTitle, ep.id AS episodeId," +
+            " ep.canonicalTitle AS title, ep.length, ep.number, ep.watchToDate, ep.wasWatched " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
+            "WHERE ani.status LIKE 'following'" +
             "GROUP BY ani.id, ep.number " +
             "ORDER BY ani.id, ep.number")
     LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar();

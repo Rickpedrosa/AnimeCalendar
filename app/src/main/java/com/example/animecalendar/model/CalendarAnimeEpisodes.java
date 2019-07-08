@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 public class CalendarAnimeEpisodes {
     @ColumnInfo(name = "animeId")
     private int animeId;
+    @ColumnInfo(name = "animeTitle")
+    private String animeTitle;
     @ColumnInfo(name = "episodeId")
     private int episodeId;
     @ColumnInfo(name = "title")
@@ -18,8 +20,9 @@ public class CalendarAnimeEpisodes {
     @ColumnInfo(name = "wasWatched")
     private int wasWatched;
 
-    public CalendarAnimeEpisodes(int animeId, int episodeId, String title, int length, int number, String watchToDate, int wasWatched) {
+    public CalendarAnimeEpisodes(int animeId, String animeTitle, int episodeId, String title, int length, int number, String watchToDate, int wasWatched) {
         this.animeId = animeId;
+        this.animeTitle = animeTitle;
         this.episodeId = episodeId;
         this.title = title;
         this.length = length;
@@ -34,6 +37,14 @@ public class CalendarAnimeEpisodes {
 
     public void setAnimeId(int animeId) {
         this.animeId = animeId;
+    }
+
+    public String getAnimeTitle() {
+        return animeTitle;
+    }
+
+    public void setAnimeTitle(String animeTitle) {
+        this.animeTitle = animeTitle;
     }
 
     public int getEpisodeId() {
