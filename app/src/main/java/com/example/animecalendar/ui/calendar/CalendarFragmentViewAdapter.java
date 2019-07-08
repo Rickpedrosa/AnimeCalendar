@@ -14,23 +14,24 @@ import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarAnimeItemBinding;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 
 import java.util.Locale;
 
-public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodes, BaseViewHolder<CalendarAnimeEpisodes>> {
+public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodesRecycled, BaseViewHolder<CalendarAnimeEpisodesRecycled>> {
 
     private static final int ANIME_TYPE = 0;
     private static final int EPISODE_TYPE = 1;
     private int id_temp = -1;
     //TODO
-    private static DiffUtil.ItemCallback<CalendarAnimeEpisodes> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodes>() {
+    private static DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled>() {
         @Override
-        public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
+        public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodesRecycled oldItem, @NonNull CalendarAnimeEpisodesRecycled newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
+        public boolean areContentsTheSame(@NonNull CalendarAnimeEpisodesRecycled oldItem, @NonNull CalendarAnimeEpisodesRecycled newItem) {
             return false;
         }
     };
@@ -41,7 +42,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
     @NonNull
     @Override
-    public BaseViewHolder<CalendarAnimeEpisodes> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseViewHolder<CalendarAnimeEpisodesRecycled> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ANIME_TYPE:
                 return new AnimeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
@@ -55,22 +56,14 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnimeEpisodes> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnimeEpisodesRecycled> holder, int position) {
         holder.bind(getItem(position));
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        int id_marker;
-        if (getItem(position).getNumber() == 1 && getItem(position).getAnimeId() != id_temp) {
-            id_marker = 0;
-        } else {
-            id_marker = getItem(position).getAnimeId();
-        }
-
-        id_temp = getItem(position).getAnimeId();
-        if (id_marker == 0) {
+        if (getItem(position).getViewtype() == ANIME_TYPE) {
             return ANIME_TYPE;
         } else {
             return EPISODE_TYPE;
@@ -78,11 +71,11 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     }
 
     @Override
-    public void onViewRecycled(@NonNull BaseViewHolder<CalendarAnimeEpisodes> holder) {
+    public void onViewRecycled(@NonNull BaseViewHolder<CalendarAnimeEpisodesRecycled> holder) {
         super.onViewRecycled(holder);
     }
 
-    class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
+    class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
 
         private FragmentCalendarAnimeItemBinding b;
 
@@ -92,12 +85,12 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodes type) {
+        public void bind(CalendarAnimeEpisodesRecycled type) {
             b.lblAnime.setText(type.getAnimeTitle());
         }
     }
 
-    class EpisodeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
+    class EpisodeViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
 
         private FragmentCalendarEpisodeItemBinding b;
 
@@ -107,9 +100,12 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodes type) {
+        public void bind(CalendarAnimeEpisodesRecycled type) {
             String format = "%d - %s";
+            String formatTwo = "%dmins";
             b.lblEpisode.setText(String.format(Locale.US, format, type.getNumber(), type.getTitle()));
+            b.lblDate.setText(type.getWatchToDate());
+            b.lblLength.setText(String.format(Locale.US, formatTwo, type.getLength()));
         }
     }
 }

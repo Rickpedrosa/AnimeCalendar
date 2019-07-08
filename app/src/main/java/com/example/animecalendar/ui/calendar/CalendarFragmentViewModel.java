@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimeEpisodesForCalendar();
     }
 
-     List<CalendarAnimeEpisodes> listFormatted(List<CalendarAnimeEpisodes> eps) {
+    List<CalendarAnimeEpisodesRecycled> listFormatted(List<CalendarAnimeEpisodes> eps) {
         int id_marker;
         int id_temp = -1;
         List<CalendarAnimeEpisodes> temp = new ArrayList<>(eps);
@@ -35,6 +36,29 @@ public class CalendarFragmentViewModel extends ViewModel {
             }
             id_temp = temp.get(i).getAnimeId();
         }
-        return temp;
+
+        id_temp = -1;
+        List<CalendarAnimeEpisodesRecycled> finalList = new ArrayList<>();
+        CalendarAnimeEpisodesRecycled item;
+        for (int i = 0; i < temp.size(); i++) {
+            item = new CalendarAnimeEpisodesRecycled(
+                    temp.get(i).getAnimeId(),
+                    temp.get(i).getAnimeTitle(),
+                    temp.get(i).getEpisodeId(),
+                    temp.get(i).getTitle(),
+                    temp.get(i).getLength(),
+                    temp.get(i).getNumber(),
+                    temp.get(i).getWatchToDate(),
+                    temp.get(i).getWasWatched()
+            );
+            if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
+                item.setViewtype(0);
+            } else {
+                item.setViewtype(1);
+            }
+            id_temp = temp.get(i).getAnimeId();
+            finalList.add(item);
+        }
+        return finalList;
     }
 }
