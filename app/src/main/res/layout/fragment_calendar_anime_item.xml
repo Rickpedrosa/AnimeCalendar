@@ -26,8 +26,7 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down_w_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/lbl_anime"
@@ -36,7 +35,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Shingeki No Kyojin Season 3 Part 2 ffffffffffffffffffffffff"
                 android:textColor="@color/colorBottomItem"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

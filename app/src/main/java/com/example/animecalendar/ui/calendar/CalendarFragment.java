@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,17 +19,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.DatePicker;
-import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
-import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.ui.series.MyAnimeSeriesFragmentViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -42,6 +35,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     private NavController navController;
     private CalendarFragmentViewAdapter listAdapter;
     private CalendarFragmentViewModel viewModel;
+    private int viewAdapterBoolean = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,12 +81,16 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     private void setupRecyclerView(View view) {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
-        listAdapter = new CalendarFragmentViewAdapter(new OnAnimeArrowClick() {
-            @Override
-            public void hideItems(int position) {
-                Toast.makeText(requireContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
-                listAdapter.showItems(position);
-
+        listAdapter = new CalendarFragmentViewAdapter();
+        listAdapter.setOnItemClickListener((view1, position) -> {
+            if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.ANIME_TYPE) {
+                listAdapter.setShowOrHide(viewAdapterBoolean % 2 != 0);
+                if (viewAdapterBoolean % 2 != 0) {
+                    listAdapter.showItems(position);
+                } else {
+                    listAdapter.hideItems(position);
+                }
+                viewAdapterBoolean++;
             }
         });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
@@ -105,9 +103,6 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         viewModel.getAnimeWithEpisodes().observe(getViewLifecycleOwner(), calendarAnimeEpisodes ->
                 listAdapter.submitList(viewModel.listFormatted(calendarAnimeEpisodes)));
     }
-
-    //TODO MOVER A OTRO SITIO
-
 
     @Override
     public void onSelect(List<Calendar> calendar) {
