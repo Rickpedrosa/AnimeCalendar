@@ -58,12 +58,6 @@ public class DetailAnimeFragment extends Fragment {
         observeData();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        viewModel.disposeObservable();
-    }
-
     private void obtainArguments() {
         animeId = DetailAnimeFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getAnimeId();
     }
@@ -103,12 +97,6 @@ public class DetailAnimeFragment extends Fragment {
         viewModel.getProgressTrigger().observe(getViewLifecycleOwner(), aBoolean ->
                 b.animeDetailed.epProgressBar.setVisibility(aBoolean ? View.VISIBLE:View.INVISIBLE));
 
-        viewModel.getAnimeEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> {
-            if (myAnimeEpisodesLists.size() == 0) {
-                viewModel.retrieveRetroEpisodes(animeId);
-            } else {
-                listAdapter.submitList(myAnimeEpisodesLists);
-            }
-        });
+        viewModel.getAnimeEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> listAdapter.submitList(myAnimeEpisodesLists));
     }
 }

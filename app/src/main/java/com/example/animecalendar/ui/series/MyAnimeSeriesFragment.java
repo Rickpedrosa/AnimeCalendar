@@ -24,12 +24,9 @@ import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
-import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Arrays;
 
 public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener {
 
@@ -41,8 +38,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this,
-                VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.SERIES))
+        viewModel = ViewModelProviders.of(requireActivity(),
+                VMProvider.viewModelFragmentFactory(requireActivity(), VMProvider.FRAGMENTS.SERIES))
                 .get(MyAnimeSeriesFragmentViewModel.class);
     }
 
@@ -71,18 +68,15 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-        listAdapter = new MyAnimeSeriesFragmentViewAdapter(new OnOptionsClickListener() {
-            @Override
-            public void showOptions(int position) {
-                DirectSelectionDialogFragment ds = DirectSelectionDialogFragment.newInstance(
-                        "",
-                        getArrayForDialog(position),
-                        MyAnimeSeriesFragment.this,
-                        2
-                );
-                viewModel.setItemPosition(position);
-                ds.show(requireFragmentManager(), "POG");
-            }
+        listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> {
+            DirectSelectionDialogFragment ds = DirectSelectionDialogFragment.newInstance(
+                    "",
+                    getArrayForDialog(position),
+                    MyAnimeSeriesFragment.this,
+                    2
+            );
+            viewModel.setItemPosition(position);
+            ds.show(requireFragmentManager(), "POG");
         });
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
@@ -150,9 +144,13 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void updateStatus(String status) {
         viewModel.updateStatus(status, listAdapter.getItem(viewModel.getItemPosition()).getId());
+        if (status.equals(LocalRepository.STATUS_FOLLOWING)) {
+            viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
+        }
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), status),
                 Snackbar.LENGTH_LONG).show();
+
     }
 }

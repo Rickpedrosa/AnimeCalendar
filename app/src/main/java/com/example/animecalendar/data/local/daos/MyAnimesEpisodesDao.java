@@ -25,7 +25,7 @@ public interface MyAnimesEpisodesDao {
 //            "ORDER BY ani.id, ep.number")
     //TODO
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
     @Update
