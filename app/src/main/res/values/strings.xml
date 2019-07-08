@@ -15,4 +15,5 @@
         <item>Delete</item>
     </array>
     <string name="update_anime_status">%1$s has been updated to %2$s</string>
+    <string name="hide_ep_title">Hide episodes</string>
 </resources>

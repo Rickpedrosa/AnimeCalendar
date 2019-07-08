@@ -20,7 +20,8 @@ import java.util.Locale;
 public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodesRecycled, BaseViewHolder<CalendarAnimeEpisodesRecycled>> {
 
     static final int ANIME_TYPE = 0;
-    private static final int EPISODE_TYPE = 1;
+    static final int EPISODE_TYPE = 1;
+    @SuppressWarnings("WeakerAccess")
     static final int HIDDEN_ITEM_TYPE = 2;
     //TODO
     private static DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled>() {
@@ -75,6 +76,17 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
     }
 
+    void hideAllEpisodes() {
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getItem(i).getViewtype() == EPISODE_TYPE) {
+                getItem(i).setViewtype(HIDDEN_ITEM_TYPE);
+            } else if (getItem(i).getViewtype() == ANIME_TYPE) {
+                getItem(i).setCollapse(CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     void showItems(int position) {
         int itemCount = 0;
         for (int i = (position + 1); i < getItemCount(); i++) {
@@ -117,7 +129,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         @Override
         public void bind(CalendarAnimeEpisodesRecycled type) {
             setDefaultStyle();
-            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == 1
+            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == CalendarAnimeEpisodesRecycled.EXPAND_TITLE
                     ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
             b.lblAnime.setText(type.getAnimeTitle());
         }
@@ -138,11 +150,18 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
         @Override
         public void bind(CalendarAnimeEpisodesRecycled type) {
+            setDefaultStyle();
             String format = "%d - %s";
             String formatTwo = "%dmins";
             b.lblEpisode.setText(String.format(Locale.US, format, type.getNumber(), type.getTitle()));
             b.lblDate.setText(type.getWatchToDate());
             b.lblLength.setText(String.format(Locale.US, formatTwo, type.getLength()));
+            b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
+                    R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
+        }
+
+        private void setDefaultStyle() {
+            b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
         }
     }
 

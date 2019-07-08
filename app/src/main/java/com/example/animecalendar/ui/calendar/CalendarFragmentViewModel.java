@@ -21,6 +21,10 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimeEpisodesForCalendar();
     }
 
+    void updateEpisodeStatus(int value, int id) {
+        viewModel.getLocalRepository().updateEpisodeStatus(value, id);
+    }
+
     List<CalendarAnimeEpisodesRecycled> listFormatted(List<CalendarAnimeEpisodes> eps) {
         int id_marker;
         int id_temp = -1;
@@ -53,10 +57,10 @@ public class CalendarFragmentViewModel extends ViewModel {
             );
             if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
                 item.setViewtype(CalendarFragmentViewAdapter.ANIME_TYPE);
-                item.setCollapse(0);
+                item.setCollapse(CalendarAnimeEpisodesRecycled.EXPAND_TITLE);
             } else {
-                item.setViewtype(CalendarFragmentViewAdapter.HIDDEN_ITEM_TYPE);
-                item.setCollapse(-1);
+                item.setViewtype(CalendarFragmentViewAdapter.EPISODE_TYPE);
+                item.setCollapse(CalendarAnimeEpisodesRecycled.DUMMY_COLLAPSE);
             }
             id_temp = temp.get(i).getAnimeId();
             finalList.add(item);

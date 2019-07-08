@@ -33,5 +33,6 @@ public interface LocalRepository {
 
     void updateAnimeStatus(String status, int animeId);
     LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar();
+    void updateEpisodeStatus(int value, int id);
 
 }

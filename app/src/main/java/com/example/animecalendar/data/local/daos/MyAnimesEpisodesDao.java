@@ -33,4 +33,7 @@ public interface MyAnimesEpisodesDao {
 
     @Update
     void updateEpisode(MyAnimeEpisode myAnimeEpisode);
+
+    @Query("UPDATE episodes SET wasWatched = :value WHERE id = :id")
+    void updateEpisodeStatus(int value, int id);
 }

@@ -2,6 +2,9 @@ package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.recycler.BaseListAdapter;
+import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
@@ -35,11 +39,11 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     private NavController navController;
     private CalendarFragmentViewAdapter listAdapter;
     private CalendarFragmentViewModel viewModel;
-    private int viewAdapterBoolean = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         viewModel = ViewModelProviders.of(this,
                 VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CALENDAR))
                 .get(CalendarFragmentViewModel.class);
@@ -65,6 +69,20 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         observeData();
     }
 
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.calendar_menu, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.hideEpisodes) {
+//            listAdapter.hideAllEpisodes();
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     private void setupViews(View view) {
         setupRecyclerView(view);
         setupToolbar(view);
@@ -72,6 +90,14 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     private void setupToolbar(View view) {
         Toolbar toolbar = ViewCompat.requireViewById(view, R.id.toolbar_calendarFragment);
+        toolbar.inflateMenu(R.menu.calendar_menu);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.hideEpisodes) {
+                listAdapter.hideAllEpisodes();
+                return true;
+            }
+            return false;
+        });
         NavigationUI.setupWithNavController(
                 toolbar,
                 navController,
@@ -84,12 +110,18 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view1, position) -> {
             if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.ANIME_TYPE) {
-                if (listAdapter.getItem(position).getCollapse() == 1) {
+                if (listAdapter.getItem(position).getCollapse() == CalendarAnimeEpisodesRecycled.EXPAND_TITLE) {
                     listAdapter.hideItems(position);
-                    listAdapter.getItem(position).setCollapse(0);
+                    listAdapter.getItem(position).setCollapse(CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE);
                 } else {
                     listAdapter.showItems(position);
-                    listAdapter.getItem(position).setCollapse(1);
+                    listAdapter.getItem(position).setCollapse(CalendarAnimeEpisodesRecycled.EXPAND_TITLE);
+                }
+            } else if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.EPISODE_TYPE) {
+                if (listAdapter.getItem(position).getWasWatched() == 0) {
+                    viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
+                } else {
+                    viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
                 }
             }
         });

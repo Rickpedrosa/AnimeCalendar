@@ -68,4 +68,9 @@ public class LocalRepositoryImpl implements LocalRepository {
     public LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar() {
         return myAnimesEpisodesDao.getAnimeEpisodesForCalendar();
     }
+
+    @Override
+    public void updateEpisodeStatus(int value, int id) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeStatus(value, id));
+    }
 }

@@ -4,6 +4,9 @@ public class CalendarAnimeEpisodesRecycled extends CalendarAnimeEpisodes {
 
     private int viewtype;
     private int collapse;
+    public static final int COLLAPSE_TITLE = 0;
+    public static final int EXPAND_TITLE = 1;
+    public static final int DUMMY_COLLAPSE = -1;
 
     public CalendarAnimeEpisodesRecycled(int animeId, String animeTitle, int episodeId, String title,
                                          int length, int number, String watchToDate, int wasWatched) {
