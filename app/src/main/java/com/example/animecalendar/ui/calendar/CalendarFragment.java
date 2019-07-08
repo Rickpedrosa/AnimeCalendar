@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -86,7 +87,14 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     private void setupRecyclerView(View view) {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
-        listAdapter = new CalendarFragmentViewAdapter();
+        listAdapter = new CalendarFragmentViewAdapter(new OnAnimeArrowClick() {
+            @Override
+            public void hideItems(int position) {
+                Toast.makeText(requireContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                listAdapter.showItems(position);
+
+            }
+        });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
         listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
