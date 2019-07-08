@@ -53,8 +53,10 @@ public class CalendarFragmentViewModel extends ViewModel {
             );
             if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
                 item.setViewtype(CalendarFragmentViewAdapter.ANIME_TYPE);
+                item.setCollapse(0);
             } else {
                 item.setViewtype(CalendarFragmentViewAdapter.HIDDEN_ITEM_TYPE);
+                item.setCollapse(-1);
             }
             id_temp = temp.get(i).getAnimeId();
             finalList.add(item);

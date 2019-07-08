@@ -22,7 +22,6 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     static final int ANIME_TYPE = 0;
     private static final int EPISODE_TYPE = 1;
     static final int HIDDEN_ITEM_TYPE = 2;
-    private boolean showOrHide;
     //TODO
     private static DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled>() {
         @Override
@@ -106,10 +105,6 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         notifyItemRangeChanged(position, itemCount);
     }
 
-    void setShowOrHide(boolean showOrHide) {
-        this.showOrHide = showOrHide;
-    }
-
     class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
 
         private FragmentCalendarAnimeItemBinding b;
@@ -122,7 +117,8 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         @Override
         public void bind(CalendarAnimeEpisodesRecycled type) {
             setDefaultStyle();
-            b.imgOptions.setImageResource(showOrHide ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
+            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == 1
+                    ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
             b.lblAnime.setText(type.getAnimeTitle());
         }
 

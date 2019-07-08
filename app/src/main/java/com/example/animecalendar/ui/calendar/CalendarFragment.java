@@ -84,13 +84,13 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view1, position) -> {
             if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.ANIME_TYPE) {
-                listAdapter.setShowOrHide(viewAdapterBoolean % 2 != 0);
-                if (viewAdapterBoolean % 2 != 0) {
-                    listAdapter.showItems(position);
-                } else {
+                if (listAdapter.getItem(position).getCollapse() == 1) {
                     listAdapter.hideItems(position);
+                    listAdapter.getItem(position).setCollapse(0);
+                } else {
+                    listAdapter.showItems(position);
+                    listAdapter.getItem(position).setCollapse(1);
                 }
-                viewAdapterBoolean++;
             }
         });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
