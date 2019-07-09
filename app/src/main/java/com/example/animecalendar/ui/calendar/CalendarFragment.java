@@ -105,7 +105,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         );
     }
 
-    private void setupRecyclerView(View view) {//TODO USAR TRANSFORMATIONS Y VIEWMODEL DE ACTIVITY
+    private void setupRecyclerView(View view) {//TODO CREAR TABLA AUXILIAR CON EL NUEVO FORMATO DE OBJETO DE EPISODIOS
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view1, position) -> {
