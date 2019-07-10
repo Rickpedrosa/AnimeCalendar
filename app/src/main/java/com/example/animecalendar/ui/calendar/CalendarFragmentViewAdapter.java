@@ -18,6 +18,8 @@ import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 
 import java.util.Locale;
 
+import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+
 @SuppressWarnings("WeakerAccess")
 public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodes, BaseViewHolder<CalendarAnimeEpisodes>> {
 
@@ -130,16 +132,21 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
         @Override
         public void bind(CalendarAnimeEpisodes type) {
-            setDefaultStyle();
-            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == CalendarAnimeEpisodesRecycled.EXPAND_TITLE
+            setDefaultStyle(type);
+            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
                     ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
+            b.imgCheck.setVisibility(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
+                    ? View.VISIBLE : View.GONE);
+            b.lblEpTitle.setVisibility(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
+                    ? View.VISIBLE : View.GONE);
             b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
                     R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
-            b.lblAnime.setText(type.getAnimeTitle());
-            b.lblEpTitle.setText(type.getEpisodeTitle());
+
         }
 
-        private void setDefaultStyle() {
+        private void setDefaultStyle(CalendarAnimeEpisodes type) {
+            b.lblAnime.setText(type.getAnimeTitle());
+            b.lblEpTitle.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
             b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
         }

@@ -64,7 +64,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
-                android:textColor="@color/colorBottomItem"
+                android:textColor="@android:color/background_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/img_check"
                 app:layout_constraintStart_toStartOf="parent" />
