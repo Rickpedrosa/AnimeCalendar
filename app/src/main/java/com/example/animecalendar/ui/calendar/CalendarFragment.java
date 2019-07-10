@@ -111,42 +111,10 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         );
     }
 
-    private void setupRecyclerView(View view) {//TODO CREAR TABLA AUXILIAR CON EL NUEVO FORMATO DE OBJETO DE EPISODIOS
+    private void setupRecyclerView(View view) {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
-        listAdapter = new CalendarFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view1, position) -> {
-//            if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
-//                if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
-//                    listAdapter.hideItems(position);
-//                    listAdapter.getItem(position).setCollapse(COLLAPSE_TITLE);
-//                } else {
-//                    listAdapter.showItems(position);
-//                    listAdapter.getItem(position).setCollapse(EXPAND_TITLE);
-//                }
-//            }
-//            else
-//            if (listAdapter.getItem(position).getViewType() == EPISODE_TYPE) {
-
-            if (listAdapter.getItem(position).getWasWatched() == 0) {
-                viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
-            } else {
-                viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
-            }
-//            }
-        });
-        listAdapter.setOnItemLongClickListener(new BaseListAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
-                    if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
-                        hideItems(position);
-                    } else {
-                        showItems(position);
-                    }
-                }
-                return true;
-            }
-        });
+        listAdapter = new CalendarFragmentViewAdapter(CalendarFragment.this::changeEpisodeStatus);
+        listAdapter.setOnItemClickListener((view1, position) -> onEpisodeClickLogic(position));
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
         listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -162,7 +130,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     public void onSelect(List<Calendar> calendar) {
     }
 
-    void showItems(int position) {
+    private void showItems(int position) {
         for (int i = (position + 1); i < listAdapter.getItemCount(); i++) {
             if (listAdapter.getItem(i).getViewType() == ANIME_TYPE) {
                 break;
@@ -172,7 +140,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         viewModel.updateEpisodeCollapse(EXPAND_TITLE, listAdapter.getItem(position).getEpisodeId());
     }
 
-    void hideItems(int position) {
+    private void hideItems(int position) {
         for (int i = (position + 1); i < listAdapter.getItemCount(); i++) {
             if (listAdapter.getItem(i).getViewType() == ANIME_TYPE) {
                 break;
@@ -180,5 +148,28 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
             viewModel.updateEpisodeViewType(HIDDEN_ITEM_TYPE, listAdapter.getItem(i).getEpisodeId());
         }
         viewModel.updateEpisodeCollapse(COLLAPSE_TITLE, listAdapter.getItem(position).getEpisodeId());
+    }
+
+    private void onEpisodeClickLogic(int position) {
+        if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
+            if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
+                hideItems(position);
+            } else {
+                showItems(position);
+            }
+        }
+        if (listAdapter.getItem(position).getWasWatched() == 0 && listAdapter.getItem(position).getCollapse() != COLLAPSE_TITLE) {
+            viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
+        } else {
+            viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
+        }
+    }
+
+    private void changeEpisodeStatus(int position){
+        if (listAdapter.getItem(position).getWasWatched() == 0) {
+            viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
+        } else {
+            viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
+        }
     }
 }

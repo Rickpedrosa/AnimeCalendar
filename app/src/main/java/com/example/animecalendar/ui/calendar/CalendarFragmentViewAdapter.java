@@ -26,7 +26,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     public static final int ANIME_TYPE = 0;
     public static final int EPISODE_TYPE = 1;
     public static final int HIDDEN_ITEM_TYPE = 2;
-    //TODO
+    private OnAnimeCheckClick onAnimeCheckClick;
     private static DiffUtil.ItemCallback<CalendarAnimeEpisodes> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodes>() {
         @Override
         public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
@@ -42,8 +42,9 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
     };
 
-    CalendarFragmentViewAdapter() {
+    CalendarFragmentViewAdapter(OnAnimeCheckClick onAnimeCheckClick) {
         super(diffUtilItemCallback);
+        this.onAnimeCheckClick = onAnimeCheckClick;
     }
 
     @NonNull
@@ -91,36 +92,6 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         notifyDataSetChanged();
     }
 
-    void showItems(int position) {
-        int itemCount = 0;
-        for (int i = (position + 1); i < getItemCount(); i++) {
-            if (getItem(i).getViewType() == ANIME_TYPE) {
-                itemCount = i;
-                break;
-            }
-            if (i == getItemCount() - 1) {
-                itemCount = getItemCount();
-            }
-            getItem(i).setViewType(EPISODE_TYPE);
-        }
-        notifyItemRangeChanged(position, itemCount);
-    }
-
-    void hideItems(int position) {
-        int itemCount = 0;
-        for (int i = (position + 1); i < getItemCount(); i++) {
-            if (getItem(i).getViewType() == ANIME_TYPE) {
-                itemCount = i;
-                break;
-            }
-            if (i == getItemCount() - 1) {
-                itemCount = getItemCount();
-            }
-            getItem(i).setViewType(HIDDEN_ITEM_TYPE);
-        }
-        notifyItemRangeChanged(position, itemCount);
-    }
-
     class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
 
         private FragmentCalendarAnimeItemBinding b;
@@ -149,6 +120,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
             b.lblEpTitle.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
             b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
+            b.imgCheck.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
         }
     }
 
@@ -163,16 +135,16 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
         @Override
         public void bind(CalendarAnimeEpisodes type) {
-            setDefaultStyle();
-            b.lblEpisode.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
-            b.lblDate.setText(type.getWatchToDate());
-            b.lblLength.setText(String.format(Locale.US, "%dmins", type.getLength()));
+            setDefaultStyle(type);
             b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
                     R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
         }
 
-        private void setDefaultStyle() {
+        private void setDefaultStyle(CalendarAnimeEpisodes type) {
             b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
+            b.lblEpisode.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
+            b.lblDate.setText(type.getWatchToDate());
+            b.lblLength.setText(String.format(Locale.US, "%dmins", type.getLength()));
         }
     }
 
