@@ -99,7 +99,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         toolbar.inflateMenu(R.menu.calendar_menu);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.hideEpisodes) {
-                listAdapter.hideAllEpisodes();
+                hideAllItems();
                 return true;
             }
             return false;
@@ -150,6 +150,16 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         viewModel.updateEpisodeCollapse(COLLAPSE_TITLE, listAdapter.getItem(position).getEpisodeId());
     }
 
+    private void hideAllItems() {
+        for (int i = 0; i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getViewType() == EPISODE_TYPE) {
+                viewModel.updateEpisodeViewType(HIDDEN_ITEM_TYPE, listAdapter.getItem(i).getEpisodeId());
+            } else if (listAdapter.getItem(i).getViewType() == ANIME_TYPE) {
+                viewModel.updateEpisodeCollapse(COLLAPSE_TITLE, listAdapter.getItem(i).getEpisodeId());
+            }
+        }
+    }
+
     private void onEpisodeClickLogic(int position) {
         if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
             if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
@@ -165,7 +175,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         }
     }
 
-    private void changeEpisodeStatus(int position){
+    private void changeEpisodeStatus(int position) {
         if (listAdapter.getItem(position).getWasWatched() == 0) {
             viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
         } else {

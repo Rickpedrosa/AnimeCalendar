@@ -81,17 +81,6 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
     }
 
-    void hideAllEpisodes() {
-        for (int i = 0; i < getItemCount(); i++) {
-            if (getItem(i).getViewType() == EPISODE_TYPE) {
-                getItem(i).setViewType(HIDDEN_ITEM_TYPE);
-            } else if (getItem(i).getViewType() == ANIME_TYPE) {
-                getItem(i).setCollapse(CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
     class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
 
         private FragmentCalendarAnimeItemBinding b;
@@ -121,6 +110,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
             b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
             b.imgCheck.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
+            b.lblEpTitle.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
         }
     }
 
