@@ -168,9 +168,9 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
                 showItems(position);
             }
         }
-        if (listAdapter.getItem(position).getWasWatched() == 0 && listAdapter.getItem(position).getCollapse() != COLLAPSE_TITLE) {
+        if (listAdapter.getItem(position).getWasWatched() == 0 && listAdapter.getItem(position).getViewType() != ANIME_TYPE) {
             viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
-        } else {
+        } else if (listAdapter.getItem(position).getViewType() != ANIME_TYPE) {
             viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
         }
     }

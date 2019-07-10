@@ -107,7 +107,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         private void setDefaultStyle(CalendarAnimeEpisodes type) {
             b.lblAnime.setText(type.getAnimeTitle());
             b.lblEpTitle.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
-            b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
+            //b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
             b.imgCheck.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
             b.lblEpTitle.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
