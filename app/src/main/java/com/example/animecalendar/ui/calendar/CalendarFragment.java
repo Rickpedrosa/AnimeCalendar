@@ -32,6 +32,12 @@ import com.example.animecalendar.providers.VMProvider;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
+import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.EPISODE_TYPE;
+import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.HIDDEN_ITEM_TYPE;
+
 public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     //    private CalendarView calendarView;
@@ -109,20 +115,36 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view1, position) -> {
-            if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.ANIME_TYPE) {
-                if (listAdapter.getItem(position).getCollapse() == CalendarAnimeEpisodesRecycled.EXPAND_TITLE) {
-                    listAdapter.hideItems(position);
-                    listAdapter.getItem(position).setCollapse(CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE);
-                } else {
-                    listAdapter.showItems(position);
-                    listAdapter.getItem(position).setCollapse(CalendarAnimeEpisodesRecycled.EXPAND_TITLE);
+//            if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
+//                if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
+//                    listAdapter.hideItems(position);
+//                    listAdapter.getItem(position).setCollapse(COLLAPSE_TITLE);
+//                } else {
+//                    listAdapter.showItems(position);
+//                    listAdapter.getItem(position).setCollapse(EXPAND_TITLE);
+//                }
+//            }
+//            else
+//            if (listAdapter.getItem(position).getViewType() == EPISODE_TYPE) {
+
+            if (listAdapter.getItem(position).getWasWatched() == 0) {
+                viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
+            } else {
+                viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
+            }
+//            }
+        });
+        listAdapter.setOnItemLongClickListener(new BaseListAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
+                    if (listAdapter.getItem(position).getCollapse() == EXPAND_TITLE) {
+                        hideItems(position);
+                    } else {
+                        showItems(position);
+                    }
                 }
-            } else if (listAdapter.getItem(position).getViewtype() == CalendarFragmentViewAdapter.EPISODE_TYPE) {
-                if (listAdapter.getItem(position).getWasWatched() == 0) {
-                    viewModel.updateEpisodeStatus(1, listAdapter.getItem(position).getEpisodeId());
-                } else {
-                    viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
-                }
+                return true;
             }
         });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
@@ -133,11 +155,30 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     private void observeData() {
         viewModel.getAnimeWithEpisodes().observe(getViewLifecycleOwner(), calendarAnimeEpisodes ->
-                listAdapter.submitList(viewModel.listFormatted(calendarAnimeEpisodes)));
+                listAdapter.submitList(calendarAnimeEpisodes));
     }
 
     @Override
     public void onSelect(List<Calendar> calendar) {
+    }
 
+    void showItems(int position) {
+        for (int i = (position + 1); i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getViewType() == ANIME_TYPE) {
+                break;
+            }
+            viewModel.updateEpisodeViewType(EPISODE_TYPE, listAdapter.getItem(i).getEpisodeId());
+        }
+        viewModel.updateEpisodeCollapse(EXPAND_TITLE, listAdapter.getItem(position).getEpisodeId());
+    }
+
+    void hideItems(int position) {
+        for (int i = (position + 1); i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getViewType() == ANIME_TYPE) {
+                break;
+            }
+            viewModel.updateEpisodeViewType(HIDDEN_ITEM_TYPE, listAdapter.getItem(i).getEpisodeId());
+        }
+        viewModel.updateEpisodeCollapse(COLLAPSE_TITLE, listAdapter.getItem(position).getEpisodeId());
     }
 }

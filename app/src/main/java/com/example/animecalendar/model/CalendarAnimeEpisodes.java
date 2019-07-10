@@ -9,8 +9,8 @@ public class CalendarAnimeEpisodes {
     private String animeTitle;
     @ColumnInfo(name = "episodeId")
     private int episodeId;
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "episodeTitle")
+    private String episodeTitle;
     @ColumnInfo(name = "length")
     private int length;
     @ColumnInfo(name = "number")
@@ -19,16 +19,23 @@ public class CalendarAnimeEpisodes {
     private String watchToDate;
     @ColumnInfo(name = "wasWatched")
     private int wasWatched;
+    @ColumnInfo(name = "viewType")
+    private int viewType;
+    @ColumnInfo(name = "collapse")
+    private int collapse;
 
-    public CalendarAnimeEpisodes(int animeId, String animeTitle, int episodeId, String title, int length, int number, String watchToDate, int wasWatched) {
+    public CalendarAnimeEpisodes(int animeId, String animeTitle, int episodeId, String episodeTitle,
+                                 int length, int number, String watchToDate, int wasWatched, int viewType, int collapse) {
         this.animeId = animeId;
         this.animeTitle = animeTitle;
         this.episodeId = episodeId;
-        this.title = title;
+        this.episodeTitle = episodeTitle;
         this.length = length;
         this.number = number;
         this.watchToDate = watchToDate;
         this.wasWatched = wasWatched;
+        this.viewType = viewType;
+        this.collapse = collapse;
     }
 
     public int getAnimeId() {
@@ -55,12 +62,12 @@ public class CalendarAnimeEpisodes {
         this.episodeId = episodeId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getEpisodeTitle() {
+        return episodeTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEpisodeTitle(String episodeTitle) {
+        this.episodeTitle = episodeTitle;
     }
 
     public int getLength() {
@@ -93,5 +100,21 @@ public class CalendarAnimeEpisodes {
 
     public void setWasWatched(int wasWatched) {
         this.wasWatched = wasWatched;
+    }
+
+    public int getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
+
+    public int getCollapse() {
+        return collapse;
+    }
+
+    public void setCollapse(int collapse) {
+        this.collapse = collapse;
     }
 }

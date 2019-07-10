@@ -27,6 +27,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.DUMMY_COLLAPSE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
+import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.EPISODE_TYPE;
+
 public class MainActivityViewModel extends AndroidViewModel {
 
     private final Application application;
@@ -131,6 +136,13 @@ public class MainActivityViewModel extends AndroidViewModel {
                     0,
                     "-"
             );
+            if (animeEpisode.getData().get(i).getAttributes().getNumber() == 1) {
+                episode.setViewType(ANIME_TYPE);
+                episode.setCollapse(EXPAND_TITLE);
+            } else {
+                episode.setViewType(EPISODE_TYPE);
+                episode.setCollapse(DUMMY_COLLAPSE);
+            }
             listEpisodes.add(episode);
         }
         addEpisodesToDatabase(listEpisodes);

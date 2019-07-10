@@ -20,8 +20,9 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 
-    @Query("SELECT ani.id AS animeId, ani.canonicalTitle AS animeTitle, ep.id AS episodeId," +
-            " ep.canonicalTitle AS title, ep.length, ep.number, ep.watchToDate, ep.wasWatched " +
+    @Query("SELECT ani.id AS animeId, ani.canonicalTitle AS animeTitle, ep.id AS episodeId, " +
+            "ep.canonicalTitle AS episodeTitle, ep.length, ep.number, ep.watchToDate, ep.wasWatched, " +
+            "ep.viewType AS viewType, ep.collapse AS collapse " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
             "WHERE ani.status LIKE 'following'" +
             "GROUP BY ani.id, ep.number " +
@@ -31,9 +32,12 @@ public interface MyAnimesEpisodesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
-    @Update
-    void updateEpisode(MyAnimeEpisode myAnimeEpisode);
+    @Query("UPDATE episodes SET wasWatched = :value WHERE id = :episodeId")
+    void updateEpisodeStatus(int value, int episodeId);
 
-    @Query("UPDATE episodes SET wasWatched = :value WHERE id = :id")
-    void updateEpisodeStatus(int value, int id);
+    @Query("UPDATE episodes SET viewType = :viewType WHERE id = :episodeId")
+    void updateEpisodeViewType(int viewType, int episodeId);
+
+    @Query("UPDATE episodes SET collapse = :collapse WHERE id = :episodeId")
+    void updateEpisodeCollapse(int collapse, int episodeId);
 }

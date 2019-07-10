@@ -1,6 +1,6 @@
 package com.example.animecalendar.model;
 
-public class CalendarAnimeEpisodesRecycled extends CalendarAnimeEpisodes {
+public class CalendarAnimeEpisodesRecycled {
 
     private int viewtype;
     private int collapse;
@@ -8,10 +8,10 @@ public class CalendarAnimeEpisodesRecycled extends CalendarAnimeEpisodes {
     public static final int EXPAND_TITLE = 1;
     public static final int DUMMY_COLLAPSE = -1;
 
-    public CalendarAnimeEpisodesRecycled(int animeId, String animeTitle, int episodeId, String title,
-                                         int length, int number, String watchToDate, int wasWatched) {
-        super(animeId, animeTitle, episodeId, title, length, number, watchToDate, wasWatched);
-    }
+//    public CalendarAnimeEpisodesRecycled(int animeId, String animeTitle, int episodeId, String title,
+//                                         int length, int number, String watchToDate, int wasWatched) {
+//        super(animeId, animeTitle, episodeId, title, length, number, watchToDate, wasWatched);
+//    }
 
     public int getViewtype() {
         return viewtype;

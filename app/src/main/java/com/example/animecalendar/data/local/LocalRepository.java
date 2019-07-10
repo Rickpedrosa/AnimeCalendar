@@ -18,21 +18,15 @@ public interface LocalRepository {
     String STATUS_COMPLETED = "completed";
 
     LiveData<List<AnimesForSeries>> getAnimesToExpose();
-
     LiveData<MyAnime> getAnimeForDetail(int id);
-
     void addAnime(MyAnime myAnime);
-
     void deleteAnime(int id);
-
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
-
     void addEpisodes(List<MyAnimeEpisode> episodes);
-
-    void updateEpisode(MyAnimeEpisode myAnimeEpisode);
-
     void updateAnimeStatus(String status, int animeId);
     LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar();
     void updateEpisodeStatus(int value, int id);
+    void updateEpisodeViewType(int viewType, int episodeId);
+    void updateEpisodeCollapse(int collapse, int episodeId);
 
 }

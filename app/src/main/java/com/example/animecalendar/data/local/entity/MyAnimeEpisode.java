@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+@SuppressWarnings("WeakerAccess")
 @Entity(tableName = "episodes",
         indices = {@Index(value = "animeId")},
         foreignKeys = @ForeignKey(
@@ -44,6 +45,10 @@ public class MyAnimeEpisode {
     private int wasWatched; //1 or 0 (boolean)
     @ColumnInfo(name = "watchToDate")
     private String watchToDate; //date
+    @ColumnInfo(name = "viewType")
+    public int viewType;
+    @ColumnInfo(name = "collapse")
+    public int collapse;
 
     public MyAnimeEpisode(long id,
                           long animeId,
@@ -155,5 +160,21 @@ public class MyAnimeEpisode {
 
     public void setWatchToDate(String watchToDate) {
         this.watchToDate = watchToDate;
+    }
+
+    public int getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
+
+    public int getCollapse() {
+        return collapse;
+    }
+
+    public void setCollapse(int collapse) {
+        this.collapse = collapse;
     }
 }

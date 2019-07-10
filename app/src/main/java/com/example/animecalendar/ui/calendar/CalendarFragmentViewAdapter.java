@@ -13,28 +13,30 @@ import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarAnimeItemBinding;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
+import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 
 import java.util.Locale;
 
-public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodesRecycled, BaseViewHolder<CalendarAnimeEpisodesRecycled>> {
+@SuppressWarnings("WeakerAccess")
+public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodes, BaseViewHolder<CalendarAnimeEpisodes>> {
 
-    static final int ANIME_TYPE = 0;
-    static final int EPISODE_TYPE = 1;
-    @SuppressWarnings("WeakerAccess")
-    static final int HIDDEN_ITEM_TYPE = 2;
+    public static final int ANIME_TYPE = 0;
+    public static final int EPISODE_TYPE = 1;
+    public static final int HIDDEN_ITEM_TYPE = 2;
     //TODO
-    private static DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodesRecycled>() {
+    private static DiffUtil.ItemCallback<CalendarAnimeEpisodes> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodes>() {
         @Override
-        public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodesRecycled oldItem, @NonNull CalendarAnimeEpisodesRecycled newItem) {
+        public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
             return oldItem.getAnimeId() == newItem.getAnimeId() && oldItem.getEpisodeId() == newItem.getEpisodeId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull CalendarAnimeEpisodesRecycled oldItem, @NonNull CalendarAnimeEpisodesRecycled newItem) {
-            return oldItem.getViewtype() == newItem.getViewtype() &&
+        public boolean areContentsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
+            return oldItem.getViewType() == newItem.getViewType() &&
                     oldItem.getWasWatched() == newItem.getWasWatched() &&
-                    oldItem.getWatchToDate().equals(newItem.getWatchToDate());
+                    oldItem.getWatchToDate().equals(newItem.getWatchToDate()) &&
+                    oldItem.getCollapse() == newItem.getCollapse();
         }
     };
 
@@ -44,7 +46,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
     @NonNull
     @Override
-    public BaseViewHolder<CalendarAnimeEpisodesRecycled> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseViewHolder<CalendarAnimeEpisodes> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ANIME_TYPE:
                 return new AnimeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
@@ -60,16 +62,16 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnimeEpisodesRecycled> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnimeEpisodes> holder, int position) {
         holder.bind(getItem(position));
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).getViewtype() == ANIME_TYPE) {
+        if (getItem(position).getViewType() == ANIME_TYPE) {
             return ANIME_TYPE;
-        } else if (getItem(position).getViewtype() == EPISODE_TYPE) {
+        } else if (getItem(position).getViewType() == EPISODE_TYPE) {
             return EPISODE_TYPE;
         } else {
             return HIDDEN_ITEM_TYPE;
@@ -78,9 +80,9 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
 
     void hideAllEpisodes() {
         for (int i = 0; i < getItemCount(); i++) {
-            if (getItem(i).getViewtype() == EPISODE_TYPE) {
-                getItem(i).setViewtype(HIDDEN_ITEM_TYPE);
-            } else if (getItem(i).getViewtype() == ANIME_TYPE) {
+            if (getItem(i).getViewType() == EPISODE_TYPE) {
+                getItem(i).setViewType(HIDDEN_ITEM_TYPE);
+            } else if (getItem(i).getViewType() == ANIME_TYPE) {
                 getItem(i).setCollapse(CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE);
             }
         }
@@ -90,14 +92,14 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     void showItems(int position) {
         int itemCount = 0;
         for (int i = (position + 1); i < getItemCount(); i++) {
-            if (getItem(i).getViewtype() == ANIME_TYPE) {
+            if (getItem(i).getViewType() == ANIME_TYPE) {
                 itemCount = i;
                 break;
             }
             if (i == getItemCount() - 1) {
                 itemCount = getItemCount();
             }
-            getItem(i).setViewtype(EPISODE_TYPE);
+            getItem(i).setViewType(EPISODE_TYPE);
         }
         notifyItemRangeChanged(position, itemCount);
     }
@@ -105,19 +107,19 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
     void hideItems(int position) {
         int itemCount = 0;
         for (int i = (position + 1); i < getItemCount(); i++) {
-            if (getItem(i).getViewtype() == ANIME_TYPE) {
+            if (getItem(i).getViewType() == ANIME_TYPE) {
                 itemCount = i;
                 break;
             }
             if (i == getItemCount() - 1) {
                 itemCount = getItemCount();
             }
-            getItem(i).setViewtype(HIDDEN_ITEM_TYPE);
+            getItem(i).setViewType(HIDDEN_ITEM_TYPE);
         }
         notifyItemRangeChanged(position, itemCount);
     }
 
-    class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
+    class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
 
         private FragmentCalendarAnimeItemBinding b;
 
@@ -127,19 +129,23 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodesRecycled type) {
+        public void bind(CalendarAnimeEpisodes type) {
             setDefaultStyle();
             b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == CalendarAnimeEpisodesRecycled.EXPAND_TITLE
                     ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
+            b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
+                    R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
             b.lblAnime.setText(type.getAnimeTitle());
+            b.lblEpTitle.setText(type.getEpisodeTitle());
         }
 
         private void setDefaultStyle() {
+            b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
         }
     }
 
-    class EpisodeViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
+    class EpisodeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
 
         private FragmentCalendarEpisodeItemBinding b;
 
@@ -149,13 +155,11 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodesRecycled type) {
+        public void bind(CalendarAnimeEpisodes type) {
             setDefaultStyle();
-            String format = "%d - %s";
-            String formatTwo = "%dmins";
-            b.lblEpisode.setText(String.format(Locale.US, format, type.getNumber(), type.getTitle()));
+            b.lblEpisode.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
             b.lblDate.setText(type.getWatchToDate());
-            b.lblLength.setText(String.format(Locale.US, formatTwo, type.getLength()));
+            b.lblLength.setText(String.format(Locale.US, "%dmins", type.getLength()));
             b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
                     R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
         }
@@ -165,14 +169,14 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
     }
 
-    class DummyViewHolder extends BaseViewHolder<CalendarAnimeEpisodesRecycled> {
+    class DummyViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
 
         DummyViewHolder(View itemView) {
             super(itemView, getOnItemClickListener(), getOnItemLongClickListener());
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodesRecycled type) {
+        public void bind(CalendarAnimeEpisodes type) {
         }
     }
 }
