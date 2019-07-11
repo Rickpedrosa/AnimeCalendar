@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
-import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarFragmentViewModel extends ViewModel {
@@ -34,7 +32,7 @@ public class CalendarFragmentViewModel extends ViewModel {
     }
 
 
-//    List<CalendarAnimeEpisodesRecycled> listFormatted(List<CalendarAnimeEpisodes> eps) {
+//    List<CalendarAnimeEpisodesConstants> listFormatted(List<CalendarAnimeEpisodes> eps) {
 //        int id_marker;
 //        int id_temp = -1;
 //        List<CalendarAnimeEpisodes> temp = new ArrayList<>(eps);
@@ -51,10 +49,10 @@ public class CalendarFragmentViewModel extends ViewModel {
 //        }
 //
 //        id_temp = -1;
-//        List<CalendarAnimeEpisodesRecycled> finalList = new ArrayList<>();
-//        CalendarAnimeEpisodesRecycled item;
+//        List<CalendarAnimeEpisodesConstants> finalList = new ArrayList<>();
+//        CalendarAnimeEpisodesConstants item;
 //        for (int i = 0; i < temp.size(); i++) {
-//            item = new CalendarAnimeEpisodesRecycled(
+//            item = new CalendarAnimeEpisodesConstants(
 //                    temp.get(i).getAnimeId(),
 //                    temp.get(i).getAnimeTitle(),
 //                    temp.get(i).getEpisodeId(),
@@ -66,10 +64,10 @@ public class CalendarFragmentViewModel extends ViewModel {
 //            );
 //            if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
 //                item.setViewtype(CalendarFragmentViewAdapter.ANIME_TYPE);
-//                item.setCollapse(CalendarAnimeEpisodesRecycled.EXPAND_TITLE);
+//                item.setCollapse(CalendarAnimeEpisodesConstants.EXPAND_TITLE);
 //            } else {
 //                item.setViewtype(CalendarFragmentViewAdapter.EPISODE_TYPE);
-//                item.setCollapse(CalendarAnimeEpisodesRecycled.DUMMY_COLLAPSE);
+//                item.setCollapse(CalendarAnimeEpisodesConstants.DUMMY_COLLAPSE);
 //            }
 //            id_temp = temp.get(i).getAnimeId();
 //            finalList.add(item);

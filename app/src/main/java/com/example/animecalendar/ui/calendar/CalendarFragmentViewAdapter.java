@@ -14,11 +14,10 @@ import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarAnimeItemBinding;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
-import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 
 import java.util.Locale;
 
-import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
 
 @SuppressWarnings("WeakerAccess")
 public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodes, BaseViewHolder<CalendarAnimeEpisodes>> {
@@ -107,7 +106,6 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         private void setDefaultStyle(CalendarAnimeEpisodes type) {
             b.lblAnime.setText(type.getAnimeTitle());
             b.lblEpTitle.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
-            //b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
             b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
             b.imgCheck.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
             b.lblEpTitle.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));

@@ -1,5 +1,7 @@
 package com.example.animecalendar.ui.search;
 
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -34,14 +36,13 @@ public class SearchFragmentViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(listResponse -> {
                     startLoading();
-                    if (listResponse.isSuccessful() && listResponse.body() != null) {
+                    if (listResponse.isSuccessful() && Objects.requireNonNull(listResponse.body()).getData().size() != 0) {
                         submitAnimeList(listResponse.body().getData());
-                    } else if (listResponse.body() == null) {
-                        //TODO AVISO O ALGO
-
+                    } else if (Objects.requireNonNull(listResponse.body()).getData().size() == 0) {
+                        Toast.makeText(viewModel.getApplication(), "0 founds for this anime", Toast.LENGTH_LONG).show();
                     }
                 }, throwable -> {
-                    //TODO AVISO O ALGO
+                    Toast.makeText(viewModel.getApplication(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     stopLoading();
                 }, this::stopLoading);
     }
@@ -58,7 +59,7 @@ public class SearchFragmentViewModel extends ViewModel {
         }
     }
 
-    void addAnimeToDatabase(MyAnime anime){
+    void addAnimeToDatabase(MyAnime anime) {
         viewModel.getLocalRepository().addAnime(anime);
     }
 
@@ -138,11 +139,11 @@ public class SearchFragmentViewModel extends ViewModel {
         animeList.postValue(am);
     }
 
-    private void startLoading(){
-       viewModel.progressBarLoading();
+    private void startLoading() {
+        viewModel.progressBarLoading();
     }
 
-    private void stopLoading(){
+    private void stopLoading() {
         viewModel.progressBarStop();
     }
 }

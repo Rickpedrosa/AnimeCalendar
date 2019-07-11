@@ -2,9 +2,6 @@ package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,16 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
-import com.example.animecalendar.model.CalendarAnimeEpisodesRecycled;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
 import java.util.Calendar;
 import java.util.List;
 
-import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.COLLAPSE_TITLE;
-import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.COLLAPSE_TITLE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.EPISODE_TYPE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.HIDDEN_ITEM_TYPE;
@@ -74,20 +69,6 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         setupViews(requireView());
         observeData();
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        inflater.inflate(R.menu.calendar_menu, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.hideEpisodes) {
-//            listAdapter.hideAllEpisodes();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     private void setupViews(View view) {
         setupRecyclerView(view);

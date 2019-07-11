@@ -27,14 +27,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.DUMMY_COLLAPSE;
-import static com.example.animecalendar.model.CalendarAnimeEpisodesRecycled.EXPAND_TITLE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.DUMMY_COLLAPSE;
+import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.EPISODE_TYPE;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
     private final Application application;
+    @SuppressWarnings("FieldCanBeLocal")
     private Disposable disposable;
     private final LocalRepository localRepository;
     private final AnimeRepository animeRepository;
@@ -49,10 +50,6 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public AnimeRepository getAnimeRepository() {
         return animeRepository;
-    }
-
-    public LiveData<Boolean> getProgressBarController() {
-        return progressBarController;
     }
 
     public void progressBarLoading() {
@@ -72,13 +69,8 @@ public class MainActivityViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(animeEpisode -> setupEpisodesForInsertion(animeId, animeEpisode),
-                        throwable -> {
-                            //TODO
-                        },
-                        () -> {
-                            //TODO
-                            Toast.makeText(application, "All episodes fetched", Toast.LENGTH_LONG).show();
-                        });
+                        throwable -> Toast.makeText(application, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show(),
+                        () -> Toast.makeText(application, "All episodes fetched", Toast.LENGTH_LONG).show());
     }
 
     private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {

@@ -60,7 +60,6 @@ public class SearchFragmentViewAdapter extends BaseListAdapter<MyAnime, BaseView
             b.lblAvg.setText(String.valueOf(type.getAverageRating()));
             b.lblEpisodeCount.setText(String.valueOf(type.getEpisodeCount()));
             b.lblCanonicalTitle.setText(type.getCanonicalTitle());
-            //TODO FAV ICON
         }
     }
 }
