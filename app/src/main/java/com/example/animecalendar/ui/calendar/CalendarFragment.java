@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
@@ -53,7 +54,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        return inflater.inflate(R.layout.outer_fragment_calendar, container, false);
     }
 
     @Override
@@ -96,6 +97,16 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter(CalendarFragment.this::changeEpisodeStatus);
         listAdapter.setOnItemClickListener((view1, position) -> onEpisodeClickLogic(position));
+        listAdapter.setOnItemLongClickListener(new BaseListAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
+                    //TODO
+                    return true;
+                }
+                return false;
+            }
+        });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
         listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -109,6 +120,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     @Override
     public void onSelect(List<Calendar> calendar) {
+
     }
 
     private void showItems(int position) {
