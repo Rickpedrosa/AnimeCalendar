@@ -1,14 +1,19 @@
 package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -19,14 +24,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.DatePicker;
+import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.dialogs.CustomEditTextDialogFragment;
 import com.example.animecalendar.base.recycler.BaseListAdapter;
+import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.COLLAPSE_TITLE;
 import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
@@ -36,7 +49,7 @@ import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.
 
 public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
-    //    private CalendarView calendarView;
+    private CalendarView calendarView;
     private RecyclerView listEpisodes;
     private NavController navController;
     private CalendarFragmentViewAdapter listAdapter;
@@ -60,10 +73,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        calendarView = ViewCompat.requireViewById(requireView(), R.id.calendarView);
-//        DatePickerBuilder builder = new DatePickerBuilder(requireContext(), this)
-//                .setPickerType(CalendarView.ONE_DAY_PICKER);
-//
+
 //        DatePicker datePicker = builder.build();
 //        datePicker.show();
         navController = NavHostFragment.findNavController(this);
@@ -74,6 +84,11 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     private void setupViews(View view) {
         setupRecyclerView(view);
         setupToolbar(view);
+        setupCalendarView(view);
+    }
+
+    private void setupCalendarView(View view) {
+        calendarView = ViewCompat.requireViewById(view, R.id.calendarView);
     }
 
     private void setupToolbar(View view) {
@@ -97,15 +112,22 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter(CalendarFragment.this::changeEpisodeStatus);
         listAdapter.setOnItemClickListener((view1, position) -> onEpisodeClickLogic(position));
-        listAdapter.setOnItemLongClickListener(new BaseListAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
-                    //TODO
-                    return true;
+        listAdapter.setOnItemLongClickListener((view12, position) -> {
+            if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
+                if (listAdapter.getItem(position).getWatchToDate().equals("-")) {
+                    DatePickerBuilder builder = new DatePickerBuilder(requireContext(), calendar
+                            -> viewModel.assignDateToEpisodes(calendar,
+                            getEpisodesOfAnime(listAdapter.getItem(position).getAnimeId())))
+                            .setPickerType(CalendarView.RANGE_PICKER);
+
+                    DatePicker datePicker = builder
+                            .build();
+                    datePicker.show();
+                    Snackbar.make(calendarView, "Pick the final anime watching date", Snackbar.LENGTH_LONG).show();
                 }
-                return false;
+                return true;
             }
+            return false;
         });
         listEpisodes.setItemAnimator(new DefaultItemAnimator());
         listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
@@ -174,5 +196,15 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         } else {
             viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
         }
+    }
+
+    private List<CalendarAnimeEpisodes> getEpisodesOfAnime(int animeId) {
+        List<CalendarAnimeEpisodes> mEpisodes = new ArrayList<>();
+        for (int i = 0; i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getAnimeId() == animeId && listAdapter.getItem(i).getWasWatched() == 0) {
+                mEpisodes.add(listAdapter.getItem(i));
+            }
+        }
+        return mEpisodes;
     }
 }

@@ -1,14 +1,21 @@
 package com.example.animecalendar.ui.calendar;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
+import com.example.animecalendar.utils.CustomTimeUtils;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class CalendarFragmentViewModel extends ViewModel {
+
     private final MainActivityViewModel viewModel;
 
     public CalendarFragmentViewModel(MainActivityViewModel viewModel) {
@@ -31,47 +38,9 @@ public class CalendarFragmentViewModel extends ViewModel {
         viewModel.getLocalRepository().updateEpisodeCollapse(collapse, episodeId);
     }
 
+    void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodes> caps) {
+       viewModel.assignDateToEpisodes(days, caps);
+    }
 
-//    List<CalendarAnimeEpisodesConstants> listFormatted(List<CalendarAnimeEpisodes> eps) {
-//        int id_marker;
-//        int id_temp = -1;
-//        List<CalendarAnimeEpisodes> temp = new ArrayList<>(eps);
-//        for (int i = 0; i < temp.size(); i++) {
-//            if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
-//                id_marker = 0;
-//            } else {
-//                id_marker = i;
-//            }
-//            if (id_marker == 0) {
-//                temp.add(i, temp.get(i));
-//            }
-//            id_temp = temp.get(i).getAnimeId();
-//        }
-//
-//        id_temp = -1;
-//        List<CalendarAnimeEpisodesConstants> finalList = new ArrayList<>();
-//        CalendarAnimeEpisodesConstants item;
-//        for (int i = 0; i < temp.size(); i++) {
-//            item = new CalendarAnimeEpisodesConstants(
-//                    temp.get(i).getAnimeId(),
-//                    temp.get(i).getAnimeTitle(),
-//                    temp.get(i).getEpisodeId(),
-//                    temp.get(i).getTitle(),
-//                    temp.get(i).getLength(),
-//                    temp.get(i).getNumber(),
-//                    temp.get(i).getWatchToDate(),
-//                    temp.get(i).getWasWatched()
-//            );
-//            if (temp.get(i).getNumber() == 1 && temp.get(i).getAnimeId() != id_temp) {
-//                item.setViewtype(CalendarFragmentViewAdapter.ANIME_TYPE);
-//                item.setCollapse(CalendarAnimeEpisodesConstants.EXPAND_TITLE);
-//            } else {
-//                item.setViewtype(CalendarFragmentViewAdapter.EPISODE_TYPE);
-//                item.setCollapse(CalendarAnimeEpisodesConstants.DUMMY_COLLAPSE);
-//            }
-//            id_temp = temp.get(i).getAnimeId();
-//            finalList.add(item);
-//        }
-//        return finalList;
-//    }
+
 }
