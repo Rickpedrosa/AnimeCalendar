@@ -16,6 +16,7 @@ public interface LocalRepository {
     String STATUS_CURRENT = "current";
     String STATUS_FOLLOWING = "following";
     String STATUS_COMPLETED = "completed";
+    String WATCH_DATE_NULL = "-";
 
     LiveData<List<AnimesForSeries>> getAnimesToExpose();
     LiveData<MyAnime> getAnimeForDetail(int id);
@@ -28,5 +29,5 @@ public interface LocalRepository {
     void updateEpisodeStatus(int value, int id);
     void updateEpisodeViewType(int viewType, int episodeId);
     void updateEpisodeCollapse(int collapse, int episodeId);
-
+    void updateEpisodeDateToWatch(String date, int episodeId);
 }

@@ -78,4 +78,9 @@ public class LocalRepositoryImpl implements LocalRepository {
     public void updateEpisodeCollapse(int collapse, int episodeId) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeCollapse(collapse, episodeId));
     }
+
+    @Override
+    public void updateEpisodeDateToWatch(String date, int episodeId) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeDateToWatch(date, episodeId));
+    }
 }

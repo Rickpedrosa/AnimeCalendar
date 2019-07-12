@@ -232,8 +232,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         }
     }
 
-    //TODO DAOS -> LOCALREPO -> LOCALREPOIMPL
     private void updateToWatchEpisodeDate(String date, int episodeId) {
-        Log.d("wantalamera", String.format(Locale.US, "%d -> %s", episodeId, date));
+        localRepository.updateEpisodeDateToWatch(date, episodeId);
     }
 }

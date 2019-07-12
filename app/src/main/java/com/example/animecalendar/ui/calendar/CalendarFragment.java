@@ -1,19 +1,14 @@
 package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -29,8 +24,6 @@ import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.dialogs.CustomEditTextDialogFragment;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.model.CalendarAnimeEpisodes;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
@@ -39,8 +32,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
+import static com.example.animecalendar.data.local.LocalRepository.WATCH_DATE_NULL;
 import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.COLLAPSE_TITLE;
 import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
 import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
@@ -108,13 +101,13 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         );
     }
 
-    private void setupRecyclerView(View view) {
-        listEpisodes = ViewCompat.requireViewById(view, R.id.listEpisodesCalendar);
+    private void setupRecyclerView(View layoutView) {
+        listEpisodes = ViewCompat.requireViewById(layoutView, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter(CalendarFragment.this::changeEpisodeStatus);
-        listAdapter.setOnItemClickListener((view1, position) -> onEpisodeClickLogic(position));
-        listAdapter.setOnItemLongClickListener((view12, position) -> {
+        listAdapter.setOnItemClickListener((view, position) -> onEpisodeClickLogic(position));
+        listAdapter.setOnItemLongClickListener((view, position) -> {
             if (listAdapter.getItem(position).getViewType() == ANIME_TYPE) {
-                if (listAdapter.getItem(position).getWatchToDate().equals("-")) {
+                if (!isTheAnimeMarkedToWatch(position)) {
                     DatePickerBuilder builder = new DatePickerBuilder(requireContext(), calendar
                             -> viewModel.assignDateToEpisodes(calendar,
                             getEpisodesOfAnime(listAdapter.getItem(position).getAnimeId())))
@@ -123,7 +116,9 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
                     DatePicker datePicker = builder
                             .build();
                     datePicker.show();
-                    Snackbar.make(calendarView, "Pick the final anime watching date", Snackbar.LENGTH_LONG).show();
+                } else {
+                    //TODO EL ANIME YA TIENE FETXAS PUESTAS, PREGUNTAR SI QUIERE REINICIARLAS O ALGO
+                    Snackbar.make(calendarView, "All episodes are dated already", Snackbar.LENGTH_LONG).show();
                 }
                 return true;
             }
@@ -196,6 +191,20 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         } else {
             viewModel.updateEpisodeStatus(0, listAdapter.getItem(position).getEpisodeId());
         }
+    }
+
+    private boolean isTheAnimeMarkedToWatch(int position) {
+        boolean flag = false;
+        int animeId = listAdapter.getItem(position).getAnimeId();
+        for (int i = (position); i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getAnimeId() != animeId) {
+                break;
+            }
+            if (flag)
+                break;
+            flag = !listAdapter.getItem(i).getWatchToDate().equals(WATCH_DATE_NULL);
+        }
+        return flag;
     }
 
     private List<CalendarAnimeEpisodes> getEpisodesOfAnime(int animeId) {

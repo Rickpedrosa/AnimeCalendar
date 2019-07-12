@@ -40,4 +40,7 @@ public interface MyAnimesEpisodesDao {
 
     @Query("UPDATE episodes SET collapse = :collapse WHERE id = :episodeId")
     void updateEpisodeCollapse(int collapse, int episodeId);
+
+    @Query("UPDATE episodes SET watchToDate = :date WHERE id = :episodeId")
+    void updateEpisodeDateToWatch(String date, int episodeId);
 }
