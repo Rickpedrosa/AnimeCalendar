@@ -1,12 +1,9 @@
 package com.example.animecalendar.ui.calendar;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 
@@ -14,75 +11,40 @@ import com.example.animecalendar.R;
 import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarAnimeItemBinding;
-import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
-import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.model.CalendarAnime;
 
-import java.util.Locale;
+public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnime, BaseViewHolder<CalendarAnime>> {
 
-import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
-
-@SuppressWarnings("WeakerAccess")
-public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEpisodes, BaseViewHolder<CalendarAnimeEpisodes>> {
-
-    public static final int ANIME_TYPE = 0;
-    public static final int EPISODE_TYPE = 1;
-    public static final int HIDDEN_ITEM_TYPE = 2;
-    private OnAnimeCheckClick onAnimeCheckClick;
-    private static DiffUtil.ItemCallback<CalendarAnimeEpisodes> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnimeEpisodes>() {
+    private static DiffUtil.ItemCallback<CalendarAnime> diffUtilItemCallback = new DiffUtil.ItemCallback<CalendarAnime>() {
         @Override
-        public boolean areItemsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
-            return oldItem.getAnimeId() == newItem.getAnimeId() && oldItem.getEpisodeId() == newItem.getEpisodeId();
+        public boolean areItemsTheSame(@NonNull CalendarAnime oldItem, @NonNull CalendarAnime newItem) {
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull CalendarAnimeEpisodes oldItem, @NonNull CalendarAnimeEpisodes newItem) {
-            return oldItem.getViewType() == newItem.getViewType() &&
-                    oldItem.getWasWatched() == newItem.getWasWatched() &&
-                    oldItem.getWatchToDate().equals(newItem.getWatchToDate()) &&
-                    oldItem.getCollapse() == newItem.getCollapse();
+        public boolean areContentsTheSame(@NonNull CalendarAnime oldItem, @NonNull CalendarAnime newItem) {
+            return oldItem.getEpCount() == newItem.getEpCount() && oldItem.getEpWatchedCount() == newItem.getEpWatchedCount();
         }
     };
 
-    CalendarFragmentViewAdapter(OnAnimeCheckClick onAnimeCheckClick) {
+    CalendarFragmentViewAdapter() {
         super(diffUtilItemCallback);
-        this.onAnimeCheckClick = onAnimeCheckClick;
     }
 
     @NonNull
     @Override
-    public BaseViewHolder<CalendarAnimeEpisodes> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ANIME_TYPE:
-                return new AnimeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.fragment_calendar_anime_item, parent, false));
-            case EPISODE_TYPE:
-                return new EpisodeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                        R.layout.fragment_calendar_episode_item, parent, false));
-            case HIDDEN_ITEM_TYPE:
-                return new DummyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_calendar_dummy_item, parent, false));
-            default:
-                throw new IllegalArgumentException("Invalid view type");
-        }
+    public BaseViewHolder<CalendarAnime> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new AnimeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.fragment_calendar_anime_item, parent, false));
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnimeEpisodes> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<CalendarAnime> holder, int position) {
         holder.bind(getItem(position));
     }
 
-
-    @Override
-    public int getItemViewType(int position) {
-        if (getItem(position).getViewType() == ANIME_TYPE) {
-            return ANIME_TYPE;
-        } else if (getItem(position).getViewType() == EPISODE_TYPE) {
-            return EPISODE_TYPE;
-        } else {
-            return HIDDEN_ITEM_TYPE;
-        }
-    }
-
-    class AnimeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
+    class AnimeViewHolder extends BaseViewHolder<CalendarAnime> {
 
         private FragmentCalendarAnimeItemBinding b;
 
@@ -92,60 +54,14 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnimeEp
         }
 
         @Override
-        public void bind(CalendarAnimeEpisodes type) {
+        public void bind(CalendarAnime type) {
             setDefaultStyle(type);
-            b.imgOptions.setImageResource(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
-                    ? R.drawable.ic_keyboard_arrow_up_w_24dp : R.drawable.ic_keyboard_arrow_down_w_24dp);
-            b.imgCheck.setVisibility(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
-                    ? View.VISIBLE : View.GONE);
-            b.lblEpTitle.setVisibility(getItem(getAdapterPosition()).getCollapse() == EXPAND_TITLE
-                    ? View.VISIBLE : View.GONE);
-            b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
-                    R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
-
         }
 
-        private void setDefaultStyle(CalendarAnimeEpisodes type) {
-            b.lblAnime.setText(type.getAnimeTitle());
-            b.lblEpTitle.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
-            b.imgOptions.setImageResource(R.drawable.ic_keyboard_arrow_down_w_24dp);
-            b.imgCheck.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
-            b.lblEpTitle.setOnClickListener(v -> onAnimeCheckClick.changeEpisodeStatus(getAdapterPosition()));
-        }
-    }
-
-    class EpisodeViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
-
-        private FragmentCalendarEpisodeItemBinding b;
-
-        EpisodeViewHolder(FragmentCalendarEpisodeItemBinding itemView) {
-            super(itemView.getRoot(), getOnItemClickListener(), getOnItemLongClickListener());
-            b = itemView;
-        }
-
-        @Override
-        public void bind(CalendarAnimeEpisodes type) {
-            setDefaultStyle(type);
-            b.imgCheck.setImageResource(getItem(getAdapterPosition()).getWasWatched() == 1 ?
-                    R.drawable.ic_check_circle_green_24dp : R.drawable.ic_check_circle_black_24dp);
-        }
-
-        private void setDefaultStyle(CalendarAnimeEpisodes type) {
-            b.imgCheck.setImageResource(R.drawable.ic_check_circle_black_24dp);
-            b.lblEpisode.setText(String.format(Locale.US, "%d - %s", type.getNumber(), type.getEpisodeTitle()));
-            b.lblDate.setText(type.getWatchToDate());
-            b.lblLength.setText(String.format(Locale.US, "%dmins", type.getLength()));
-        }
-    }
-
-    class DummyViewHolder extends BaseViewHolder<CalendarAnimeEpisodes> {
-
-        DummyViewHolder(View itemView) {
-            super(itemView, getOnItemClickListener(), getOnItemLongClickListener());
-        }
-
-        @Override
-        public void bind(CalendarAnimeEpisodes type) {
+        private void setDefaultStyle(CalendarAnime type) {
+            b.lblAnime.setText(type.getTitle());
+            b.lblEpsCounter.setText(b.lblEpsCounter.getResources().getString(R.string.epsCounter,
+                    type.getEpWatchedCount(), type.getEpCount()));
         }
     }
 }

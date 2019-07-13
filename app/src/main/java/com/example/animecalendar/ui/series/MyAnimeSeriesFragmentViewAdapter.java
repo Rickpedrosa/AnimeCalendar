@@ -70,16 +70,14 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         }
 
         private void setGeneralInfo(AnimesForSeries type) {
-            String format = "%d/%d episodes";
-            String sformat = "Status: %s";
             b.lblTitle.setText(type.getTitle());
-            b.lblStatus.setText(String.format(Locale.US, sformat, type.getStatus()));
-            b.lblEpCounts.setText(String.format(Locale.US, format, type.getEpWatchedCount(), type.getEpCount()));
+            b.lblStatus.setText(b.lblStatus.getResources().getString(R.string.animeStatus, type.getStatus()));
+            b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
             PicassoUtils.loadPicasso(b.imgPoster.getContext(), type.getPoster(), b.imgPoster);
         }
 
         private void setStyles(AnimesForSeries type) {
-           cleanLabels();
+            cleanLabels();
             if (type.getStatus().equals(LocalRepository.STATUS_CURRENT)) {
                 b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
             } else if (type.getStatus().equals(LocalRepository.STATUS_FOLLOWING)) {

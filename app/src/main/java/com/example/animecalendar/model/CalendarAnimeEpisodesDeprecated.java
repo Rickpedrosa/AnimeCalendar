@@ -2,14 +2,14 @@ package com.example.animecalendar.model;
 
 import androidx.room.ColumnInfo;
 
-public class CalendarAnimeEpisodes {
+public class CalendarAnimeEpisodesDeprecated {
     @ColumnInfo(name = "animeId")
     private int animeId;
     @ColumnInfo(name = "animeTitle")
     private String animeTitle;
-    @ColumnInfo(name = "episodeId")
-    private int episodeId;
-    @ColumnInfo(name = "episodeTitle")
+    @ColumnInfo(name = "id")
+    private int id;
+    @ColumnInfo(name = "canonicalTitle")
     private String episodeTitle;
     @ColumnInfo(name = "length")
     private int length;
@@ -24,11 +24,11 @@ public class CalendarAnimeEpisodes {
     @ColumnInfo(name = "collapse")
     private int collapse;
 
-    public CalendarAnimeEpisodes(int animeId, String animeTitle, int episodeId, String episodeTitle,
-                                 int length, int number, String watchToDate, int wasWatched, int viewType, int collapse) {
+    public CalendarAnimeEpisodesDeprecated(int animeId, String animeTitle, int id, String episodeTitle,
+                                           int length, int number, String watchToDate, int wasWatched, int viewType, int collapse) {
         this.animeId = animeId;
         this.animeTitle = animeTitle;
-        this.episodeId = episodeId;
+        this.id = id;
         this.episodeTitle = episodeTitle;
         this.length = length;
         this.number = number;
@@ -54,12 +54,12 @@ public class CalendarAnimeEpisodes {
         this.animeTitle = animeTitle;
     }
 
-    public int getEpisodeId() {
-        return episodeId;
+    public int getId() {
+        return id;
     }
 
-    public void setEpisodeId(int episodeId) {
-        this.episodeId = episodeId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEpisodeTitle() {

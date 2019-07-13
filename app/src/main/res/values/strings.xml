@@ -17,4 +17,7 @@
     <string name="update_anime_status">%1$s has been updated to %2$s</string>
     <string name="hide_ep_title">Hide episodes</string>
     <string name="episodes_per_day">Episodes per day…</string>
+    <string name="epsCounter">%1$d/%2$d</string>
+    <string name="animeStatus">Status: %1$s</string>
+    <string name="episode">%1$d - %2$s</string>
 </resources>

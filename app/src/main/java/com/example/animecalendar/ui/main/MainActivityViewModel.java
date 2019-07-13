@@ -1,7 +1,6 @@
 package com.example.animecalendar.ui.main;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,24 +16,18 @@ import com.example.animecalendar.data.remote.pojos.anime_episode.Datum;
 import com.example.animecalendar.data.remote.repos.AnimeRepository;
 import com.example.animecalendar.data.remote.repos.AnimeRepositoryImpl;
 import com.example.animecalendar.data.remote.services.AnimeService;
-import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.model.CalendarAnimeEpisodesDeprecated;
 import com.example.animecalendar.providers.RXJavaProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.DUMMY_COLLAPSE;
-import static com.example.animecalendar.model.CalendarAnimeEpisodesConstants.EXPAND_TITLE;
-import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.ANIME_TYPE;
-import static com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter.EPISODE_TYPE;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
@@ -132,13 +125,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                     0,
                     "-"
             );
-            if (animeEpisode.getData().get(i).getAttributes().getNumber() == 1) {
-                episode.setViewType(ANIME_TYPE);
-                episode.setCollapse(EXPAND_TITLE);
-            } else {
-                episode.setViewType(EPISODE_TYPE);
-                episode.setCollapse(DUMMY_COLLAPSE);
-            }
             listEpisodes.add(episode);
         }
         addEpisodesToDatabase(listEpisodes);
@@ -182,7 +168,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 });
     }
 
-    public void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodes> caps) {
+    public void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodesDeprecated> caps) {
         float daysCount = (float) days.size();
         float capsCount = (float) caps.size();
         float capsPerDay = (capsCount / daysCount);
@@ -199,7 +185,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                     for (int firstDay = 0; firstDay < (int) capsPerDay; firstDay++) { //capítulos del primer día
                         updateToWatchEpisodeDate(
                                 CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                caps.get(firstDay).getEpisodeId());
+                                caps.get(firstDay).getId());
                         capReference = firstDay; // variable para ir pasando el indice del capitulo a actualizar
                     }
                     restAux = capsPerDay - ((int) capsPerDay); //parte decimal que pasa al día siguiente
@@ -210,7 +196,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                         capReference++;
                         updateToWatchEpisodeDate(
                                 CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                caps.get(capReference).getEpisodeId());
+                                caps.get(capReference).getId());
                     }
                     restAux = capsPerDayAux - ((int) capsPerDayAux); //parte decimal que pasa al día siguiente
                     totalCapsAux = totalCapsAux - ((int) capsPerDayAux); //se resta la parte entera del total de caps
@@ -221,7 +207,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                         capReference++;
                         updateToWatchEpisodeDate(
                                 CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                caps.get(capReference).getEpisodeId());
+                                caps.get(capReference).getId());
                     }
                 }
             }

@@ -8,6 +8,7 @@ import androidx.room.Query;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.model.AnimesForSeries;
+import com.example.animecalendar.model.CalendarAnime;
 
 import java.util.List;
 
@@ -19,6 +20,13 @@ public interface MyAnimesDao {
             " FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1" +
             " GROUP BY ani.id ORDER BY ani.averageRating DESC")
     LiveData<List<AnimesForSeries>> getAnimesToExpose();
+
+    @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.episodeCount AS epCount," +
+            " COUNT(ep.id) AS epsWatched" +
+            " FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1 " +
+            " WHERE ani.status LIKE 'following'" +
+            " GROUP BY ani.id ORDER BY ani.averageRating DESC")
+    LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
 
     @Query("SELECT * FROM anime WHERE id = :id")
     LiveData<MyAnime> getAnimeForDetail(int id);

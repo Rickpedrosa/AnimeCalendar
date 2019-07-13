@@ -8,8 +8,10 @@ import com.example.animecalendar.data.local.daos.MyAnimesDao;
 import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimeEpisodePOJOUpdate;
 import com.example.animecalendar.model.AnimesForSeries;
-import com.example.animecalendar.model.CalendarAnimeEpisodes;
+import com.example.animecalendar.model.CalendarAnime;
+import com.example.animecalendar.model.CalendarAnimeEpisodesDeprecated;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -60,7 +62,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<CalendarAnimeEpisodes>> getAnimeEpisodesForCalendar() {
+    public LiveData<List<CalendarAnimeEpisodesDeprecated>> getAnimeEpisodesForCalendar() {
         return myAnimesEpisodesDao.getAnimeEpisodesForCalendar();
     }
 
@@ -70,17 +72,13 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void updateEpisodeViewType(int viewType, int episodeId) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeViewType(viewType, episodeId));
-    }
-
-    @Override
-    public void updateEpisodeCollapse(int collapse, int episodeId) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeCollapse(collapse, episodeId));
-    }
-
-    @Override
     public void updateEpisodeDateToWatch(String date, int episodeId) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeDateToWatch(date, episodeId));
     }
+
+    @Override
+    public LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar() {
+        return myAnimesDao.getAnimesToExposeForCalendar();
+    }
+
 }
