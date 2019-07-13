@@ -23,10 +23,6 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
     }
 
-    void updateEpisodeStatus(int value, int episodeId) {
-        viewModel.getLocalRepository().updateEpisodeStatus(value, episodeId);
-    }
-
     void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodesDeprecated> caps) {
         viewModel.assignDateToEpisodes(days, caps);
     }

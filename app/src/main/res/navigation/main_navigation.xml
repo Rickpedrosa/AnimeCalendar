@@ -36,7 +36,7 @@
     <fragment
         android:id="@+id/calendarEpisodesFragment"
         android:name="com.example.animecalendar.ui.calendar_episodes.CalendarEpisodesFragment"
-        android:label="CalendarEpisodesFragment" >
+        android:label="Episodes">
         <argument
             android:name="animeId"
             app:argType="integer" />

@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -20,17 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
-import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.ui.calendar.CalendarFragmentDirections;
-import com.example.animecalendar.ui.calendar.CalendarFragmentViewAdapter;
-import com.example.animecalendar.ui.calendar.CalendarFragmentViewModel;
 
-import java.util.List;
 import java.util.Objects;
+
+import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
+import static com.example.animecalendar.data.local.LocalRepository.WATCHED;
+import static com.example.animecalendar.data.local.LocalRepository.WATCH_DATE_DONE;
+import static com.example.animecalendar.data.local.LocalRepository.WATCH_DATE_NULL;
 
 public class CalendarEpisodesFragment extends Fragment {
 
@@ -65,18 +62,24 @@ public class CalendarEpisodesFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
-        listAdapter.setOnItemClickListener(new BaseListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-            }
-        });
+        listAdapter.setOnItemClickListener((view, position) -> updateEpisode(position));
         b.includeCalendarEpisodeContent.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.includeCalendarEpisodeContent.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
         b.includeCalendarEpisodeContent.listEpisodes.setAdapter(listAdapter);
     }
 
-    private void setupToolbar(){
+    private void updateEpisode(int position) {
+        if (listAdapter.getItem(position).getWasWatched() == 0) {
+            viewModel.updateEpisodeStatus(WATCHED, (int) listAdapter.getItem(position).getId());
+            viewModel.updateEpisodeDateToWatch(WATCH_DATE_DONE, (int) listAdapter.getItem(position).getId());
+        } else {
+            viewModel.updateEpisodeStatus(NOT_WATCHED, (int) listAdapter.getItem(position).getId());
+            viewModel.updateEpisodeDateToWatch(WATCH_DATE_NULL, (int) listAdapter.getItem(position).getId());
+        }
+    }
+
+    private void setupToolbar() {
         NavigationUI.setupWithNavController(
                 b.toolbar,
                 NavHostFragment.findNavController(this),
@@ -85,12 +88,7 @@ public class CalendarEpisodesFragment extends Fragment {
     }
 
     private void observeData() {
-        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), new Observer<List<MyAnimeEpisodesList>>() {
-            @Override
-            public void onChanged(List<MyAnimeEpisodesList> myAnimeEpisodesLists) {
-                listAdapter.submitList(myAnimeEpisodesLists);
-            }
-        });
+        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> listAdapter.submitList(myAnimeEpisodesLists));
     }
 
     private void obtainArguments() {

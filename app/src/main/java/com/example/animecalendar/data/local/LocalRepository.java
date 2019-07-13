@@ -19,6 +19,9 @@ public interface LocalRepository {
     String STATUS_FOLLOWING = "following";
     String STATUS_COMPLETED = "completed";
     String WATCH_DATE_NULL = "-";
+    String WATCH_DATE_DONE = "Watched";
+    int WATCHED = 1;
+    int NOT_WATCHED = 0;
 
     LiveData<List<AnimesForSeries>> getAnimesToExpose();
     LiveData<MyAnime> getAnimeForDetail(int id);

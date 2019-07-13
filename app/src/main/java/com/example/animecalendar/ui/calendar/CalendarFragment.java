@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
@@ -33,7 +32,6 @@ import java.util.List;
 public class CalendarFragment extends Fragment implements OnSelectDateListener {
 
     private CalendarView calendarView;
-    private RecyclerView listEpisodes;
     private NavController navController;
     private CalendarFragmentViewAdapter listAdapter;
     private CalendarFragmentViewModel viewModel;
@@ -56,9 +54,6 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-//        DatePicker datePicker = builder.build();
-//        datePicker.show();
         navController = NavHostFragment.findNavController(this);
         setupViews(requireView());
         observeData();
@@ -92,7 +87,7 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     }
 
     private void setupRecyclerView(View layoutView) {
-        listEpisodes = ViewCompat.requireViewById(layoutView, R.id.listEpisodesCalendar);
+        RecyclerView listEpisodes = ViewCompat.requireViewById(layoutView, R.id.listEpisodesCalendar);
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(CalendarFragmentDirections
                 .actionCalendarFragmentToCalendarEpisodesFragment(listAdapter.getItem(position).getId())));
