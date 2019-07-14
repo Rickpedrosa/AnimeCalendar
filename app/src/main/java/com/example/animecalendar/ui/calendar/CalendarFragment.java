@@ -64,21 +64,21 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         observeData();
     }
 
-    private void setupCalendarView() {
-        b.includeCalendarContent.calendarView.setEvents(new ArrayList<>(
-                Collections.singletonList(new EventDay(Calendar.getInstance(), R.drawable.ic_today_lol_24dp))
-        ));
-        b.includeCalendarContent.calendarView.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(EventDay eventDay) {
-            }
-        });
-    }
+//    private void setupCalendarView() {
+//        b.includeCalendarContent.calendarView.setEvents(new ArrayList<>(
+//                Collections.singletonList(new EventDay(Calendar.getInstance(), R.drawable.ic_today_lol_24dp))
+//        ));
+//        b.includeCalendarContent.calendarView.setOnDayClickListener(new OnDayClickListener() {
+//            @Override
+//            public void onDayClick(EventDay eventDay) {
+//            }
+//        });
+//    }
 
     private void setupViews() {
         setupRecyclerView();
         setupToolbar();
-        setupCalendarView();
+//        setupCalendarView();
     }
 
     private void setupToolbar() {

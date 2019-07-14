@@ -77,7 +77,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         int seasonNumber, number, length;
         for (int i = 0; i < animeEpisode.getData().size(); i++) {
             if (animeEpisode.getData().get(i).getAttributes().getThumbnail() == null) {
-                thumb = "";
+                thumb = "X";
             } else {
                 thumb = animeEpisode.getData().get(i).getAttributes().getThumbnail().getOriginal();
             }

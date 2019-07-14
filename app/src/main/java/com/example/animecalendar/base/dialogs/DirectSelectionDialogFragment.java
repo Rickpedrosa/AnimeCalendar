@@ -11,10 +11,11 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.animecalendar.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DirectSelectionDialogFragment extends DialogFragment {
+public class DirectSelectionDialogFragment extends BottomSheetDialogFragment {
     private static final String ARG_TITLE = "ARG_TITLE";
     private static final String ARG_ITEMS = "ARG_ITEMS";
 

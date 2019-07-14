@@ -1,10 +1,14 @@
 package com.example.animecalendar.ui.calendar_episodes;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -35,6 +39,10 @@ public class CalendarEpisodesFragment extends Fragment {
     private int animeId;
     private CalendarEpisodesFragmentViewAdapter listAdapter;
     private CalendarEpisodesFragmentViewModel viewModel;
+    private LinearLayoutManager linearLayoutManager;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle mBundleRecyclerViewState;
+    private Parcelable mListState = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class CalendarEpisodesFragment extends Fragment {
         viewModel = ViewModelProviders.of(this,
                 VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CALENDAR_EPISODES))
                 .get(CalendarEpisodesFragmentViewModel.class);
+        linearLayoutManager = new LinearLayoutManager(requireContext());
+        obtainArguments();
     }
 
     @Nullable
@@ -54,19 +64,59 @@ public class CalendarEpisodesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        obtainArguments();
         setupRecyclerView();
         setupToolbar();
         observeData();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mBundleRecyclerViewState = new Bundle();
+        mListState = Objects.requireNonNull(b.includeCalendarEpisodeContent.listEpisodes.getLayoutManager()).onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, mListState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mBundleRecyclerViewState != null) {
+            new Handler().postDelayed(() -> {
+                mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
+                Objects.requireNonNull(b.includeCalendarEpisodeContent.listEpisodes.getLayoutManager()).onRestoreInstanceState(mListState);
+            }, 50);
+        }
+        b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
+    }
+
     private void setupRecyclerView() {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> updateEpisode(position));
+        listAdapter.setOnItemLongClickListener((view, position) -> {
+            scrollToPositionOnEnteringFragment();
+            return true;
+        });
         b.includeCalendarEpisodeContent.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.includeCalendarEpisodeContent.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
+        b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
         b.includeCalendarEpisodeContent.listEpisodes.setAdapter(listAdapter);
+
+    }
+
+    private void scrollToPositionOnEnteringFragment() {
+        boolean noItemsWatched = false;
+        for (int i = listAdapter.getItemCount() - 1; i >= 0; i--) {
+            if (listAdapter.getItem(i).getWasWatched() == WATCHED) {
+                linearLayoutManager.scrollToPositionWithOffset(i - 1,
+                        10);
+                noItemsWatched = true;
+                break;
+            }
+        }
+        if (!noItemsWatched) {
+            linearLayoutManager.scrollToPositionWithOffset(0,
+                    10);
+        }
     }
 
     private void updateEpisode(int position) {
@@ -88,7 +138,9 @@ public class CalendarEpisodesFragment extends Fragment {
     }
 
     private void observeData() {
-        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> listAdapter.submitList(myAnimeEpisodesLists));
+        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> {
+            listAdapter.submitList(myAnimeEpisodesLists);
+        });
     }
 
     private void obtainArguments() {

@@ -18,7 +18,9 @@
         android:label="CalendarFragment" >
         <action
             android:id="@+id/action_calendarFragment_to_calendarEpisodesFragment"
-            app:destination="@id/calendarEpisodesFragment" />
+            app:destination="@id/calendarEpisodesFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
