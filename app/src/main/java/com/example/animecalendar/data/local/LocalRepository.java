@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
-import com.example.animecalendar.model.AnimeEpisodePOJOUpdate;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
-import com.example.animecalendar.model.CalendarAnimeEpisodesDeprecated;
+import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -30,9 +29,10 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
     void addEpisodes(List<MyAnimeEpisode> episodes);
     void updateAnimeStatus(String status, int animeId);
-    LiveData<List<CalendarAnimeEpisodesDeprecated>> getAnimeEpisodesForCalendar();
+//    LiveData<List<CalendarAnimeEpisodesDeprecated>> getAnimeEpisodesForCalendar();
     void updateEpisodeStatus(int value, int id);
     void updateEpisodeDateToWatch(String date, int episodeId);
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesOfTheDay();
 
 }

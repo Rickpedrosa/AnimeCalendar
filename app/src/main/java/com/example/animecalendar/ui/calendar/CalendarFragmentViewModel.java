@@ -3,9 +3,7 @@ package com.example.animecalendar.ui.calendar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.animecalendar.model.AnimeEpisodePOJOUpdate;
 import com.example.animecalendar.model.CalendarAnime;
-import com.example.animecalendar.model.CalendarAnimeEpisodesDeprecated;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.Calendar;
@@ -23,7 +21,7 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
     }
 
-    void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodesDeprecated> caps) {
-        viewModel.assignDateToEpisodes(days, caps);
-    }
+//    void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodesDeprecated> caps) {
+//        viewModel.assignDateToEpisodes(days, caps);
+//    }
 }

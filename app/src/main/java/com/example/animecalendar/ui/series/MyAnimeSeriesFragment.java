@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.series;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.DatePicker;
+import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
+import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
 import com.example.animecalendar.data.local.LocalRepository;
@@ -28,7 +33,11 @@ import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener {
+import java.util.Calendar;
+import java.util.List;
+
+public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener,
+ OnSelectDateListener{
 
     private FragmentMyanimesBinding b;
     private NavController navController;
@@ -136,7 +145,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 }
                 break;
         }
-    }
+    }//TODO CUSTOM DATEPICKER (applandeo) CLASS TO DIALOGFRAGMENT
 
     private void deleteAnime() {
         viewModel.deleteAnime(listAdapter.getItem(viewModel.getItemPosition()).getId());
@@ -151,6 +160,11 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 getResources().getString(R.string.update_anime_status,
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), status),
                 Snackbar.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onSelect(List<Calendar> calendar) {
 
     }
 }
