@@ -14,6 +14,8 @@ import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+
 @Dao
 public interface MyAnimesEpisodesDao {
 

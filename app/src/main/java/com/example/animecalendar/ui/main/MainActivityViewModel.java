@@ -220,7 +220,4 @@ public class MainActivityViewModel extends AndroidViewModel {
         localRepository.updateEpisodeDateToWatchPojoVersion(episodesToUpdate);
     }
 
-    private void updateToWatchEpisodeDate(String date, int episodeId) {
-        localRepository.updateEpisodeDateToWatch(date, episodeId);
-    }
 }

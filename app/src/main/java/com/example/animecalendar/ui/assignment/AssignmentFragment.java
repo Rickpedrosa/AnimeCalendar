@@ -37,7 +37,7 @@ public class AssignmentFragment extends Fragment {
     private AssignmentFragmentViewAdapter listAdapter;
     private int animeId;
 
-   
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +163,7 @@ public class AssignmentFragment extends Fragment {
                 viewModel.commitEpisodesDateAssignation(viewModel.getAssignableDates(), getAllEpisodes());
                 viewModel.updateStatus(LocalRepository.STATUS_FOLLOWING, (int) listAdapter.getItem(0).getAnimeId());
                 Toast.makeText(requireContext(), "DONE!", Toast.LENGTH_SHORT).show();
+                NavHostFragment.findNavController(this).popBackStack();
 
             } else {
                 Toast.makeText(requireContext(), "DO NOT", Toast.LENGTH_SHORT).show();

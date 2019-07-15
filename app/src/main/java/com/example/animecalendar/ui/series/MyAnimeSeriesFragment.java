@@ -1,6 +1,5 @@
 package com.example.animecalendar.ui.series;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.DatePicker;
-import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
@@ -132,18 +128,16 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 break;
             case LocalRepository.STATUS_FINISHED:
                 if (which == 0) {
-                    //updateStatus(LocalRepository.STATUS_FOLLOWING);
-                    //viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
                     navController.navigate(MyAnimeSeriesFragmentDirections
-                    .actionMyAnimeSeriesFragmentToAssignmentFragment(
-                            listAdapter.getItem(viewModel.getItemPosition()).getId()));
+                            .actionMyAnimeSeriesFragmentToAssignmentFragment(
+                                    listAdapter.getItem(viewModel.getItemPosition()).getId()));
                 } else {
                     deleteAnime();
                 }
                 break;
             case LocalRepository.STATUS_FOLLOWING:
                 if (which == 0) {
-                    updateStatus(LocalRepository.STATUS_FINISHED); //do unfollow to the anime
+                    updateStatus(); //do unfollow to the anime
                 } else {
                     deleteAnime();
                 }
@@ -155,14 +149,11 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel.deleteAnime(listAdapter.getItem(viewModel.getItemPosition()).getId());
     }
 
-    private void updateStatus(String status) {
-        viewModel.updateStatus(status, listAdapter.getItem(viewModel.getItemPosition()).getId());
-        if (status.equals(LocalRepository.STATUS_FOLLOWING)) {
-            //viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
-        }
+    private void updateStatus() {
+        viewModel.updateStatus(LocalRepository.STATUS_FINISHED, listAdapter.getItem(viewModel.getItemPosition()).getId());
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
-                        listAdapter.getItem(viewModel.getItemPosition()).getTitle(), status),
+                        listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),
                 Snackbar.LENGTH_LONG).show();
 
     }

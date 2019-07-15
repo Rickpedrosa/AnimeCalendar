@@ -10,6 +10,7 @@ import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.model.AnimesForSeries;
+import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.List;
@@ -44,16 +45,7 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         viewModel.getLocalRepository().updateAnimeStatus(status, id);
     }
 
-    void retrieveEpisodes(int id) {
-        viewModel.retrieveRetroEpisodes(id);
-    }
-
-    public DatePicker getDatePicker(Context context, OnSelectDateListener onSelectDateListener) {
-        if (datePicker == null) {
-            datePicker = new DatePickerBuilder(context, onSelectDateListener)
-                    .setPickerType(CalendarView.RANGE_PICKER)
-                    .build();
-        }
-        return datePicker;
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id) {
+        return viewModel.getLocalRepository().getAnimeEpisodes(id);
     }
 }
