@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/hideEpisodes"
+        android:id="@+id/hideShowCalendar"
         android:icon="@drawable/ic_mode_edit_black_24dp"
         android:title="@string/hide_ep_title"
         app:showAsAction="ifRoom" />

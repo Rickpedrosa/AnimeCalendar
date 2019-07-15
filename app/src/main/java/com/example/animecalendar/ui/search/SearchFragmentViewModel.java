@@ -61,6 +61,7 @@ public class SearchFragmentViewModel extends ViewModel {
 
     void addAnimeToDatabase(MyAnime anime) {
         viewModel.getLocalRepository().addAnime(anime);
+        viewModel.retrieveRetroEpisodes((int) anime.getId());
     }
 
     int getItemPosition() {

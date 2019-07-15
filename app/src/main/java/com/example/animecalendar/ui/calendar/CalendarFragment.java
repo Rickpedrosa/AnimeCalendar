@@ -1,11 +1,9 @@
 package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,26 +18,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
-import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
-import com.applikeysolutions.cosmocalendar.listeners.OnMonthChangeListener;
-import com.applikeysolutions.cosmocalendar.model.Day;
-import com.applikeysolutions.cosmocalendar.model.Month;
-import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
-import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
-import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.OuterFragmentCalendarBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.utils.CustomTimeUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 public class CalendarFragment extends Fragment {
 
@@ -47,6 +29,7 @@ public class CalendarFragment extends Fragment {
     private CalendarFragmentViewAdapter listAdapter;
     private CalendarFragmentViewModel viewModel;
     private OuterFragmentCalendarBinding b;
+    private int flag = 2;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,12 +88,13 @@ public class CalendarFragment extends Fragment {
     private void setupToolbar() {
         b.toolbarCalendarFragment.inflateMenu(R.menu.calendar_menu);
         b.toolbarCalendarFragment.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.hideEpisodes) {
-               b.includeCalendarContent.cosmoCalendar.clearSelections();
-                Calendar day = Calendar.getInstance();
-                day.set(2019, 7, 23);
-                b.includeCalendarContent.cosmoCalendar.getSelectionManager().toggleDay(new Day(Calendar.getInstance()));
-                b.includeCalendarContent.cosmoCalendar.getSelectionManager().toggleDay(new Day(day));
+            if (item.getItemId() == R.id.hideShowCalendar) {
+                if (flag % 2 == 0) {
+                    b.includeCalendarContent.cosmoCalendar.setVisibility(View.GONE);
+                } else {
+                    b.includeCalendarContent.cosmoCalendar.setVisibility(View.VISIBLE);
+                }
+                flag++;
                 return true;
             }
             return false;

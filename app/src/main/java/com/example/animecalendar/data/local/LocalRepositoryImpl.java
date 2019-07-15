@@ -8,6 +8,7 @@ import com.example.animecalendar.data.local.daos.MyAnimesDao;
 import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -80,4 +81,13 @@ public class LocalRepositoryImpl implements LocalRepository {
         return myAnimesEpisodesDao.getAnimeEpisodesOfTheDay();
     }
 
+    @Override
+    public LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId) {
+        return myAnimesEpisodesDao.getAnimeEpisodesToAssignDate(animeId);
+    }
+
+    @Override
+    public void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeDateToWatchPojoVersion(episodes));
+    }
 }

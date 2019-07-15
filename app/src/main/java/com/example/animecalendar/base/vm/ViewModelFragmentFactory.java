@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.animecalendar.providers.VMProvider;
+import com.example.animecalendar.ui.assignment.AssignmentFragmentViewModel;
 import com.example.animecalendar.ui.calendar.CalendarFragmentViewModel;
 import com.example.animecalendar.ui.calendar_episodes.CalendarEpisodesFragmentViewModel;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragmentViewModel;
@@ -40,6 +41,8 @@ public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
                 return (T) new DetailAnimeEpisodeFragmentViewModel(mainActivityViewModel);
             case CALENDAR_EPISODES:
                 return (T) new CalendarEpisodesFragmentViewModel(mainActivityViewModel);
+            case ASSIGNMENT:
+                return (T) new AssignmentFragmentViewModel(mainActivityViewModel);
             default:
                 return null;
         }

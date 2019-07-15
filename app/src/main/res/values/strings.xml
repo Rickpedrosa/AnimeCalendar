@@ -20,4 +20,5 @@
     <string name="epsCounter">%1$d/%2$d</string>
     <string name="animeStatus">Status: %1$s</string>
     <string name="episode">%1$d - %2$s</string>
+    <string name="animeTitle">%1$s (%2$s eps)</string>
 </resources>

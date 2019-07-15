@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@id/myAnimeSeriesFragment">
 
@@ -11,6 +12,9 @@
         <action
             android:id="@+id/action_myAnimeSeriesFragment_to_detailAnimeFragment"
             app:destination="@id/detailAnimeFragment" />
+        <action
+            android:id="@+id/action_myAnimeSeriesFragment_to_assignmentFragment"
+            app:destination="@id/assignmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
@@ -39,6 +43,14 @@
         android:id="@+id/calendarEpisodesFragment"
         android:name="com.example.animecalendar.ui.calendar_episodes.CalendarEpisodesFragment"
         android:label="Episodes">
+        <argument
+            android:name="animeId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/assignmentFragment"
+        android:name="com.example.animecalendar.ui.assignment.AssignmentFragment"
+        tools:layout="@layout/fragment_assignment_dates" >
         <argument
             android:name="animeId"
             app:argType="integer" />

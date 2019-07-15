@@ -40,8 +40,8 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = androidx.lifecycle.ViewModelProviders.of(this,
-                VMProvider.viewModelFragmentFactory(this,
+        viewModel = androidx.lifecycle.ViewModelProviders.of(requireActivity(),
+                VMProvider.viewModelFragmentFactory(requireActivity(),
                         VMProvider.FRAGMENTS.SEARCH))
                 .get(SearchFragmentViewModel.class);
     }

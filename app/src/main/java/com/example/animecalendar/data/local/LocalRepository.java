@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -34,5 +35,7 @@ public interface LocalRepository {
     void updateEpisodeDateToWatch(String date, int episodeId);
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesOfTheDay();
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
+    void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes);
 
 }

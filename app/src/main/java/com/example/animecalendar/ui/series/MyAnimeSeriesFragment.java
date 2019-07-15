@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener,
- OnSelectDateListener{
+        OnSelectDateListener {
 
     private FragmentMyanimesBinding b;
     private NavController navController;
@@ -132,7 +132,11 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 break;
             case LocalRepository.STATUS_FINISHED:
                 if (which == 0) {
-                    updateStatus(LocalRepository.STATUS_FOLLOWING);
+                    //updateStatus(LocalRepository.STATUS_FOLLOWING);
+                    //viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
+                    navController.navigate(MyAnimeSeriesFragmentDirections
+                    .actionMyAnimeSeriesFragmentToAssignmentFragment(
+                            listAdapter.getItem(viewModel.getItemPosition()).getId()));
                 } else {
                     deleteAnime();
                 }
@@ -145,7 +149,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 }
                 break;
         }
-    }//TODO CUSTOM DATEPICKER (applandeo) CLASS TO DIALOGFRAGMENT
+    }
 
     private void deleteAnime() {
         viewModel.deleteAnime(listAdapter.getItem(viewModel.getItemPosition()).getId());
@@ -154,7 +158,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     private void updateStatus(String status) {
         viewModel.updateStatus(status, listAdapter.getItem(viewModel.getItemPosition()).getId());
         if (status.equals(LocalRepository.STATUS_FOLLOWING)) {
-            viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
+            //viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
         }
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
