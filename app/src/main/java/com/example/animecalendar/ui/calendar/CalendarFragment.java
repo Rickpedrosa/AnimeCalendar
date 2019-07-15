@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.calendar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
+import com.applikeysolutions.cosmocalendar.listeners.OnMonthChangeListener;
+import com.applikeysolutions.cosmocalendar.model.Day;
+import com.applikeysolutions.cosmocalendar.model.Month;
+import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
+import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
+import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.OuterFragmentCalendarBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
+import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +41,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-public class CalendarFragment extends Fragment implements OnSelectDateListener {
+public class CalendarFragment extends Fragment {
 
     private NavController navController;
     private CalendarFragmentViewAdapter listAdapter;
@@ -64,28 +72,45 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
         observeData();
     }
 
-//    private void setupCalendarView() {
-//        b.includeCalendarContent.calendarView.setEvents(new ArrayList<>(
-//                Collections.singletonList(new EventDay(Calendar.getInstance(), R.drawable.ic_today_lol_24dp))
+    private void setupCalendarView() {
+//        b.includeCalendarContent.cosmoCalendar.setSelectionManager(new RangeSelectionManager(
+//                new OnDaySelectedListener() {
+//                    @Override
+//                    public void onDaySelected() {
+////                    Log.e("PORONGA", "========== setSelectionManager ==========");
+////
+////                    Log.e("PORONGA", "Selected Dates : " + b.includeCalendarContent.cosmoCalendar.getSelectedDates().size());
+//                        if (b.includeCalendarContent.cosmoCalendar.getSelectedDates().size() <= 0) {
+//                            return;
+//                        }
+////                    Log.e("PORONGA", "Selected Days : " + b.includeCalendarContent.cosmoCalendar.getSelectedDays());
+////                    Log.e("PORONGA", "Departure : DD MMM YYYY : " +
+////                            CustomTimeUtils.getDateFormatted(b.includeCalendarContent.cosmoCalendar.getSelectedDays().get(0).getCalendar().getTime()));
+////                    Log.e("PORONGA", "Return : DD MMM YYYY : " +
+////                            CustomTimeUtils.getDateFormatted(b.includeCalendarContent.cosmoCalendar.getSelectedDays()
+////                                    .get(b.includeCalendarContent.cosmoCalendar.getSelectedDates().size() - 1).getCalendar().getTime()));
+//
+//                    }
+//                }
 //        ));
-//        b.includeCalendarContent.calendarView.setOnDayClickListener(new OnDayClickListener() {
-//            @Override
-//            public void onDayClick(EventDay eventDay) {
-//            }
-//        });
-//    }
+
+    }
 
     private void setupViews() {
         setupRecyclerView();
         setupToolbar();
-//        setupCalendarView();
+        setupCalendarView();
     }
 
     private void setupToolbar() {
         b.toolbarCalendarFragment.inflateMenu(R.menu.calendar_menu);
         b.toolbarCalendarFragment.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.hideEpisodes) {
-                Toast.makeText(requireContext(), "2XTIME", Toast.LENGTH_LONG).show();
+               b.includeCalendarContent.cosmoCalendar.clearSelections();
+                Calendar day = Calendar.getInstance();
+                day.set(2019, 7, 23);
+                b.includeCalendarContent.cosmoCalendar.getSelectionManager().toggleDay(new Day(Calendar.getInstance()));
+                b.includeCalendarContent.cosmoCalendar.getSelectionManager().toggleDay(new Day(day));
                 return true;
             }
             return false;
@@ -114,14 +139,9 @@ public class CalendarFragment extends Fragment implements OnSelectDateListener {
     private void observeData() {
         viewModel.getAnimeWithEpisodes().observe(getViewLifecycleOwner(), calendarAnimeEpisodes ->
         {
-            b.includeCalendarContent.progressBar.setVisibility(View.INVISIBLE);
             b.includeCalendarContent.lblNoAnime.setVisibility(calendarAnimeEpisodes.size() == 0 ?
                     View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(calendarAnimeEpisodes);
         });
-    }
-
-    @Override
-    public void onSelect(List<Calendar> calendar) {
     }
 }
