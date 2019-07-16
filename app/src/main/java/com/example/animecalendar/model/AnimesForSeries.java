@@ -14,6 +14,7 @@ public class AnimesForSeries {
     private String poster;
     @ColumnInfo(name = "epCount")
     private int epCount;
+    @Ignore
     @ColumnInfo(name = "epsWatched")
     private int epWatchedCount;
 

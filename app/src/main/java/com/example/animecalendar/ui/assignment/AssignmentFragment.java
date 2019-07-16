@@ -132,8 +132,7 @@ public class AssignmentFragment extends Fragment {
     private List<MyAnimeEpisodeListWithAnimeTitle> getAllEpisodes() {
         List<MyAnimeEpisodeListWithAnimeTitle> mList = new ArrayList<>();
         for (int i = 0; i < listAdapter.getItemCount(); i++) {
-            if (listAdapter.getItem(i).getWasWatched() == LocalRepository.NOT_WATCHED)
-                mList.add(listAdapter.getItem(i));
+            mList.add(listAdapter.getItem(i));
         }
         return mList;
     }

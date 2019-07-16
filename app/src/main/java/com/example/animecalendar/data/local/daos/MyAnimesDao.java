@@ -29,6 +29,14 @@ public interface MyAnimesDao {
     //GROUP BY ani.id
     //ORDER BY ani.averageRating DESC
 
+    @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.status AS status, ani.tinyPosterImage AS poster, ani.episodeCount AS epCount " +
+            " FROM anime ani INNER JOIN episodes eptwo ON ani.id = eptwo.animeId " +
+            " WHERE ani.status LIKE 'following'" +
+            " GROUP BY ani.id " +
+            " HAVING ani.episodeCount = COUNT(eptwo.id) " +
+            " ORDER BY ani.averageRating DESC")
+    LiveData<List<AnimesForSeries>> getAnimesToExposeFollowingOnly();
+
     @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.episodeCount AS epCount," +
             " COUNT(ep.id) AS epsWatched" +
             " FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1 " +

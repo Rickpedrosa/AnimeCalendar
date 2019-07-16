@@ -36,5 +36,6 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesOfTheDay();
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
     void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes);
+    LiveData<List<AnimesForSeries>> getAnimesToExposeFollowingOnly();
 
 }

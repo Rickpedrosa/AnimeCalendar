@@ -38,6 +38,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         viewModel = ViewModelProviders.of(requireActivity(),
                 VMProvider.viewModelFragmentFactory(requireActivity(), VMProvider.FRAGMENTS.SERIES))
                 .get(MyAnimeSeriesFragmentViewModel.class);
@@ -60,6 +61,23 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     }
 
     private void setupToolbar() {
+        b.appbar.inflateMenu(R.menu.myanimes_menu);
+        b.appbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.mnuAll: //0
+                    return true;
+                case R.id.mnuFollowing: //1
+                    return true;
+                case R.id.mnuFinished: //2
+                    return true;
+                case R.id.mnuCurrent: //3
+                    return true;
+                case R.id.mnuCompleted: //4
+                    return true;
+                default:
+                    return false;
+            }
+        });
         NavigationUI.setupWithNavController(b.collapsingToolbar,
                 b.appbar,
                 navController,

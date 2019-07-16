@@ -32,7 +32,7 @@ public interface MyAnimesEpisodesDao {
 
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
-            "WHERE ep.animeId = :animeId " +
+            "WHERE ep.animeId = :animeId AND ep.wasWatched = 0 " +
             "ORDER BY number")
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
 

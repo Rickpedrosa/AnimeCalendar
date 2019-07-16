@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/mnuAll"
+            android:title="Show all" />
+        <item
+            android:id="@+id/mnuFollowing"
+            android:title="Following" />
+        <item
+            android:id="@+id/mnuFinished"
+            android:title="Watch" />
+        <item
+            android:id="@+id/mnuCurrent"
+            android:title="Current" />
+        <item
+            android:id="@+id/mnuCompleted"
+            android:title="Completed" />
+    </group>
+</menu>

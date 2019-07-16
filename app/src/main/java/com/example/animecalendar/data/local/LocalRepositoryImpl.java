@@ -90,4 +90,9 @@ public class LocalRepositoryImpl implements LocalRepository {
     public void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeDateToWatchPojoVersion(episodes));
     }
+
+    @Override
+    public LiveData<List<AnimesForSeries>> getAnimesToExposeFollowingOnly() {
+        return myAnimesDao.getAnimesToExposeFollowingOnly();
+    }
 }

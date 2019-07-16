@@ -70,22 +70,27 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         private void setGeneralInfo(AnimesForSeries type) {
             b.lblTitle.setText(type.getTitle());
             b.lblStatus.setText(b.lblStatus.getResources().getString(R.string.animeStatus, type.getStatus()));
-            b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
+           // b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
             PicassoUtils.loadPicasso(b.imgPoster.getContext(), type.getPoster(), b.imgPoster);
         }
 
         private void setStyles(AnimesForSeries type) {
             cleanLabels();
-            if (type.getStatus().equals(LocalRepository.STATUS_CURRENT)) {
-                b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
-            } else if (type.getStatus().equals(LocalRepository.STATUS_FOLLOWING)) {
-                b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
-                //b.lblNextEpisode.setText("Next episode: 06/07/2019");
-            } else if (type.getStatus().equals(LocalRepository.STATUS_COMPLETED)) {
-                b.innerConstraint.setAlpha(0.5f);
-            } else {
-                //FINISHED STATUS
-                b.lblEpCounts.setText("Ready to schedule!");
+            switch (type.getStatus()) {
+                case LocalRepository.STATUS_CURRENT:
+                    b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
+                    break;
+                case LocalRepository.STATUS_FOLLOWING:
+                    b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
+                    //b.lblNextEpisode.setText("Next episode: 06/07/2019");
+                    break;
+                case LocalRepository.STATUS_COMPLETED:
+                    b.innerConstraint.setAlpha(0.5f);
+                    break;
+                default:
+                    //FINISHED STATUS
+                    b.lblEpCounts.setText("Ready to schedule!");
+                    break;
             }
         }
 
