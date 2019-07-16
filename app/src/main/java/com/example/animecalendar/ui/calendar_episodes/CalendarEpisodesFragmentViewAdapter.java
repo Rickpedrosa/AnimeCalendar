@@ -68,7 +68,7 @@ public class CalendarEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnime
         private void setImmutableValues(MyAnimeEpisodesList type) {
             b.lblEpisode.setText(b.lblEpisode.getResources().getString(R.string.episode, type.getNumber(), type.getCanonicalTitle()));
             b.lblDate.setText(type.getWatchToDate());
-            PicassoUtils.loadPicasso(b.empresaImg.getContext(), type.getThumbnail(), b.empresaImg);
+            PicassoUtils.loadPicassoWithError(b.empresaImg.getContext(), type.getThumbnail(), b.empresaImg);
         }
 
         private void setMutableValues(MyAnimeEpisodesList type) {

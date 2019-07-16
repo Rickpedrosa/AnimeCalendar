@@ -1,6 +1,5 @@
 package com.example.animecalendar.ui.series;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -52,7 +51,6 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         holder.bind(getItem(position));
     }
 
-    @SuppressLint("SetTextI18n")
     class AnimeViewHolder extends BaseViewHolder<AnimesForSeries> {
 
         private FragmentSeriesItemBinding b;
@@ -82,11 +80,17 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
                 b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
             } else if (type.getStatus().equals(LocalRepository.STATUS_FOLLOWING)) {
                 b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
-                b.lblNextEpisode.setText("Next episode: 06/07/2019");
+                //b.lblNextEpisode.setText("Next episode: 06/07/2019");
+            } else if (type.getStatus().equals(LocalRepository.STATUS_COMPLETED)) {
+                b.innerConstraint.setAlpha(0.5f);
+            } else {
+                //FINISHED STATUS
+                b.lblEpCounts.setText("Ready to schedule!");
             }
         }
 
         private void cleanLabels() {
+            b.innerConstraint.setAlpha(1f);
             b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(android.R.color.background_light));
             b.lblNextEpisode.setText("");
         }

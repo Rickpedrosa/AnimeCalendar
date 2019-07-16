@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
 import com.example.animecalendar.data.local.LocalRepository;
@@ -29,11 +28,7 @@ import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Calendar;
-import java.util.List;
-
-public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener,
-        OnSelectDateListener {
+public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener {
 
     private FragmentMyanimesBinding b;
     private NavController navController;
@@ -155,11 +150,6 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 getResources().getString(R.string.update_anime_status,
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),
                 Snackbar.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onSelect(List<Calendar> calendar) {
 
     }
 }

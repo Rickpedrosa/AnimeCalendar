@@ -25,6 +25,10 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
         viewModel.getLocalRepository().updateEpisodeStatus(value, episodeId);
     }
 
+    void updateAnimeStatus(String status, int animeId){
+        viewModel.getLocalRepository().updateAnimeStatus(status, animeId);
+    }
+
     void updateEpisodeDateToWatch(String date, int episodeId) {
         viewModel.getLocalRepository().updateEpisodeDateToWatch(date, episodeId);
     }

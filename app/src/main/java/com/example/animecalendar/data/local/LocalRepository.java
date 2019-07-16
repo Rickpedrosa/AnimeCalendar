@@ -30,7 +30,6 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
     void addEpisodes(List<MyAnimeEpisode> episodes);
     void updateAnimeStatus(String status, int animeId);
-//    LiveData<List<CalendarAnimeEpisodesDeprecated>> getAnimeEpisodesForCalendar();
     void updateEpisodeStatus(int value, int id);
     void updateEpisodeDateToWatch(String date, int episodeId);
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();

@@ -1,6 +1,7 @@
 package com.example.animecalendar.model;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Ignore;
 
 public class AnimesForSeries {
     @ColumnInfo(name = "id")
@@ -16,13 +17,12 @@ public class AnimesForSeries {
     @ColumnInfo(name = "epsWatched")
     private int epWatchedCount;
 
-    public AnimesForSeries(int id, String title, String status, String poster, int epCount, int epWatchedCount) {
+    public AnimesForSeries(int id, String title, String status, String poster, int epCount) {
         this.id = id;
         this.title = title;
         this.status = status;
         this.poster = poster;
         this.epCount = epCount;
-        this.epWatchedCount = epWatchedCount;
     }
 
     public int getId() {

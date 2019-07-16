@@ -37,6 +37,7 @@ public class AssignmentFragment extends Fragment {
     private AssignmentFragmentViewAdapter listAdapter;
     private int animeId;
 
+    //TODO HACER ACTUALIZACION AL EPISODIO QUE TENGA EL WASWATCHED == 0
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,7 +132,8 @@ public class AssignmentFragment extends Fragment {
     private List<MyAnimeEpisodeListWithAnimeTitle> getAllEpisodes() {
         List<MyAnimeEpisodeListWithAnimeTitle> mList = new ArrayList<>();
         for (int i = 0; i < listAdapter.getItemCount(); i++) {
-            mList.add(listAdapter.getItem(i));
+            if (listAdapter.getItem(i).getWasWatched() == LocalRepository.NOT_WATCHED)
+                mList.add(listAdapter.getItem(i));
         }
         return mList;
     }
