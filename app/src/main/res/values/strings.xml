@@ -14,6 +14,11 @@
     <array name="dialog_opts_3">
         <item>Delete</item>
     </array>
+    <array name="dialog_opts_4">
+        <item>Follow</item>
+        <item>Delete</item>
+        <item>Update</item>
+    </array>
     <string name="update_anime_status">%1$s has been updated to %2$s</string>
     <string name="hide_ep_title">Hide episodes</string>
     <string name="episodes_per_day">Episodes per day…</string>

@@ -34,6 +34,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     private NavController navController;
     private MyAnimeSeriesFragmentViewModel viewModel;
     private MyAnimeSeriesFragmentViewAdapter listAdapter;
+    public static final String ALL_CATEGORY = "All";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel = ViewModelProviders.of(requireActivity(),
                 VMProvider.viewModelFragmentFactory(requireActivity(), VMProvider.FRAGMENTS.SERIES))
                 .get(MyAnimeSeriesFragmentViewModel.class);
+        if (savedInstanceState == null)
+            viewModel.setCategoryToLiveData(ALL_CATEGORY);
     }
 
     @Nullable
@@ -65,14 +68,19 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         b.appbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.mnuAll: //0
+                    viewModel.setCategoryToLiveData(ALL_CATEGORY);
                     return true;
                 case R.id.mnuFollowing: //1
+                    viewModel.setCategoryToLiveData(LocalRepository.STATUS_FOLLOWING);
                     return true;
                 case R.id.mnuFinished: //2
+                    viewModel.setCategoryToLiveData(LocalRepository.STATUS_FINISHED);
                     return true;
                 case R.id.mnuCurrent: //3
+                    viewModel.setCategoryToLiveData(LocalRepository.STATUS_CURRENT);
                     return true;
                 case R.id.mnuCompleted: //4
+                    viewModel.setCategoryToLiveData(LocalRepository.STATUS_COMPLETED);
                     return true;
                 default:
                     return false;
@@ -106,7 +114,10 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     }
 
     private void observeData() {
-        viewModel.getAnimesToExpose().observe(getViewLifecycleOwner(), animesForSeries -> listAdapter.submitList(animesForSeries));
+        viewModel.getAnimesToExposeByCategory().observe(getViewLifecycleOwner(), animesForSeries -> {
+            b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
+            listAdapter.submitList(animesForSeries);
+        });
     }
 
     private String[] getArrayForDialog(int position) {
@@ -114,7 +125,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             case LocalRepository.STATUS_COMPLETED:
                 return getResources().getStringArray(R.array.dialog_opts_3);
             case LocalRepository.STATUS_CURRENT:
-                return getResources().getStringArray(R.array.dialog_opts_1);
+                return getResources().getStringArray(R.array.dialog_opts_4);
             case LocalRepository.STATUS_FINISHED:
                 return getResources().getStringArray(R.array.dialog_opts_1);
             case LocalRepository.STATUS_FOLLOWING:
@@ -135,8 +146,10 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             case LocalRepository.STATUS_CURRENT:
                 if (which == 0) {
                     Toast.makeText(requireContext(), "Current animes cannot be followed", Toast.LENGTH_LONG).show();
-                } else {
+                } else if (which == 1) {
                     deleteAnime();
+                } else {
+                    //TODO PERMITIR ACTUALIZAR EL ANIME
                 }
                 break;
             case LocalRepository.STATUS_FINISHED:

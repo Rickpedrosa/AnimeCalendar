@@ -92,7 +92,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<AnimesForSeries>> getAnimesToExposeFollowingOnly() {
-        return myAnimesDao.getAnimesToExposeFollowingOnly();
+    public LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category) {
+        return myAnimesDao.getAnimesToExposeByCategory(category);
     }
 }
