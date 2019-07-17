@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchFragmentViewModel extends ViewModel {
@@ -34,8 +35,8 @@ public class SearchFragmentViewModel extends ViewModel {
         disposable = viewModel.getAnimeRepository().getAnimesByFilterText(title, AnimeService.LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> startLoading())
                 .subscribe(listResponse -> {
-                    startLoading();
                     if (listResponse.isSuccessful() && Objects.requireNonNull(listResponse.body()).getData().size() != 0) {
                         submitAnimeList(listResponse.body().getData());
                     } else if (Objects.requireNonNull(listResponse.body()).getData().size() == 0) {

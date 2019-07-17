@@ -32,6 +32,7 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -71,12 +72,13 @@ public class MainActivityViewModel extends AndroidViewModel {
         disposable = getEpisodesFromResponse(String.valueOf(animeId), 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> progressBarLoading())
                 .subscribe(animeEpisode -> setupEpisodesForInsertion(animeId, animeEpisode),
-                        throwable -> Toast.makeText(application, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show(),
-                        () -> Toast.makeText(application, "All episodes fetched", Toast.LENGTH_LONG).show());
+                        throwable -> asyncStateInform(throwable.getLocalizedMessage()),
+                        () -> asyncStateInform("All episodes fetched"));
     }
 
-    public void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {
+    private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {
         List<MyAnimeEpisode> listEpisodes = new ArrayList<>();
         MyAnimeEpisode episode;
 
@@ -140,7 +142,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         localRepository.addEpisodes(list);
     }
 
-    public Observable<AnimeEpisode> getEpisodesFromResponse(String id, int offset) {
+    private Observable<AnimeEpisode> getEpisodesFromResponse(String id, int offset) {
         return RXJavaProvider.episodeObservableFlatMapped(animeRepository.getAnimeEpisodes(
                 id,
                 offset,
@@ -242,4 +244,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         return updateTrigger;
     }
 
+    LiveData<Boolean> getProgressBarController() {
+        return progressBarController;
+    }
+
+    private void asyncStateInform(String message) {
+        Toast.makeText(application, message, Toast.LENGTH_LONG).show();
+        progressBarStop();
+    }
 }
