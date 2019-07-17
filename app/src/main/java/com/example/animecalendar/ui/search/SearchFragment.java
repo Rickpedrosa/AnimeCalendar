@@ -27,6 +27,7 @@ import com.example.animecalendar.databinding.FragmentSearchBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.KeyboardUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
@@ -60,6 +61,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         setupToolbar();
         setupRecyclerView();
         setupSearchText();
+        setupTextView();
         observeAnimeData();
     }
 
@@ -73,6 +75,13 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         NavigationUI.setupWithNavController(b.toolbarSearchFragment,
                 navController,
                 AppbarConfigProvider.getAppBarConfiguration());
+    }
+
+    private void setupTextView() {
+        b.lblNoAnimesSearch.setOnClickListener(v -> {
+            b.editSearch.requestFocus();
+            KeyboardUtils.showSoftKeyboard(requireActivity());
+        });
     }
 
     private void setupRecyclerView() {
@@ -117,12 +126,23 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void observeAnimeData() {
         viewModel.getAnimeList().observe(getViewLifecycleOwner(), myAnimes ->
-                listAdapter.submitList(myAnimes));
+        {
+            b.lblNoAnimesSearch.setVisibility(myAnimes.size() == 0 ? View.VISIBLE : View.GONE);
+            listAdapter.submitList(myAnimes);
+        });
+    }
+
+    private void showTheSuccess() {
+        Snackbar.make(b.lblNoAnimesSearch,
+                listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle() + " added!",
+                Snackbar.LENGTH_LONG).show();
+        b.editSearch.getText().clear();
     }
 
     @Override
     public void onPositiveButtonClick(DialogInterface dialog) {
         viewModel.addAnimeToDatabase(listAdapter.getItem(viewModel.getItemPosition()));
+        showTheSuccess();
     }
 
     @Override
