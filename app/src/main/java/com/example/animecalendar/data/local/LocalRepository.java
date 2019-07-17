@@ -37,5 +37,6 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
     void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes);
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category);
+    void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
 
 }

@@ -95,4 +95,9 @@ public class LocalRepositoryImpl implements LocalRepository {
     public LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category) {
         return myAnimesDao.getAnimesToExposeByCategory(category);
     }
+
+    @Override
+    public void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.addEpisodesOnReplaceStrategy(episodes));
+    }
 }

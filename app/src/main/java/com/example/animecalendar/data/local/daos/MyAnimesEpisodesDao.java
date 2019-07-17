@@ -39,6 +39,9 @@ public interface MyAnimesEpisodesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
+
     @Query("UPDATE episodes SET wasWatched = :value WHERE id = :episodeId")
     void updateEpisodeStatus(int value, int episodeId);
 

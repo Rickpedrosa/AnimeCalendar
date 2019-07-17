@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.Event;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
@@ -118,6 +120,15 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(animesForSeries);
         });
+        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (!aBoolean.hasBeenHandled()) {
+                if (aBoolean.getContentIfNotHandled()) {
+                    Toast.makeText(requireContext(), "Son los mismos", Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(requireContext(), "Se puede actualizar", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private String[] getArrayForDialog(int position) {
@@ -149,7 +160,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 } else if (which == 1) {
                     deleteAnime();
                 } else {
-                    //TODO PERMITIR ACTUALIZAR EL ANIME
+                    viewModel.checkIfCanBeUpdated(listAdapter.getItem(viewModel.getItemPosition()));
                 }
                 break;
             case LocalRepository.STATUS_FINISHED:

@@ -5,8 +5,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.animecalendar.base.Event;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.data.local.LocalRepositoryImpl;
@@ -17,6 +19,7 @@ import com.example.animecalendar.data.remote.repos.AnimeRepository;
 import com.example.animecalendar.data.remote.repos.AnimeRepositoryImpl;
 import com.example.animecalendar.data.remote.services.AnimeService;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
+import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.providers.RXJavaProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
@@ -24,6 +27,7 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,6 +42,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final LocalRepository localRepository;
     private final AnimeRepository animeRepository;
     private MutableLiveData<Boolean> progressBarController = new MutableLiveData<>();
+    private MutableLiveData<Event<Boolean>> updateTrigger = new MutableLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -71,7 +76,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                         () -> Toast.makeText(application, "All episodes fetched", Toast.LENGTH_LONG).show());
     }
 
-    private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {
+    public void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {
         List<MyAnimeEpisode> listEpisodes = new ArrayList<>();
         MyAnimeEpisode episode;
 
@@ -135,7 +140,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         localRepository.addEpisodes(list);
     }
 
-    private Observable<AnimeEpisode> getEpisodesFromResponse(String id, int offset) {
+    public Observable<AnimeEpisode> getEpisodesFromResponse(String id, int offset) {
         return RXJavaProvider.episodeObservableFlatMapped(animeRepository.getAnimeEpisodes(
                 id,
                 offset,
@@ -218,6 +223,23 @@ public class MainActivityViewModel extends AndroidViewModel {
             }
         }
         localRepository.updateEpisodeDateToWatchPojoVersion(episodesToUpdate);
+    }
+
+    public void checkIfCanBeUpdated(AnimesForSeries anime) {
+        disposable = animeRepository.getAnime(String.valueOf(anime.getId()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(animeResponse -> {
+                    if (!Objects.requireNonNull(animeResponse.body()).getData().getAttributes().getStatus().equalsIgnoreCase(anime.getStatus())) {
+                        updateTrigger.postValue(new Event<>(false));
+                    } else {
+                        updateTrigger.postValue(new Event<>(true));
+                    }
+                }, throwable -> Toast.makeText(application, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    public LiveData<Event<Boolean>> getUpdateTrigger() {
+        return updateTrigger;
     }
 
 }
