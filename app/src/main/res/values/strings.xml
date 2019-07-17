@@ -26,4 +26,5 @@
     <string name="animeStatus">Status: %1$s</string>
     <string name="episode">%1$d - %2$s</string>
     <string name="animeTitle">%1$s (%2$s eps)</string>
+    <string name="myseries_fragment_toolbar_title">My animes (%1$s)</string>
 </resources>

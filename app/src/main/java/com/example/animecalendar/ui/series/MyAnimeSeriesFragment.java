@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.series;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -29,6 +31,8 @@ import com.example.animecalendar.databinding.FragmentMyanimesBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Objects;
 
 public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener {
 
@@ -96,6 +100,9 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
+//        DividerItemDecoration divider = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+//        Drawable mDivider = ContextCompat.getDrawable(requireContext(), R.drawable.my_series_divider);
+//        divider.setDrawable(Objects.requireNonNull(mDivider));
         listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> {
             DirectSelectionDialogFragment ds = DirectSelectionDialogFragment.newInstance(
                     "",
@@ -110,7 +117,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
                 .setAnimeId(listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
-        b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         b.listAnimes.setLayoutManager(manager);
         b.listAnimes.setAdapter(listAdapter);
     }
@@ -120,15 +127,19 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(animesForSeries);
         });
+
         viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
             if (!aBoolean.hasBeenHandled()) {
                 if (aBoolean.getContentIfNotHandled()) {
                     Toast.makeText(requireContext(), "Son los mismos", Toast.LENGTH_LONG).show();
-                }else {
+                } else {
                     Toast.makeText(requireContext(), "Se puede actualizar", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        viewModel.getCategoryTrigger().observe(getViewLifecycleOwner(), s ->
+                b.collapsingToolbar.setTitle(getResources().getString(R.string.myseries_fragment_toolbar_title, s)));
     }
 
     private String[] getArrayForDialog(int position) {

@@ -231,13 +231,15 @@ public class MainActivityViewModel extends AndroidViewModel {
         disposable = animeRepository.getAnime(String.valueOf(anime.getId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> progressBarLoading())
                 .subscribe(animeResponse -> {
                     if (!Objects.requireNonNull(animeResponse.body()).getData().getAttributes().getStatus().equalsIgnoreCase(anime.getStatus())) {
                         updateTrigger.postValue(new Event<>(false));
                     } else {
                         updateTrigger.postValue(new Event<>(true));
                     }
-                }, throwable -> Toast.makeText(application, throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                    progressBarStop();
+                }, throwable -> asyncStateInform(throwable.getLocalizedMessage()));
     }
 
     public LiveData<Event<Boolean>> getUpdateTrigger() {

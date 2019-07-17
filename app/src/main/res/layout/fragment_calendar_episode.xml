@@ -10,7 +10,7 @@
         android:id="@+id/coordinatorLayoutSearchFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/colorPrimaryDark">
+        app:cardBackgroundColor="@color/colorPrimaryPogDark">
 
 
         <com.google.android.material.appbar.AppBarLayout

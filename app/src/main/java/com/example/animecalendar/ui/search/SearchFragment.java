@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -41,7 +42,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = androidx.lifecycle.ViewModelProviders.of(requireActivity(),
+        viewModel = ViewModelProviders.of(requireActivity(),
                 VMProvider.viewModelFragmentFactory(requireActivity(),
                         VMProvider.FRAGMENTS.SEARCH))
                 .get(SearchFragmentViewModel.class);

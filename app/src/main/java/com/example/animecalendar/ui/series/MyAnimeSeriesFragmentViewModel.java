@@ -38,7 +38,6 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
     private int itemPosition;
     private Disposable disposable;
     private MutableLiveData<String> categoryTrigger = new MutableLiveData<>();
-    private MutableLiveData<Event<Boolean>> updateTrigger = new MutableLiveData<>();
 
 
     public MyAnimeSeriesFragmentViewModel(MainActivityViewModel viewModel) {
@@ -84,11 +83,15 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         categoryTrigger.setValue(val);
     }
 
-    void checkIfCanBeUpdated(AnimesForSeries animesForSeries){
+    void checkIfCanBeUpdated(AnimesForSeries animesForSeries) {
         viewModel.checkIfCanBeUpdated(animesForSeries);
     }
 
     LiveData<Event<Boolean>> getUpdateTrigger() {
         return viewModel.getUpdateTrigger();
+    }
+
+    LiveData<String> getCategoryTrigger() {
+        return categoryTrigger;
     }
 }

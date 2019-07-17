@@ -18,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
+import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
@@ -36,8 +37,6 @@ public class AssignmentFragment extends Fragment {
     private AssignmentFragmentViewModel viewModel;
     private AssignmentFragmentViewAdapter listAdapter;
     private int animeId;
-
-    //TODO HACER ACTUALIZACION AL EPISODIO QUE TENGA EL WASWATCHED == 0
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -11,7 +11,7 @@
         android:id="@+id/coordinatorLayoutSearchFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimaryPogDark"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -54,7 +54,7 @@
             android:id="@+id/innerConstraintSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimaryPogDark"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
