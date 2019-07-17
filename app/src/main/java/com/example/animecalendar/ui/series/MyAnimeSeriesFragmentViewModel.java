@@ -11,6 +11,8 @@ import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 import static com.example.animecalendar.ui.series.MyAnimeSeriesFragment.ALL_CATEGORY;
 
 public class MyAnimeSeriesFragmentViewModel extends ViewModel {
@@ -61,5 +63,9 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
 
     void setCategoryToLiveData(String val){
         categoryTrigger.setValue(val);
+    }
+
+    void updateCurrentAnime(AnimesForSeries anime){
+       viewModel.getAnimeRepository().getAnime(String.valueOf(anime.getId()))
     }
 }

@@ -34,7 +34,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     private NavController navController;
     private MyAnimeSeriesFragmentViewModel viewModel;
     private MyAnimeSeriesFragmentViewAdapter listAdapter;
-    public static final String ALL_CATEGORY = "All";
+    static final String ALL_CATEGORY = "All";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
