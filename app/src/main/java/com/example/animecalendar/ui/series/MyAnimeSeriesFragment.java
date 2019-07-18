@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragmentMaterial;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
@@ -88,7 +86,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                     return false;
             }
         });
-        NavigationUI.setupWithNavController(b.collapsingToolbar,
+        NavigationUI.setupWithNavController(
+                b.collapsingToolbar,
                 b.appbar,
                 navController,
                 AppbarConfigProvider.getAppBarConfiguration());
@@ -98,7 +97,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
         listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> {
             viewModel.setItemPosition(position);
-            DirectSelectionDialogFragmentMaterial.newInstance(listAdapter.getItem(position).getStatus(),
+            DirectSelectionDialogFragmentMaterial.newInstance(
+                    listAdapter.getItem(position).getStatus(),
                     this,
                     4)
                     .show(requireFragmentManager(), "XD");

@@ -135,7 +135,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void showTheSuccess() {
         Snackbar.make(b.lblNoAnimesSearch,
-                listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle() + " added!",
+                listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle() + " added! (fetching episodes)",
                 Snackbar.LENGTH_LONG).show();
         b.editSearch.getText().clear();
     }

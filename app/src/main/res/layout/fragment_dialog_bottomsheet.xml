@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/flSheetRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="8dp">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
+        android:background="@color/backgroundNight"
+        app:itemTextColor="@android:color/background_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start" />
