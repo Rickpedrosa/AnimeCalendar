@@ -1,19 +1,17 @@
 package com.example.animecalendar.ui.series;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,20 +19,18 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.Event;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragment;
+import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragmentMaterial;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Objects;
-
-public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragment.Listener {
+public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDialogFragmentMaterial.Listener {
 
     private FragmentMyanimesBinding b;
     private NavController navController;
@@ -100,18 +96,12 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-//        DividerItemDecoration divider = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
-//        Drawable mDivider = ContextCompat.getDrawable(requireContext(), R.drawable.my_series_divider);
-//        divider.setDrawable(Objects.requireNonNull(mDivider));
         listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> {
-            DirectSelectionDialogFragment ds = DirectSelectionDialogFragment.newInstance(
-                    "",
-                    getArrayForDialog(position),
-                    MyAnimeSeriesFragment.this,
-                    2
-            );
             viewModel.setItemPosition(position);
-            ds.show(requireFragmentManager(), "POG");
+            DirectSelectionDialogFragmentMaterial.newInstance(listAdapter.getItem(position).getStatus(),
+                    this,
+                    4)
+                    .show(requireFragmentManager(), "XD");
         });
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
@@ -142,59 +132,10 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 b.collapsingToolbar.setTitle(getResources().getString(R.string.myseries_fragment_toolbar_title, s)));
     }
 
-    private String[] getArrayForDialog(int position) {
-        switch (listAdapter.getItem(position).getStatus()) {
-            case LocalRepository.STATUS_COMPLETED:
-                return getResources().getStringArray(R.array.dialog_opts_3);
-            case LocalRepository.STATUS_CURRENT:
-                return getResources().getStringArray(R.array.dialog_opts_4);
-            case LocalRepository.STATUS_FINISHED:
-                return getResources().getStringArray(R.array.dialog_opts_1);
-            case LocalRepository.STATUS_FOLLOWING:
-                return getResources().getStringArray(R.array.dialog_opts_2);
-            default:
-                return getResources().getStringArray(R.array.dialog_opts_1);
-        }
-    }
 
-    @Override
-    public void onItemSelected(DialogFragment dialog, int which) {
-        switch (listAdapter.getItem(viewModel.getItemPosition()).getStatus()) {
-            case LocalRepository.STATUS_COMPLETED:
-                if (which == 0) {
-                    deleteAnime();
-                }
-                break;
-            case LocalRepository.STATUS_CURRENT:
-                if (which == 0) {
-                    Toast.makeText(requireContext(), "Current animes cannot be followed", Toast.LENGTH_LONG).show();
-                } else if (which == 1) {
-                    deleteAnime();
-                } else {
-                    viewModel.checkIfCanBeUpdated(listAdapter.getItem(viewModel.getItemPosition()));
-                }
-                break;
-            case LocalRepository.STATUS_FINISHED:
-                if (which == 0) {
-                    navController.navigate(MyAnimeSeriesFragmentDirections
-                            .actionMyAnimeSeriesFragmentToAssignmentFragment(
-                                    listAdapter.getItem(viewModel.getItemPosition()).getId()));
-                } else {
-                    deleteAnime();
-                }
-                break;
-            case LocalRepository.STATUS_FOLLOWING:
-                if (which == 0) {
-                    updateStatus(); //do unfollow to the anime
-                } else {
-                    deleteAnime();
-                }
-                break;
-        }
-    }
-
-    private void deleteAnime() {
+    private void deleteAnime(BottomSheetDialogFragment dialog) {
         viewModel.deleteAnime(listAdapter.getItem(viewModel.getItemPosition()).getId());
+        dialog.dismiss();
     }
 
     private void updateStatus() {
@@ -204,5 +145,58 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),
                 Snackbar.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public boolean onNavItemSelected(BottomSheetDialogFragment dialog, MenuItem item) {
+        switch (listAdapter.getItem(viewModel.getItemPosition()).getStatus()) {
+            case LocalRepository.STATUS_COMPLETED:
+                if (item.getItemId() == R.id.dialog_completed_delete) {
+                    deleteAnime(dialog);
+                    return true;
+                }
+                break;
+            case LocalRepository.STATUS_CURRENT:
+                switch (item.getItemId()) {
+                    case R.id.dialog_current_follow:
+                        Toast.makeText(requireContext(), "Current animes cannot be followed", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        return true;
+                    case R.id.dialog_current_delete:
+                        deleteAnime(dialog);
+                        return true;
+                    case R.id.dialog_current_update:
+                        viewModel.checkIfCanBeUpdated(listAdapter.getItem(viewModel.getItemPosition()));
+                        dialog.dismiss();
+                        return true;
+                }
+                break;
+            case LocalRepository.STATUS_FINISHED:
+                switch (item.getItemId()) {
+                    case R.id.dialog_finished_follow:
+                        navController.navigate(MyAnimeSeriesFragmentDirections
+                                .actionMyAnimeSeriesFragmentToAssignmentFragment(
+                                        listAdapter.getItem(viewModel.getItemPosition()).getId()));
+                        dialog.dismiss();
+                        return true;
+                    case R.id.dialog_finished_delete:
+                        deleteAnime(dialog);
+                        return true;
+                }
+                break;
+            case LocalRepository.STATUS_FOLLOWING:
+                switch (item.getItemId()) {
+                    case R.id.dialog_following_unfollow:
+                        updateStatus();
+                        dialog.dismiss();
+                        return true;
+                    case R.id.dialog_following_delete:
+                        deleteAnime(dialog);
+                        return true;
+                }
+                break;
+        }
+        dialog.dismiss();
+        return false;
     }
 }
