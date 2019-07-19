@@ -3,11 +3,9 @@ package com.example.animecalendar.ui.calendar_episodes;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
+import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
@@ -31,8 +30,8 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -55,8 +54,8 @@ public class CalendarEpisodesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this,
-                VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CALENDAR_EPISODES))
+        viewModel = ViewModelProviders.of(requireActivity(),
+                VMProvider.viewModelFragmentFactory(requireActivity(), VMProvider.FRAGMENTS.CALENDAR_EPISODES))
                 .get(CalendarEpisodesFragmentViewModel.class);
         linearLayoutManager = new LinearLayoutManager(requireContext());
         obtainArguments();
@@ -107,7 +106,7 @@ public class CalendarEpisodesFragment extends Fragment {
             }
         });
         listAdapter.setOnItemLongClickListener((view, position) -> {
-            scrollToPositionOnEnteringFragment();
+            linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
             return true;
         });
         b.includeCalendarEpisodeContent.listEpisodes.setItemAnimator(new DefaultItemAnimator());
@@ -117,36 +116,35 @@ public class CalendarEpisodesFragment extends Fragment {
 
     }
 
-    private void scrollToPositionOnEnteringFragment() {
-        boolean noItemsWatched = false;
+    private int getPositionToScroll() {
         for (int i = listAdapter.getItemCount() - 1; i >= 0; i--) {
             if (listAdapter.getItem(i).getWasWatched() == WATCHED) {
-                linearLayoutManager.scrollToPositionWithOffset(i - 1, 10);
-                noItemsWatched = true;
-                break;
-            }
-
-            if (i == 0) {
-                linearLayoutManager.scrollToPositionWithOffset(0, 10);
+                return i - 1;
             }
         }
-        if (!noItemsWatched) {
-            linearLayoutManager.scrollToPositionWithOffset(0, 10);
-        }
+        return 0;
     }
 
     private void updateEpisode(int position) throws ParseException {
-        if (CustomTimeUtils.getDateFormatted(Calendar.getInstance().getTime()).equals(listAdapter.getItem(position).getWatchToDate())) {
-            if (listAdapter.getItem(position).getWasWatched() == NOT_WATCHED) {
-                viewModel.updateEpisodeStatus(WATCHED, (int) listAdapter.getItem(position).getId());
-                viewModel.updateEpisodeDateToWatch(WATCH_DATE_DONE, (int) listAdapter.getItem(position).getId());
-            }
-        } else if (new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(listAdapter.getItem(position).getWatchToDate()).getTime()
-                < Calendar.getInstance().getTime().getTime()) {
-            if (listAdapter.getItem(position).getWasWatched() == NOT_WATCHED) {
-                viewModel.updateEpisodeStatus(WATCHED, (int) listAdapter.getItem(position).getId());
-                viewModel.updateEpisodeDateToWatch(WATCH_DATE_DONE, (int) listAdapter.getItem(position).getId());
-            }
+        boolean equalDate = CustomTimeUtils.getDateFormatted(Calendar.getInstance().getTime())
+                .equals(listAdapter.getItem(position).getWatchToDate());
+        boolean smallerThanDate = CustomTimeUtils.dateFromStringToLong(listAdapter.getItem(position)
+                .getWatchToDate())
+                < Calendar.getInstance().getTime().getTime();
+        if (equalDate) {
+            innerUpdateEpisode(position);
+        } else if (smallerThanDate) {
+            innerUpdateEpisode(position);
+        } else {
+            //TODO DIALOG CONFIRMATION
+            viewModel.reorderCaps(getNonWatchedEpisodes());
+        }
+    }
+
+    private void innerUpdateEpisode(int position) {
+        if (listAdapter.getItem(position).getWasWatched() == NOT_WATCHED) {
+            viewModel.updateEpisodeStatus(WATCHED, (int) listAdapter.getItem(position).getId());
+            viewModel.updateEpisodeDateToWatch(WATCH_DATE_DONE, (int) listAdapter.getItem(position).getId());
         }
     }
 
@@ -163,6 +161,19 @@ public class CalendarEpisodesFragment extends Fragment {
             listAdapter.submitList(myAnimeEpisodesLists);
             checkForAnimeStatusUpdate(myAnimeEpisodesLists);
         });
+    }
+
+    private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes() {
+        List<AnimeEpisodeDateUpdatePOJO> mList = new ArrayList<>();
+        for (int i = 0; i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getWasWatched() == NOT_WATCHED) {
+                mList.add(new AnimeEpisodeDateUpdatePOJO(
+                        listAdapter.getItem(i).getId(),
+                        listAdapter.getItem(i).getWatchToDate()
+                ));
+            }
+        }
+        return mList;
     }
 
     private void checkForAnimeStatusUpdate(List<MyAnimeEpisodesList> myAnimeEpisodes) {

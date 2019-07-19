@@ -24,8 +24,10 @@ import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.providers.RXJavaProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -252,6 +254,42 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private void asyncStateInform(String message) {
         Toast.makeText(application, message, Toast.LENGTH_LONG).show();
+        progressBarStop();
+    }
+
+    public void reorderCaps(List<AnimeEpisodeDateUpdatePOJO> nonWatchedEps) throws ParseException {
+        progressBarLoading();
+        AnimeEpisodeDateUpdatePOJO targetEpisode = nonWatchedEps.get(0); //Episode to be updated
+        localRepository.updateEpisodeStatus(LocalRepository.WATCHED, (int) targetEpisode.getId());
+        localRepository.updateEpisodeDateToWatch(LocalRepository.WATCH_DATE_DONE, (int) targetEpisode.getId());
+        nonWatchedEps.remove(0);
+
+        boolean updateListFlag = false;
+
+        for (int i = 0; i < nonWatchedEps.size(); i++) {
+            if (i == 0) {
+                try {
+                    if (nonWatchedEps.get(i + 1) != null) {
+                        if (nonWatchedEps.get(i).getNewDate().equals(nonWatchedEps.get(i + 1).getNewDate())) {
+                            //si es igual no hacer nada, si es distinto restar un día al resto de caps y actualizar
+                            break;
+                        } else {
+                            updateListFlag = true;
+                        }
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    break;
+                }
+            }
+            String day = nonWatchedEps.get(i).getNewDate();
+            long mDay = CustomTimeUtils.dateFromStringToLong(day) - CustomTimeUtils.ONE_DAY_MILLISECONDS;
+            String newDay = CustomTimeUtils.getDateFormatted(new Date(mDay));
+            nonWatchedEps.get(i).setNewDate(newDay);
+        }
+
+        if (updateListFlag) {
+            localRepository.updateEpisodeDateToWatchPojoVersion(nonWatchedEps);
+        }
         progressBarStop();
     }
 }

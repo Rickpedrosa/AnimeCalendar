@@ -16,7 +16,6 @@ import java.util.List;
 public interface MyAnimesDao {
 
     //FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1 // COUNT(ep.id) AS episodiosVistos
-    //TODO No devuelve bien los episodios vistos
     @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.status AS status, ani.tinyPosterImage AS poster, ani.episodeCount AS epCount " +
             " FROM anime ani INNER JOIN episodes eptwo ON ani.id = eptwo.animeId" +
             " GROUP BY ani.id " +

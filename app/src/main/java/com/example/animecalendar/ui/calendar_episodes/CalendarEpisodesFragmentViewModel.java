@@ -3,9 +3,14 @@ package com.example.animecalendar.ui.calendar_episodes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.animecalendar.data.local.LocalRepository;
+import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
+import com.example.animecalendar.utils.CustomTimeUtils;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public class CalendarEpisodesFragmentViewModel extends ViewModel {
@@ -25,7 +30,7 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
         viewModel.getLocalRepository().updateEpisodeStatus(value, episodeId);
     }
 
-    void updateAnimeStatus(String status, int animeId){
+    void updateAnimeStatus(String status, int animeId) {
         viewModel.getLocalRepository().updateAnimeStatus(status, animeId);
     }
 
@@ -39,5 +44,9 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
 
     void setAnimeId(int animeId) {
         this.animeId = animeId;
+    }
+
+    void reorderCaps(List<AnimeEpisodeDateUpdatePOJO> nonWatchedEps) throws ParseException {
+        viewModel.reorderCaps(nonWatchedEps);
     }
 }
