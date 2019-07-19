@@ -258,7 +258,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void reorderCaps(List<AnimeEpisodeDateUpdatePOJO> nonWatchedEps) throws ParseException {
-        progressBarLoading();
         AnimeEpisodeDateUpdatePOJO targetEpisode = nonWatchedEps.get(0); //Episode to be updated
         localRepository.updateEpisodeStatus(LocalRepository.WATCHED, (int) targetEpisode.getId());
         localRepository.updateEpisodeDateToWatch(LocalRepository.WATCH_DATE_DONE, (int) targetEpisode.getId());
@@ -267,18 +266,16 @@ public class MainActivityViewModel extends AndroidViewModel {
         boolean updateListFlag = false;
 
         for (int i = 0; i < nonWatchedEps.size(); i++) {
-            if (i == 0) {
-                try {
-                    if (nonWatchedEps.get(i + 1) != null) {
-                        if (nonWatchedEps.get(i).getNewDate().equals(nonWatchedEps.get(i + 1).getNewDate())) {
-                            //si es igual no hacer nada, si es distinto restar un día al resto de caps y actualizar
-                            break;
-                        } else {
-                            updateListFlag = true;
-                        }
+            if (nonWatchedEps.size() == 1) {
+                updateListFlag = true;
+            } else {
+                if (i == 0) {
+                    if (targetEpisode.getNewDate().equals(nonWatchedEps.get(i).getNewDate())) {
+                        //si es igual no hacer nada, si es distinto restar un día al resto de caps y actualizar
+                        break;
+                    } else {
+                        updateListFlag = true;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    break;
                 }
             }
             String day = nonWatchedEps.get(i).getNewDate();
@@ -290,6 +287,5 @@ public class MainActivityViewModel extends AndroidViewModel {
         if (updateListFlag) {
             localRepository.updateEpisodeDateToWatchPojoVersion(nonWatchedEps);
         }
-        progressBarStop();
     }
 }

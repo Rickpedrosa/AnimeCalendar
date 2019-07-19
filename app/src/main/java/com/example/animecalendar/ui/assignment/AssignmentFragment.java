@@ -2,7 +2,6 @@ package com.example.animecalendar.ui.assignment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
-import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
@@ -64,6 +62,7 @@ public class AssignmentFragment extends Fragment {
         restoreDataFromDeviceRotation();
     }
 
+    //TODO AÑADIR FAB PARA ASIGNACIÓN
     @Override
     public void onDestroyView() {
         super.onDestroyView();

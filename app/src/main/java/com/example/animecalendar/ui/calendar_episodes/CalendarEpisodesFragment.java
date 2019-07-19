@@ -29,11 +29,9 @@ import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
@@ -183,7 +181,7 @@ public class CalendarEpisodesFragment extends Fragment {
                 counter++;
             }
         }
-        if (counter == (myAnimeEpisodes.size() - 1)) {
+        if (counter == (myAnimeEpisodes.size())) {
             viewModel.updateAnimeStatus(LocalRepository.STATUS_COMPLETED, (int) myAnimeEpisodes.get(0).getAnimeId());
         }
     }
