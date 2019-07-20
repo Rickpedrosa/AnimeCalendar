@@ -29,7 +29,6 @@ public class CalendarFragment extends Fragment {
     private CalendarFragmentViewAdapter listAdapter;
     private CalendarFragmentViewModel viewModel;
     private OuterFragmentCalendarBinding b;
-    private int flag = 2;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +52,7 @@ public class CalendarFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         setupViews();
         observeData();
+        calendarVisibility();
     }
 
     private void setupCalendarView() {
@@ -85,16 +85,20 @@ public class CalendarFragment extends Fragment {
         setupCalendarView();
     }
 
+    private void calendarVisibility() {
+        if (viewModel.getFlag() % 2 == 0) {
+            b.includeCalendarContent.cosmoCalendar.setVisibility(View.GONE);
+        } else {
+            b.includeCalendarContent.cosmoCalendar.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setupToolbar() {
         b.toolbarCalendarFragment.inflateMenu(R.menu.calendar_menu);
         b.toolbarCalendarFragment.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.hideShowCalendar) {
-                if (flag % 2 == 0) {
-                    b.includeCalendarContent.cosmoCalendar.setVisibility(View.GONE);
-                } else {
-                    b.includeCalendarContent.cosmoCalendar.setVisibility(View.VISIBLE);
-                }
-                flag++;
+                viewModel.setFlag();
+                calendarVisibility();
                 return true;
             }
             return false;

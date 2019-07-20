@@ -12,6 +12,7 @@ import java.util.List;
 public class CalendarFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
+    private int flag = 2;
 
     public CalendarFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
@@ -21,7 +22,11 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
     }
 
-//    void assignDateToEpisodes(List<Calendar> days, List<CalendarAnimeEpisodesDeprecated> caps) {
-//        viewModel.assignDateToEpisodes(days, caps);
-//    }
+    int getFlag() {
+        return flag;
+    }
+
+    void setFlag() {
+        flag++;
+    }
 }

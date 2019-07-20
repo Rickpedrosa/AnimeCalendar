@@ -82,6 +82,10 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 case R.id.mnuCompleted: //4
                     viewModel.setCategoryToLiveData(LocalRepository.STATUS_COMPLETED);
                     return true;
+                case R.id.mnuSearch: //todo
+                    return true;
+                case R.id.mnuSettings:
+                    return true;
                 default:
                     return false;
             }
@@ -121,9 +125,13 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
             if (!aBoolean.hasBeenHandled()) {
                 if (aBoolean.getContentIfNotHandled()) {
-                    Toast.makeText(requireContext(), "Son los mismos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(),
+                            "The anime is not finished in Kitsu API Servers",
+                            Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(requireContext(), "Se puede actualizar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(),
+                            "Anime can be updated. Fetching new data",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });

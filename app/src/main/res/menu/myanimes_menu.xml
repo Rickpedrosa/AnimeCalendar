@@ -6,6 +6,11 @@
         android:icon="@drawable/ic_search_w_24dp"
         android:title="Search anime local"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mnuSettings"
+        android:icon="@drawable/ic_build_white_menu_24dp"
+        android:title="Preferences"
+        app:showAsAction="ifRoom" />
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/mnuAll"

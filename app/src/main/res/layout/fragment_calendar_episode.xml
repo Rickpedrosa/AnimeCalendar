@@ -35,6 +35,19 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorBottomItem"
+            android:src="@drawable/ic_search_w_24dp"
+            app:elevation="1dp"
+            android:alpha="0.6"
+            app:pressedTranslationZ="0dp" />
+
         <include
             android:id="@+id/includeCalendarEpisodeContent"
             layout="@layout/fragment_calendar_episode_include"

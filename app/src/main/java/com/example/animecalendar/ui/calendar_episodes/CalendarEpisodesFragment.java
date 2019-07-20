@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
@@ -36,7 +35,6 @@ import java.util.Objects;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
 import static com.example.animecalendar.data.local.LocalRepository.WATCHED;
-import static com.example.animecalendar.data.local.LocalRepository.WATCH_DATE_DONE;
 
 public class CalendarEpisodesFragment extends Fragment {
 
@@ -71,6 +69,7 @@ public class CalendarEpisodesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setupRecyclerView();
         setupToolbar();
+        setupFab();
         observeData();
     }
 
@@ -94,6 +93,13 @@ public class CalendarEpisodesFragment extends Fragment {
         b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
     }
 
+    private void setupFab(){
+        b.fab.setOnClickListener(v -> {
+            linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
+            //b.includeCalendarEpisodeContent.listEpisodes.smoothScrollToPosition(getPositionToScroll());
+        });
+    }
+
     private void setupRecyclerView() {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> {
@@ -104,7 +110,7 @@ public class CalendarEpisodesFragment extends Fragment {
             }
         });
         listAdapter.setOnItemLongClickListener((view, position) -> {
-            linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
+            //linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
             return true;
         });
         b.includeCalendarEpisodeContent.listEpisodes.setItemAnimator(new DefaultItemAnimator());
@@ -117,7 +123,7 @@ public class CalendarEpisodesFragment extends Fragment {
     private int getPositionToScroll() {
         for (int i = listAdapter.getItemCount() - 1; i >= 0; i--) {
             if (listAdapter.getItem(i).getWasWatched() == WATCHED) {
-                return i - 1;
+                return i;
             }
         }
         return 0;
@@ -141,8 +147,8 @@ public class CalendarEpisodesFragment extends Fragment {
 
     private void innerUpdateEpisode(int position) {
         if (listAdapter.getItem(position).getWasWatched() == NOT_WATCHED) {
-            viewModel.updateEpisodeStatus(WATCHED, (int) listAdapter.getItem(position).getId());
-            viewModel.updateEpisodeDateToWatch(WATCH_DATE_DONE, (int) listAdapter.getItem(position).getId());
+            viewModel.updateEpisodeStatus((int) listAdapter.getItem(position).getId());
+            viewModel.updateEpisodeDateToWatch((int) listAdapter.getItem(position).getId());
         }
     }
 
@@ -182,7 +188,7 @@ public class CalendarEpisodesFragment extends Fragment {
             }
         }
         if (counter == (myAnimeEpisodes.size())) {
-            viewModel.updateAnimeStatus(LocalRepository.STATUS_COMPLETED, (int) myAnimeEpisodes.get(0).getAnimeId());
+            viewModel.updateAnimeStatus((int) myAnimeEpisodes.get(0).getAnimeId());
         }
     }
 

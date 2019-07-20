@@ -62,6 +62,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         setupToolbar();
         setupRecyclerView();
         setupSearchText();
+        setupFab();
         setupTextView();
         observeAnimeData();
     }
@@ -72,6 +73,11 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         viewModel.disposeObservable();
     }
 
+    private void setupFab() {
+        b.fab.setAlpha(0.25f);
+        b.fab.setOnClickListener(v -> showKeyboardToSearch());
+    }
+
     private void setupToolbar() {
         NavigationUI.setupWithNavController(b.toolbarSearchFragment,
                 navController,
@@ -79,10 +85,13 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     }
 
     private void setupTextView() {
-        b.lblNoAnimesSearch.setOnClickListener(v -> {
-            b.editSearch.requestFocus();
-            KeyboardUtils.showSoftKeyboard(requireActivity());
-        });
+        b.lblNoAnimesSearch.setOnClickListener(v -> showKeyboardToSearch());
+    }
+
+    private void showKeyboardToSearch(){
+        b.editSearch.requestFocus();
+        b.editSearch.getText().clear();
+        KeyboardUtils.showSoftKeyboard(requireActivity());
     }
 
     private void setupRecyclerView() {
