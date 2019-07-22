@@ -100,8 +100,6 @@ public class CalendarFragment extends Fragment {
         b.listEpisodesCalendar
                 .setItemAnimator(new DefaultItemAnimator());
         b.listEpisodesCalendar
-                .addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.listEpisodesCalendar
                 .setLayoutManager(new LinearLayoutManager(requireContext()));
         b.listEpisodesCalendar
                 .setAdapter(listAdapter);

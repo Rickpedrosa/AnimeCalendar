@@ -31,6 +31,14 @@ public interface MyAnimesDao {
             " ORDER BY ani.status DESC")
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category);
 
+    @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.status AS status, ani.tinyPosterImage AS poster, ani.episodeCount AS epCount " +
+            " FROM anime ani INNER JOIN episodes eptwo ON ani.id = eptwo.animeId " +
+            " WHERE ani.canonicalTitle LIKE :query" +
+            " GROUP BY ani.id " +
+            " HAVING ani.episodeCount = COUNT(eptwo.id) " +
+            " ORDER BY ani.status DESC")
+    LiveData<List<AnimesForSeries>> getAnimesToExposeBySearchQuery(String query);
+
     @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.episodeCount AS epCount," +
             " COUNT(ep.id) AS epsWatched, ani.tinyPosterImage" +
             " FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1 " +

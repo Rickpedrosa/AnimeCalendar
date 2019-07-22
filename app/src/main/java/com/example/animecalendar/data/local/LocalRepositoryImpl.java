@@ -109,6 +109,11 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
+    public LiveData<List<AnimesForSeries>> getAnimesToExposeBySearchQuery(String query) {
+        return myAnimesDao.getAnimesToExposeBySearchQuery(query);
+    }
+
+    @Override
     public LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes() {
         return myAnimesEpisodesDao.getDatesFromWatchableEpisodes();
     }

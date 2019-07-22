@@ -1,8 +1,5 @@
 package com.example.animecalendar.ui.series;
 
-import android.annotation.SuppressLint;
-import android.widget.Toast;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -10,25 +7,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.animecalendar.base.Event;
 import com.example.animecalendar.data.local.LocalRepository;
-import com.example.animecalendar.data.remote.pojos.anime.Anime;
-import com.example.animecalendar.data.remote.pojos.anime_episode.AnimeEpisode;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.Maybe;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 
 import static com.example.animecalendar.ui.series.MyAnimeSeriesFragment.ALL_CATEGORY;
 
@@ -36,12 +18,30 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
     private int itemPosition;
-    private Disposable disposable;
     private MutableLiveData<String> categoryTrigger = new MutableLiveData<>();
-
+    private final MutableLiveData<String> searchQuery = new MutableLiveData<>();
+    private boolean searchViewExpanded;
 
     public MyAnimeSeriesFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
+        searchQuery.postValue("");
+    }
+
+    String getSearchQuery() {
+        return searchQuery.getValue();
+    }
+
+    void setSearchQuery(String criteria) {
+        searchQuery.postValue(criteria);
+        categoryTrigger.postValue(criteria);
+    }
+
+    boolean isSearchViewExpanded() {
+        return searchViewExpanded;
+    }
+
+    void setSearchViewExpanded(boolean searchViewExpanded) {
+        this.searchViewExpanded = searchViewExpanded;
     }
 
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory() {
@@ -58,7 +58,8 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
                 case LocalRepository.STATUS_COMPLETED:
                     return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_COMPLETED);
                 default:
-                    return viewModel.getLocalRepository().getAnimesToExpose();
+                    String query = "%" + input + "%";
+                    return viewModel.getLocalRepository().getAnimesToExposeBySearchQuery(query);
             }
         });
     }
@@ -91,7 +92,5 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         return viewModel.getUpdateTrigger();
     }
 
-    LiveData<String> getCategoryTrigger() {
-        return categoryTrigger;
-    }
+
 }

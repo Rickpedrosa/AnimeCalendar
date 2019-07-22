@@ -2,7 +2,9 @@ package com.example.animecalendar.ui.series;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,6 +40,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     private MyAnimeSeriesFragmentViewModel viewModel;
     private MyAnimeSeriesFragmentViewAdapter listAdapter;
     static final String ALL_CATEGORY = "All";
+    private SearchView searchView;
+    private MenuItem mnuSearch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,8 +70,26 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         observeData();
     }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // Restore searching state (in this order).
+        String query = viewModel.getSearchQuery();
+        if (viewModel.isSearchViewExpanded()) {
+            // If done directly, menu item disappears after collapsing.
+            b.listAnimes.post(() -> {
+                mnuSearch.expandActionView();
+                if (!TextUtils.isEmpty(query)) {
+                    searchView.setQuery(query, false);
+                }
+            });
+        }
+    }
+
     private void setupToolbar() {
         b.appbar.inflateMenu(R.menu.myanimes_menu);
+        setupSearchView();
+
         b.appbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.mnuAll: //0
@@ -84,8 +107,6 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 case R.id.mnuCompleted: //4
                     viewModel.setCategoryToLiveData(LocalRepository.STATUS_COMPLETED);
                     return true;
-                case R.id.mnuSearch: //todo
-                    return true;
                 case R.id.mnuSettings:
                     return true;
                 default:
@@ -97,6 +118,40 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 b.appbar,
                 navController,
                 AppbarConfigProvider.getAppBarConfiguration());
+        b.collapsingToolbar.setTitle("My animes");
+    }
+
+    private void setupSearchView() {
+        mnuSearch = b.appbar.getMenu().findItem(R.id.mnuSearch);
+        searchView = (SearchView) mnuSearch.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        mnuSearch.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                viewModel.setSearchViewExpanded(true);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                viewModel.setSearchViewExpanded(false);
+                return true;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter adapter when text is changed
+                // listAdapter.getFilter().filter(query);
+                viewModel.setSearchQuery(query);
+                return false;
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -137,9 +192,6 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 }
             }
         });
-
-        viewModel.getCategoryTrigger().observe(getViewLifecycleOwner(), s ->
-                b.collapsingToolbar.setTitle(getResources().getString(R.string.myseries_fragment_toolbar_title, s)));
     }
 
 

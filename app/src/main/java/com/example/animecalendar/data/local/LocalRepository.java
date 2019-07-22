@@ -43,5 +43,6 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForASingleDate(String date);
     LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes();
     void updateEpisodeStatusAndDatePOJO(AnimeEpDateStatusPOJO episode);
+    LiveData<List<AnimesForSeries>> getAnimesToExposeBySearchQuery(String query);
 
 }

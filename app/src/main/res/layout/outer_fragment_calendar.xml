@@ -42,7 +42,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listEpisodesCalendar"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="8dp"
                 android:paddingBottom="8dp"
@@ -52,6 +52,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:visibility="invisible"
                 android:textColor="@android:color/background_light"
                 android:textStyle="italic"
                 android:id="@+id/lbl_noAnime"
