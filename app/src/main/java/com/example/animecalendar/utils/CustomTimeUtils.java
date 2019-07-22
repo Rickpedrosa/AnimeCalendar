@@ -19,6 +19,14 @@ public class CustomTimeUtils {
                 .parse(date).getTime();
     }
 
+    public static boolean isToday(String date) {
+        return getDateFormatted(new Date()).equals(date);
+    }
+
+    public static String getWeekDay(String date) throws ParseException {
+        return new SimpleDateFormat("EE", Locale.getDefault()).format(new Date(dateFromStringToLong(date)));
+    }
+
     private CustomTimeUtils() {
     }
 }

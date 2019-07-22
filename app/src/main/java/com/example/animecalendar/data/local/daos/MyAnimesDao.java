@@ -32,7 +32,7 @@ public interface MyAnimesDao {
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category);
 
     @Query("SELECT ani.id AS id, ani.canonicalTitle AS canonicalTitle, ani.episodeCount AS epCount," +
-            " COUNT(ep.id) AS epsWatched" +
+            " COUNT(ep.id) AS epsWatched, ani.tinyPosterImage" +
             " FROM anime ani LEFT JOIN episodes ep ON ani.id = ep.animeId AND ep.wasWatched = 1 " +
             " WHERE ani.status LIKE 'following'" +
             " GROUP BY ani.id ORDER BY ani.status DESC")

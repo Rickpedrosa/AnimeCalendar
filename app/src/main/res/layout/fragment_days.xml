@@ -10,7 +10,7 @@
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backgroundNight">
+        android:background="@color/colorPrimaryPogDark">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarLayout"
@@ -36,7 +36,7 @@
             android:id="@+id/innerConstraintDays"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/backgroundNight"
+            android:background="@color/colorPrimaryPogDark"
             android:descendantFocusability="blocksDescendants"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -45,14 +45,13 @@
                 android:id="@+id/listDays"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/lbl_noDays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

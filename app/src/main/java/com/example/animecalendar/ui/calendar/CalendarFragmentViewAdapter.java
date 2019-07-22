@@ -12,6 +12,7 @@ import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarAnimeItemBinding;
 import com.example.animecalendar.model.CalendarAnime;
+import com.example.animecalendar.utils.PicassoUtils;
 
 public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnime, BaseViewHolder<CalendarAnime>> {
 
@@ -62,6 +63,7 @@ public class CalendarFragmentViewAdapter extends BaseListAdapter<CalendarAnime, 
             b.lblAnime.setText(type.getTitle());
             b.lblEpsCounter.setText(b.lblEpsCounter.getResources().getString(R.string.epsCounter,
                     type.getEpWatchedCount(), type.getEpCount()));
+            PicassoUtils.loadPicassoWithError(b.imgAnime.getContext(), type.getTinyPosterImage(), b.imgAnime);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.series;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.SimpleDividerItemDecoration;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragmentMaterial;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
@@ -111,7 +113,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
                 .setAnimeId(listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
-        b.listAnimes.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        b.listAnimes.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
         b.listAnimes.setLayoutManager(manager);
         b.listAnimes.setAdapter(listAdapter);
     }

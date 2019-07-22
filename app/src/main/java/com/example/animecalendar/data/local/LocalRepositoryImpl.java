@@ -10,6 +10,7 @@ import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
+import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -108,7 +109,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<String>> getDatesFromWatchableEpisodes() {
+    public LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes() {
         return myAnimesEpisodesDao.getDatesFromWatchableEpisodes();
     }
 

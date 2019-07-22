@@ -10,6 +10,7 @@ import androidx.room.Update;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
+import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
@@ -31,11 +32,12 @@ public interface MyAnimesEpisodesDao {
             "ORDER BY date(ep.watchToDate)")
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForCalendarEvents();
 
-    @Query("SELECT DISTINCT ep.watchToDate" +
+    @Query("SELECT DISTINCT ep.watchToDate, COUNT(DISTINCT ep.id) AS epsCount" +
             " FROM episodes ep INNER JOIN anime an ON an.id = ep.animeId " +
-            "WHERE ep.watchToDate LIKE '%/%' AND an.status LIKE 'following'" +
+            "WHERE ep.watchToDate LIKE '%/%' AND an.status LIKE 'following' " +
+            "GROUP BY ep.watchToDate " +
             "ORDER BY date(ep.watchToDate)")
-    LiveData<List<String>> getDatesFromWatchableEpisodes();
+    LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes();
 
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +

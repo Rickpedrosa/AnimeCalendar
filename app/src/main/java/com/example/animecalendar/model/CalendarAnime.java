@@ -11,12 +11,16 @@ public class CalendarAnime {
     private int epCount;
     @ColumnInfo(name = "epsWatched")
     private int epWatchedCount;
+    @ColumnInfo(name = "tinyPosterImage")
+    private String tinyPosterImage;
 
-    public CalendarAnime(int id, String title, int epCount, int epWatchedCount) {
+
+    public CalendarAnime(int id, String title, int epCount, int epWatchedCount, String tinyPosterImage) {
         this.id = id;
         this.title = title;
         this.epCount = epCount;
         this.epWatchedCount = epWatchedCount;
+        this.tinyPosterImage = tinyPosterImage;
     }
 
     public int getId() {
@@ -49,5 +53,13 @@ public class CalendarAnime {
 
     public void setEpWatchedCount(int epWatchedCount) {
         this.epWatchedCount = epWatchedCount;
+    }
+
+    public String getTinyPosterImage() {
+        return tinyPosterImage;
+    }
+
+    public void setTinyPosterImage(String tinyPosterImage) {
+        this.tinyPosterImage = tinyPosterImage;
     }
 }

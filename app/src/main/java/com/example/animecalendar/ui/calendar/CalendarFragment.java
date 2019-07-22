@@ -97,13 +97,13 @@ public class CalendarFragment extends Fragment {
         listAdapter = new CalendarFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> navController.navigate(CalendarFragmentDirections
                 .actionCalendarFragmentToCalendarEpisodesFragment(listAdapter.getItem(position).getId())));
-        b.includeCalendarContent.listEpisodesCalendar
+        b.listEpisodesCalendar
                 .setItemAnimator(new DefaultItemAnimator());
-        b.includeCalendarContent.listEpisodesCalendar
+        b.listEpisodesCalendar
                 .addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.includeCalendarContent.listEpisodesCalendar
+        b.listEpisodesCalendar
                 .setLayoutManager(new LinearLayoutManager(requireContext()));
-        b.includeCalendarContent.listEpisodesCalendar
+        b.listEpisodesCalendar
                 .setAdapter(listAdapter);
     }
 
@@ -113,7 +113,7 @@ public class CalendarFragment extends Fragment {
 
     private void submitDataToAdapter(List<CalendarAnime> calendarAnimeEpisodes) {
         listAdapter.submitList(calendarAnimeEpisodes);
-        b.includeCalendarContent.lblNoAnime.setVisibility(calendarAnimeEpisodes.size() == 0 ?
+        b.lblNoAnime.setVisibility(calendarAnimeEpisodes.size() == 0 ?
                 View.VISIBLE : View.INVISIBLE);
     }
 }

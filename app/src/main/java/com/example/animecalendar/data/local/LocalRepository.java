@@ -6,6 +6,7 @@ import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
+import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -40,7 +41,7 @@ public interface LocalRepository {
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category);
     void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForASingleDate(String date);
-    LiveData<List<String>> getDatesFromWatchableEpisodes();
+    LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes();
     void updateEpisodeStatusAndDatePOJO(AnimeEpDateStatusPOJO episode);
 
 }

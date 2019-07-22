@@ -23,9 +23,9 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
     }
 
-    LiveData<List<String>> getDatesFromWatchableEpisodes() {
-        return viewModel.getLocalRepository().getDatesFromWatchableEpisodes();
-    }
+//    LiveData<List<String>> getDatesFromWatchableEpisodes() {
+//        return viewModel.getLocalRepository().getDatesFromWatchableEpisodes();
+//    }
 
     int getFlag() {
         return flag;
