@@ -27,6 +27,7 @@ import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager;
 import com.applikeysolutions.cosmocalendar.settings.appearance.ConnectedDayIconPosition;
 import com.applikeysolutions.cosmocalendar.settings.lists.connected_days.ConnectedDays;
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.OuterFragmentCalendarBinding;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -68,50 +69,19 @@ public class CalendarFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         setupViews();
         observeData();
-        calendarVisibility();
     }
 
     private void setupViews() {
         setupRecyclerView();
         setupToolbar();
-        setupCalendarView();
     }
 
-    private void setupCalendarView() {
-        b.includeCalendarContent.cosmoCalendar.setConnectedDayIconPosition(ConnectedDayIconPosition.TOP);
-        b.includeCalendarContent.cosmoCalendar.setSelectionManager(
-                new SingleSelectionManager(() -> navController.navigate(R.id.searchFragment)));
-//        viewModel.getDatesFromWatchableEpisodes().observe(getViewLifecycleOwner(), this::setCalendarEventDays);
-    }
-
-    private void setCalendarEventDays(List<String> strings) {
-        Set<Long> days = new TreeSet<>();
-        try {
-            for (int i = 0; i < strings.size(); i++) {
-                days.add(CustomTimeUtils.dateFromStringToLong(strings.get(i)));
-            }
-            ConnectedDays connectedDays = new ConnectedDays(days, Color.parseColor("#FFA823"));
-            b.includeCalendarContent.cosmoCalendar.addConnectedDays(connectedDays);
-        } catch (
-                ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void calendarVisibility() {
-        if (viewModel.getFlag() % 2 == 0) {
-            b.includeCalendarContent.cosmoCalendar.setVisibility(View.GONE);
-        } else {
-            b.includeCalendarContent.cosmoCalendar.setVisibility(View.VISIBLE);
-        }
-    }
 
     private void setupToolbar() {
         b.toolbarCalendarFragment.inflateMenu(R.menu.calendar_menu);
         b.toolbarCalendarFragment.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.hideShowCalendar) {
-                viewModel.setFlag();
-                calendarVisibility();
+                navController.navigate(R.id.daysFragment);
                 return true;
             }
             return false;

@@ -24,6 +24,9 @@
             app:destination="@id/calendarEpisodesFragment"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_calendarFragment_to_daysFragment"
+            app:destination="@id/daysFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -53,4 +56,8 @@
             android:name="animeId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/daysFragment"
+        android:name="com.example.animecalendar.ui.days.DaysFragment"
+        android:label="DaysFragment" />
 </navigation>

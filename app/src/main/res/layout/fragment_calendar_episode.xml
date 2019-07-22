@@ -42,15 +42,14 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:alpha="0.6"
             android:backgroundTint="@color/colorBottomItem"
             android:src="@drawable/ic_search_w_24dp"
             app:elevation="1dp"
-            android:alpha="0.6"
             app:pressedTranslationZ="0dp" />
 
-        <include
-            android:id="@+id/includeCalendarEpisodeContent"
-            layout="@layout/fragment_calendar_episode_include"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listEpisodes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

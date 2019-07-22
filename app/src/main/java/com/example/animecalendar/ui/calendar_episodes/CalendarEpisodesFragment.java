@@ -79,7 +79,7 @@ public class CalendarEpisodesFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mBundleRecyclerViewState = new Bundle();
-        mListState = Objects.requireNonNull(b.includeCalendarEpisodeContent.listEpisodes.getLayoutManager()).onSaveInstanceState();
+        mListState = Objects.requireNonNull(b.listEpisodes.getLayoutManager()).onSaveInstanceState();
         mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, mListState);
     }
 
@@ -89,10 +89,10 @@ public class CalendarEpisodesFragment extends Fragment {
         if (mBundleRecyclerViewState != null) {
             new Handler().postDelayed(() -> {
                 mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
-                Objects.requireNonNull(b.includeCalendarEpisodeContent.listEpisodes.getLayoutManager()).onRestoreInstanceState(mListState);
+                Objects.requireNonNull(b.listEpisodes.getLayoutManager()).onRestoreInstanceState(mListState);
             }, 50);
         }
-        b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
+        b.listEpisodes.setLayoutManager(linearLayoutManager);
     }
 
     private void setupFab() {
@@ -115,10 +115,10 @@ public class CalendarEpisodesFragment extends Fragment {
             //linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
             return true;
         });
-        b.includeCalendarEpisodeContent.listEpisodes.setItemAnimator(new DefaultItemAnimator());
-        b.includeCalendarEpisodeContent.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
-        b.includeCalendarEpisodeContent.listEpisodes.setAdapter(listAdapter);
+        b.listEpisodes.setItemAnimator(new DefaultItemAnimator());
+        b.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listEpisodes.setLayoutManager(linearLayoutManager);
+        b.listEpisodes.setAdapter(listAdapter);
 
     }
 
