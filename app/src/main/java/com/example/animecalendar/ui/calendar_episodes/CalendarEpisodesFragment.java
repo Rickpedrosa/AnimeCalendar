@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
+import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -93,7 +95,7 @@ public class CalendarEpisodesFragment extends Fragment {
         b.includeCalendarEpisodeContent.listEpisodes.setLayoutManager(linearLayoutManager);
     }
 
-    private void setupFab(){
+    private void setupFab() {
         b.fab.setOnClickListener(v -> {
             linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
             //b.includeCalendarEpisodeContent.listEpisodes.smoothScrollToPosition(getPositionToScroll());
@@ -147,8 +149,13 @@ public class CalendarEpisodesFragment extends Fragment {
 
     private void innerUpdateEpisode(int position) {
         if (listAdapter.getItem(position).getWasWatched() == NOT_WATCHED) {
-            viewModel.updateEpisodeStatus((int) listAdapter.getItem(position).getId());
-            viewModel.updateEpisodeDateToWatch((int) listAdapter.getItem(position).getId());
+            viewModel.updateStatusAndDateEpisode(
+                    new AnimeEpDateStatusPOJO(
+                            listAdapter.getItem(position).getId(),
+                            LocalRepository.WATCH_DATE_DONE,
+                            LocalRepository.WATCHED
+                    )
+            );
         }
     }
 

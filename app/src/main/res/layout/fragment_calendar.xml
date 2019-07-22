@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:orientation="horizontal"
-            app:selectionType="range"
+            app:selectionType="none"
             app:eventsEnabled="true"
             app:dayTextColor="@android:color/background_light"
             app:calendarBackgroundColor="@color/backgroundNight"

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.animecalendar.model.CalendarAnime;
+import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 
 import java.util.Calendar;
@@ -20,6 +21,10 @@ public class CalendarFragmentViewModel extends ViewModel {
 
     LiveData<List<CalendarAnime>> getAnimeWithEpisodes() {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
+    }
+
+    LiveData<List<String>> getDatesFromWatchableEpisodes() {
+        return viewModel.getLocalRepository().getDatesFromWatchableEpisodes();
     }
 
     int getFlag() {

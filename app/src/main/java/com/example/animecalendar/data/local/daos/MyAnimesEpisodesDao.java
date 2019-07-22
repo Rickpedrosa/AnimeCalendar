@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
@@ -25,10 +26,16 @@ public interface MyAnimesEpisodesDao {
 
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
-            "WHERE ep.watchToDate NOT LIKE '-' OR ep.watchToDate NOT LIKE 'Watched' AND ani.status LIKE 'following'" +
+            "WHERE (ep.watchToDate NOT LIKE '-' OR ep.watchToDate NOT LIKE 'Watched') AND ani.status LIKE 'following' AND ep.wasWatched = 0 " +
             "GROUP BY ani.id, ep.number " +
             "ORDER BY date(ep.watchToDate)")
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesOfTheDay();
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForCalendarEvents();
+
+    @Query("SELECT DISTINCT ep.watchToDate" +
+            " FROM episodes ep INNER JOIN anime an ON an.id = ep.animeId " +
+            "WHERE ep.watchToDate LIKE '%/%' AND an.status LIKE 'following'" +
+            "ORDER BY date(ep.watchToDate)")
+    LiveData<List<String>> getDatesFromWatchableEpisodes();
 
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
@@ -36,11 +43,20 @@ public interface MyAnimesEpisodesDao {
             "ORDER BY number")
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
 
+    @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
+            "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
+            "WHERE ep.watchToDate = :date " +
+            "ORDER BY ani.id")
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForASingleDate(String date);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
+
+    @Update(entity = MyAnimeEpisode.class)
+    void updateEpisodeStatusAndDatePOJO(AnimeEpDateStatusPOJO episode);
 
     @Query("UPDATE episodes SET wasWatched = :value WHERE id = :episodeId")
     void updateEpisodeStatus(int value, int episodeId);

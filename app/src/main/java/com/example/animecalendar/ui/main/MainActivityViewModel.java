@@ -18,6 +18,7 @@ import com.example.animecalendar.data.remote.pojos.anime_episode.Datum;
 import com.example.animecalendar.data.remote.repos.AnimeRepository;
 import com.example.animecalendar.data.remote.repos.AnimeRepositoryImpl;
 import com.example.animecalendar.data.remote.services.AnimeService;
+import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -259,8 +260,11 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void reorderCaps(List<AnimeEpisodeDateUpdatePOJO> nonWatchedEps) throws ParseException {
         AnimeEpisodeDateUpdatePOJO targetEpisode = nonWatchedEps.get(0); //Episode to be updated
-        localRepository.updateEpisodeStatus(LocalRepository.WATCHED, (int) targetEpisode.getId());
-        localRepository.updateEpisodeDateToWatch(LocalRepository.WATCH_DATE_DONE, (int) targetEpisode.getId());
+        localRepository.updateEpisodeStatusAndDatePOJO(new AnimeEpDateStatusPOJO(
+                targetEpisode.getId(),
+                LocalRepository.WATCH_DATE_DONE,
+                LocalRepository.WATCHED
+        ));
         nonWatchedEps.remove(0);
 
         boolean updateListFlag = false;
