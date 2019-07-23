@@ -35,4 +35,8 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
     void updateStatusAndDateEpisode(AnimeEpDateStatusPOJO episode) {
         viewModel.getLocalRepository().updateEpisodeStatusAndDatePOJO(episode);
     }
+
+    LiveData<Boolean> reorderCapsConfirmationPreference() {
+        return viewModel.getConfirmationDialogPreference();
+    }
 }

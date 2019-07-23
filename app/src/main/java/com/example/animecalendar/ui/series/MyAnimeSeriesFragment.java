@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -50,8 +51,6 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel = ViewModelProviders.of(requireActivity(),
                 VMProvider.viewModelFragmentFactory(requireActivity(), VMProvider.FRAGMENTS.SERIES))
                 .get(MyAnimeSeriesFragmentViewModel.class);
-        if (savedInstanceState == null)
-            viewModel.setCategoryToLiveData(ALL_CATEGORY);
     }
 
     @Nullable
@@ -175,6 +174,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
     }
 
     private void observeData() {
+        viewModel.getTypePreference().observe(getViewLifecycleOwner(), s -> viewModel.setCategoryToLiveData(s));
+
         viewModel.getAnimesToExposeByCategory().observe(getViewLifecycleOwner(), animesForSeries -> {
             b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(animesForSeries);

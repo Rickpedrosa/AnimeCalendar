@@ -7,8 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 
+import com.example.animecalendar.R;
 import com.example.animecalendar.base.Event;
+import com.example.animecalendar.base.pref.SharedPreferencesBooleanLiveData;
+import com.example.animecalendar.base.pref.SharedPreferencesStringLiveData;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.data.local.LocalRepositoryImpl;
@@ -47,12 +51,32 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final AnimeRepository animeRepository;
     private MutableLiveData<Boolean> progressBarController = new MutableLiveData<>();
     private MutableLiveData<Event<Boolean>> updateTrigger = new MutableLiveData<>();
+    private final LiveData<Boolean> confirmationDialogPreference;
+    private final LiveData<String> defaultListTypePreference;
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
         this.application = application;
         this.localRepository = new LocalRepositoryImpl(appDatabase.myAnimesEpisodesDao(), appDatabase.myAnimesDao());
         this.animeRepository = new AnimeRepositoryImpl();
+        this.confirmationDialogPreference = new SharedPreferencesBooleanLiveData(
+                PreferenceManager.getDefaultSharedPreferences(application),
+                application.getResources().getString(R.string.reorder_key),
+                true
+        );
+        this.defaultListTypePreference = new SharedPreferencesStringLiveData(
+                PreferenceManager.getDefaultSharedPreferences(application),
+                application.getResources().getString(R.string.anime_list_key),
+                application.getResources().getString(R.string.anime_list_defaultValue)
+        );
+    }
+
+    public LiveData<Boolean> getConfirmationDialogPreference() {
+        return confirmationDialogPreference;
+    }
+
+    public LiveData<String> getDefaultListTypePreference() {
+        return defaultListTypePreference;
     }
 
     public AnimeRepository getAnimeRepository() {
@@ -133,8 +157,8 @@ public class MainActivityViewModel extends AndroidViewModel {
                     airDate,
                     length,
                     thumb,
-                    0,
-                    "-"
+                    LocalRepository.NOT_WATCHED,
+                    LocalRepository.WATCH_DATE_NULL
             );
             listEpisodes.add(episode);
         }

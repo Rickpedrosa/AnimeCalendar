@@ -1,11 +1,13 @@
 package com.example.animecalendar.ui.calendar_episodes;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.dialogs.YesNoDialogFragment;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
@@ -38,7 +41,7 @@ import java.util.Objects;
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
 import static com.example.animecalendar.data.local.LocalRepository.WATCHED;
 
-public class CalendarEpisodesFragment extends Fragment {
+public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFragment.Listener {
 
     private FragmentCalendarEpisodeBinding b;
     private int animeId;
@@ -69,7 +72,7 @@ public class CalendarEpisodesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupRecyclerView();
+        viewModel.reorderCapsConfirmationPreference().observe(getViewLifecycleOwner(), this::setupRecyclerView);
         setupToolbar();
         setupFab();
         observeData();
@@ -96,23 +99,20 @@ public class CalendarEpisodesFragment extends Fragment {
     }
 
     private void setupFab() {
-        b.fab.setOnClickListener(v -> {
-            linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
-            //b.includeCalendarEpisodeContent.listEpisodes.smoothScrollToPosition(getPositionToScroll());
-        });
+        b.fab.setOnClickListener(v -> linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10));
     }
 
-    private void setupRecyclerView() {
+    private void setupRecyclerView(Boolean preference) {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> {
             try {
-                updateEpisode(position);
+                updateEpisode(position, preference);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         });
         listAdapter.setOnItemLongClickListener((view, position) -> {
-            //linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10);
+            //TODO
             return true;
         });
         b.listEpisodes.setItemAnimator(new DefaultItemAnimator());
@@ -131,7 +131,7 @@ public class CalendarEpisodesFragment extends Fragment {
         return 0;
     }
 
-    private void updateEpisode(int position) throws ParseException {
+    private void updateEpisode(int position, boolean preference) throws ParseException {
         boolean equalDate = CustomTimeUtils.getDateFormatted(Calendar.getInstance().getTime())
                 .equals(listAdapter.getItem(position).getWatchToDate());
         boolean smallerThanDate = CustomTimeUtils.dateFromStringToLong(listAdapter.getItem(position)
@@ -142,8 +142,18 @@ public class CalendarEpisodesFragment extends Fragment {
         } else if (smallerThanDate) {
             innerUpdateEpisode(position);
         } else {
-            //TODO DIALOG CONFIRMATION
-            viewModel.reorderCaps(getNonWatchedEpisodes());
+            if (preference) {
+                YesNoDialogFragment.newInstance(
+                        "Caps realignment",
+                        "You are a nasty otaku," +
+                                "this episode is not for today, ARE YOU SURE?!",
+                        "OKAY",
+                        "NAY",
+                        CalendarEpisodesFragment.this,
+                        6).show(requireFragmentManager(), "POGGU");
+            } else {
+                viewModel.reorderCaps(getNonWatchedEpisodes());
+            }
         }
     }
 
@@ -201,5 +211,21 @@ public class CalendarEpisodesFragment extends Fragment {
 
     private void obtainArguments() {
         animeId = CalendarEpisodesFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getAnimeId();
+    }
+
+    @Override
+    public void onPositiveButtonClick(DialogInterface dialog) {
+        try {
+            viewModel.reorderCaps(getNonWatchedEpisodes());
+        } catch (ParseException e) {
+            Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+        }
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onNegativeButtonClick(DialogInterface dialog) {
+        dialog.dismiss();
     }
 }

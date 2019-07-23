@@ -21,10 +21,28 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
     private MutableLiveData<String> categoryTrigger = new MutableLiveData<>();
     private final MutableLiveData<String> searchQuery = new MutableLiveData<>();
     private boolean searchViewExpanded;
+    private LiveData<List<AnimesForSeries>> animesToExpose;
 
     public MyAnimeSeriesFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
         searchQuery.postValue("");
+        animesToExpose = Transformations.switchMap(categoryTrigger, input -> {
+            switch (input) {
+                case ALL_CATEGORY:
+                    return viewModel.getLocalRepository().getAnimesToExpose();
+                case LocalRepository.STATUS_FOLLOWING:
+                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_FOLLOWING);
+                case LocalRepository.STATUS_FINISHED:
+                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_FINISHED);
+                case LocalRepository.STATUS_CURRENT:
+                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_CURRENT);
+                case LocalRepository.STATUS_COMPLETED:
+                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_COMPLETED);
+                default:
+                    String query = "%" + input + "%";
+                    return viewModel.getLocalRepository().getAnimesToExposeBySearchQuery(query);
+            }
+        });
     }
 
     String getSearchQuery() {
@@ -45,23 +63,7 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
     }
 
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory() {
-        return Transformations.switchMap(categoryTrigger, input -> {
-            switch (input) {
-                case ALL_CATEGORY:
-                    return viewModel.getLocalRepository().getAnimesToExpose();
-                case LocalRepository.STATUS_FOLLOWING:
-                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_FOLLOWING);
-                case LocalRepository.STATUS_FINISHED:
-                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_FINISHED);
-                case LocalRepository.STATUS_CURRENT:
-                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_CURRENT);
-                case LocalRepository.STATUS_COMPLETED:
-                    return viewModel.getLocalRepository().getAnimesToExposeByCategory(LocalRepository.STATUS_COMPLETED);
-                default:
-                    String query = "%" + input + "%";
-                    return viewModel.getLocalRepository().getAnimesToExposeBySearchQuery(query);
-            }
-        });
+        return animesToExpose;
     }
 
     int getItemPosition() {
@@ -92,5 +94,7 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         return viewModel.getUpdateTrigger();
     }
 
-
+    LiveData<String> getTypePreference() {
+        return viewModel.getDefaultListTypePreference();
+    }
 }

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <SwitchPreference
         android:defaultValue="true"
         android:icon="@drawable/ic_today_lol_24dp"
-        android:key="pref_sync"
+        android:key="@string/reorder_key"
         android:title="Reorder caps confirmation" />
 
+    <ListPreference
+        app:useSimpleSummaryProvider="true"
+        android:defaultValue="@string/anime_list_defaultValue"
+        android:dialogTitle="@string/anime_list_dialog_title"
+        android:entries="@array/animeListEntries"
+        android:entryValues="@array/animeListValues"
+        android:icon="@drawable/ic_build_bottomview_24dp"
+        android:key="@string/anime_list_key"
+        android:title="@string/anime_list_dialog_title" />
 </PreferenceScreen>

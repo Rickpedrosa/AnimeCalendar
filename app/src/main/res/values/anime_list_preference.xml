@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_all">All</string>
+    <string name="pref_finished">finished</string>
+    <string name="pref_current">current</string>
+    <string name="pref_following">following</string>
+    <string name="pref_completed">completed</string>
+
+    <string-array name="animeListEntries">
+        <item>@string/pref_all</item>
+        <item>@string/pref_finished</item>
+        <item>@string/pref_current</item>
+        <item>@string/pref_completed</item>
+        <item>@string/pref_following</item>
+    </string-array>
+
+    <string-array name="animeListValues">
+        <item>@string/pref_all</item>
+        <item>@string/pref_finished</item>
+        <item>@string/pref_current</item>
+        <item>@string/pref_completed</item>
+        <item>@string/pref_following</item>
+    </string-array>
+
+    <string name="anime_list_key">animeListKey</string>
+    <string name="anime_list_dialog_title">Default display type</string>
+    <string name="anime_list_defaultValue">@string/pref_all</string>
+</resources>
