@@ -108,6 +108,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                     viewModel.setCategoryToLiveData(LocalRepository.STATUS_COMPLETED);
                     return true;
                 case R.id.mnuSettings:
+                    navController.navigate(R.id.settingsFragment);
                     return true;
                 default:
                     return false;

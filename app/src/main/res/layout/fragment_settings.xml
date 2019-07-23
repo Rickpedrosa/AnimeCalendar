@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- AQUÍ PODEMOS PONER EL TIPO DE TOOLBAR QUE QUERAMOS, POR EJEMPLO
+           DENTRO DE UNA AppBarLayout -->
+    <!-- ... -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarLayout_fragmentSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_fragmentSettings"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- AQUÍ ES DONDE SE MOSTRARÁN AUTOMÁTICAMENTE LAS PREFERENCIAS. ES MUY IMPORTANTE
+         QUE EL ATRIBUTO android:id ( @android:id/list_container ) TENGA EXACTAMENTE ESTE VALOR. LO DE targetApi ES
+         SIMPLEMENTE PARA QUE NO SE QUEJE -->
+    <FrameLayout
+        android:id="@android:id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:targetApi="n" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
