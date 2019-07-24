@@ -114,11 +114,9 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             }
         });
         NavigationUI.setupWithNavController(
-                b.collapsingToolbar,
                 b.appbar,
                 navController,
                 AppbarConfigProvider.getAppBarConfiguration());
-        b.collapsingToolbar.setTitle("My animes");
     }
 
     private void setupSearchView() {

@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.animecalendar.base.Resource;
 import com.example.animecalendar.data.local.entity.MyAnime;
+import com.example.animecalendar.data.remote.pojos.animelist.AnimationList;
 import com.example.animecalendar.data.remote.pojos.animelist.Datum;
 import com.example.animecalendar.data.remote.services.AnimeService;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
@@ -19,11 +21,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class SearchFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
     private MutableLiveData<List<MyAnime>> animeList = new MutableLiveData<>();
+    private MutableLiveData<Resource<AnimationList>> resourceStateLiveData = new MutableLiveData<>();
     private Disposable disposable;
     private int itemPosition;
 
