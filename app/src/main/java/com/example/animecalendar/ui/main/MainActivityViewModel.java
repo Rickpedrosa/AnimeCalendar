@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import androidx.preference.PreferenceManager;
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.Event;
 import com.example.animecalendar.base.pref.SharedPreferencesBooleanLiveData;
+import com.example.animecalendar.base.pref.SharedPreferencesIntegerLiveData;
 import com.example.animecalendar.base.pref.SharedPreferencesStringLiveData;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepository;
@@ -54,7 +56,10 @@ public class MainActivityViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> progressBarController = new MutableLiveData<>();
     private MutableLiveData<Event<Boolean>> updateTrigger = new MutableLiveData<>();
     private final LiveData<Boolean> confirmationDialogPreference;
+    private final LiveData<Boolean> notificationEnablingPreference;
     private final LiveData<String> defaultListTypePreference;
+    private final LiveData<Integer> timeNotificationPreference;
+    private MediatorLiveData<List<String>> todaysWatching = new MediatorLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -70,6 +75,16 @@ public class MainActivityViewModel extends AndroidViewModel {
                 PreferenceManager.getDefaultSharedPreferences(application),
                 application.getResources().getString(R.string.anime_list_key),
                 application.getResources().getString(R.string.anime_list_defaultValue)
+        );
+        this.notificationEnablingPreference = new SharedPreferencesBooleanLiveData(
+                PreferenceManager.getDefaultSharedPreferences(application),
+                application.getResources().getString(R.string.notification_key),
+                true
+        );
+        this.timeNotificationPreference = new SharedPreferencesIntegerLiveData(
+                PreferenceManager.getDefaultSharedPreferences(application),
+                application.getResources().getString(R.string.time_notification_key),
+                application.getResources().getInteger(R.integer.default_value_time_notif)
         );
 
     }

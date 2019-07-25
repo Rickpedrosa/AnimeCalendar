@@ -2,6 +2,8 @@ package com.example.animecalendar.base.pref;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+
+import androidx.annotation.Nullable;
 import androidx.preference.DialogPreference;
 import android.util.AttributeSet;
 
