@@ -27,6 +27,10 @@ public class CustomTimeUtils {
         return new SimpleDateFormat("EE", Locale.getDefault()).format(new Date(dateFromStringToLong(date)));
     }
 
+    public static String getToday() {
+        return getDateFormatted(new Date());
+    }
+
     private CustomTimeUtils() {
     }
 }

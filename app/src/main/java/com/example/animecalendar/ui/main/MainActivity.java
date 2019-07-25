@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -20,11 +21,15 @@ import com.example.animecalendar.data.local.AppDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainActivityViewModel viewModel;
+    public static final String TITLE_EXTRA = "TITLE_EXTRA";
+    public static final String CONTENT_EXTRA = "CONTENT_EXTRA";
+    public static final String BIG_CONTENT_EXTRA = "BIG_CONTENT_EXTRA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,13 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
-        //sendPruebaChannelOne();
-        goAlarm();
+        viewModel.getTodaysWatching().observe(this, this::triggerAlarm);
+    }
+
+    private void triggerAlarm(List<String> strings) {
+        if (strings.size() > 0) {
+            goAlarm(strings);
+        }
     }
 
     private void setupProgressBarVisibility() {
@@ -63,13 +73,23 @@ public class MainActivity extends AppCompatActivity {
         )).get(MainActivityViewModel.class);
     }
 
-    private void goAlarm() {
+    private void goAlarm(List<String> strings) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra("KEY", "HOLA HOLITA VECINO");
+        intent.putExtra(TITLE_EXTRA, getResources().getString(R.string.app_name)); //title
+        intent.putExtra(CONTENT_EXTRA, "Today animes!"); //content
+        intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(strings)); //big content
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 60000L, pendingIntent);
+    }
+
+    private String getAnimesBuilt(List<String> strings) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < strings.size(); i++) {
+            builder.append(strings.get(i).concat("\n"));
+        }
+        return builder.toString();
     }
 
     @Override

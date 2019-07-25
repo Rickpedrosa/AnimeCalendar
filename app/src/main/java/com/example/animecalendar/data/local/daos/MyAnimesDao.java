@@ -46,6 +46,9 @@ public interface MyAnimesDao {
             " GROUP BY ani.id ORDER BY ani.status DESC")
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
 
+    @Query("SELECT DISTINCT an.canonicalTitle FROM anime an INNER JOIN episodes ep ON an.id = ep.animeId WHERE ep.watchToDate LIKE :today")
+    LiveData<List<String>> getTodayItems(String today);
+
     @Query("SELECT * FROM anime WHERE id = :id")
     LiveData<MyAnime> getAnimeForDetail(int id);
 

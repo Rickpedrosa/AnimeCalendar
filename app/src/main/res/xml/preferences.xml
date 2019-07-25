@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SwitchPreference
-        android:defaultValue="true"
-        android:icon="@drawable/ic_today_lol_24dp"
-        android:key="@string/reorder_key"
-        android:title="Reorder caps confirmation" />
+    <androidx.preference.PreferenceCategory android:title="Episodes">
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_today_lol_24dp"
+            android:key="@string/reorder_key"
+            android:title="Reorder caps confirmation" />
+    </androidx.preference.PreferenceCategory>
 
-    <ListPreference
-        app:useSimpleSummaryProvider="true"
-        android:defaultValue="@string/anime_list_defaultValue"
-        android:dialogTitle="@string/anime_list_dialog_title"
-        android:entries="@array/animeListEntries"
-        android:entryValues="@array/animeListValues"
-        android:icon="@drawable/ic_build_bottomview_24dp"
-        android:key="@string/anime_list_key"
-        android:title="@string/anime_list_dialog_title" />
-</PreferenceScreen>
+    <androidx.preference.PreferenceCategory android:title="Animes">
+        <androidx.preference.ListPreference
+            android:defaultValue="@string/anime_list_defaultValue"
+            android:dialogTitle="@string/anime_list_dialog_title"
+            android:entries="@array/animeListEntries"
+            android:entryValues="@array/animeListValues"
+            android:icon="@drawable/ic_build_bottomview_24dp"
+            android:key="@string/anime_list_key"
+            android:title="@string/anime_list_dialog_title"
+            app:useSimpleSummaryProvider="true" />
+    </androidx.preference.PreferenceCategory>
+
+    <PreferenceCategory android:title="Notifications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_today_lol_24dp"
+            android:key="@string/notification_key"
+            android:title="Enable notifications" />
+
+        <com.example.animecalendar.base.pref.DateTimePreferenceCompat
+            android:defaultValue="90"
+            android:icon="@drawable/ic_today_lol_24dp"
+            android:key="key4"
+            android:summary="Time Summary"
+            android:title="Time Preference" />
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

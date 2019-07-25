@@ -28,4 +28,5 @@
     <string name="animeTitle">%1$s (%2$s eps)</string>
     <string name="myseries_fragment_toolbar_title">My animes (%1$s)</string>
     <string name="reorder_key">pref_sync</string>
+    <string name="notification_key">notif_key</string>
 </resources>
