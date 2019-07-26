@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class App extends Application {
     public static final String CHANNEL_ONE = "channel_1";
+    public static final int CHANNEL_ONE_INT = 1;
 
     @Override
     public void onCreate() {

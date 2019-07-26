@@ -4,13 +4,10 @@ import android.app.Application;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.R;
@@ -45,7 +42,6 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -62,7 +58,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final LiveData<Boolean> notificationEnablingPreference;
     private final LiveData<String> defaultListTypePreference;
     private final LiveData<Integer> timeNotificationPreference;
-    private LiveData<NotificationItem> poggu;
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -90,37 +85,38 @@ public class MainActivityViewModel extends AndroidViewModel {
                 application.getResources().getInteger(R.integer.default_value_time_notif)
         );
 
+        setupNotificationData();
+    }
+
+    private void setupNotificationData() {
         final LiveData<List<String>> liveDataTitles = localRepository.getTodayItems(CustomTimeUtils.getDateFormatted(new Date()));
         final LiveData<Integer> time = timeNotificationPreference;
+        final LiveData<Boolean> triggerNotification = notificationEnablingPreference;
 
-        poggu = Transformations.switchMap(notificationEnablingPreference,
-                new Function<Boolean, LiveData<NotificationItem>>() {
-                    @Override
-                    public LiveData<NotificationItem> apply(Boolean input) {
-                        todaysWatching.removeSource(liveDataTitles);
-                        todaysWatching.removeSource(time);
-                        todaysWatching.addSource(liveDataTitles, strings -> todaysWatching.setValue(combine(liveDataTitles, time)));
-                        todaysWatching.addSource(time, integer -> todaysWatching.setValue(combine(liveDataTitles, time)));
-
-                        return input ? todaysWatching : null;
-                    }
-                });
+        todaysWatching.addSource(triggerNotification, aBoolean -> todaysWatching.setValue(combine(liveDataTitles, time, triggerNotification)));
+        todaysWatching.addSource(liveDataTitles, strings -> todaysWatching.setValue(combine(liveDataTitles, time, triggerNotification)));
+        todaysWatching.addSource(time, integer -> todaysWatching.setValue(combine(liveDataTitles, time, triggerNotification)));
     }
 
-    LiveData<NotificationItem> getPoggu() {
-        return poggu;
+    LiveData<NotificationItem> getNotificationLiveData() {
+        return todaysWatching;
     }
 
-    private NotificationItem combine(LiveData<List<String>> liveDataTitles, LiveData<Integer> liveDataTime) {
+    private NotificationItem combine(LiveData<List<String>> liveDataTitles,
+                                     LiveData<Integer> liveDataTime,
+                                     LiveData<Boolean> input) {
         List<String> mTitles = new ArrayList<>();
         int mTime = 0;
-        if (liveDataTitles.getValue() != null) {
-            mTitles = liveDataTitles.getValue();
+        if (input.getValue() != null) {
+            if (input.getValue()) {
+                if (liveDataTitles.getValue() != null) {
+                    mTitles = liveDataTitles.getValue();
+                }
+                if (liveDataTime.getValue() != null) {
+                    mTime = liveDataTime.getValue();
+                }
+            }
         }
-        if (liveDataTime.getValue() != null) {
-            mTime = liveDataTime.getValue();
-        }
-
         return new NotificationItem(mTitles, mTime);
     }
 

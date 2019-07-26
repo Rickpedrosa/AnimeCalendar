@@ -5,10 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,9 +19,12 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.model.NotificationItem;
+import com.example.animecalendar.utils.CustomTimeUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,21 +42,21 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
-        //viewModel.getTodaysWatching().observe(this, this::triggerAlarm);
-        viewModel.getPoggu().observe(this, new Observer<NotificationItem>() {
+        viewModel.getNotificationLiveData().observe(this, new Observer<NotificationItem>() {
             @Override
             public void onChanged(NotificationItem notificationItem) {
-                for (int i = 0; i < notificationItem.getAnimeTitles().size(); i++) {
-                    Log.d("ITEM", notificationItem.getAnimeTitles().get(i));
+                if (notificationItem.getAnimeTitles().size() > 0) {
+                    //TODO montar alarm manager
                 }
-                Log.d("ITEM", String.valueOf(notificationItem.getNotificationTime()));
             }
         });
     }
 
-    private void triggerAlarm(List<String> strings) {
-        if (strings.size() > 0) {
-            goAlarm(strings);
+    private void triggerAlarm(NotificationItem notificationItem) {
+        try {
+            goAlarm(notificationItem);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -85,15 +86,18 @@ public class MainActivity extends AppCompatActivity {
         )).get(MainActivityViewModel.class);
     }
 
-    private void goAlarm(List<String> strings) {
+    private void goAlarm(NotificationItem notificationItem) throws ParseException {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         intent.putExtra(TITLE_EXTRA, getResources().getString(R.string.app_name)); //title
         intent.putExtra(CONTENT_EXTRA, "Today animes!"); //content
-        intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(strings)); //big content
+        intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(notificationItem.getAnimeTitles())); //big content
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
-        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 60000L, pendingIntent);
+        Objects.requireNonNull(alarmManager).setExact(
+                AlarmManager.RTC_WAKEUP,
+                CustomTimeUtils.getTodayWithTime(notificationItem.getNotificationTime()),
+                pendingIntent);
     }
 
     private String getAnimesBuilt(List<String> strings) {
