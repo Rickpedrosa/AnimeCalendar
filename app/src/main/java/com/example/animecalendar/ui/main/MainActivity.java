@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -18,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.AppDatabase;
+import com.example.animecalendar.model.NotificationItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
@@ -38,7 +41,16 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
-        viewModel.getTodaysWatching().observe(this, this::triggerAlarm);
+        //viewModel.getTodaysWatching().observe(this, this::triggerAlarm);
+        viewModel.getPoggu().observe(this, new Observer<NotificationItem>() {
+            @Override
+            public void onChanged(NotificationItem notificationItem) {
+                for (int i = 0; i < notificationItem.getAnimeTitles().size(); i++) {
+                    Log.d("ITEM", notificationItem.getAnimeTitles().get(i));
+                }
+                Log.d("ITEM", String.valueOf(notificationItem.getNotificationTime()));
+            }
+        });
     }
 
     private void triggerAlarm(List<String> strings) {

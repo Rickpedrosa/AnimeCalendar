@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
 
@@ -30,6 +31,7 @@ import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
+import com.example.animecalendar.model.NotificationItem;
 import com.example.animecalendar.providers.RXJavaProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
@@ -55,11 +57,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final AnimeRepository animeRepository;
     private MutableLiveData<Boolean> progressBarController = new MutableLiveData<>();
     private MutableLiveData<Event<Boolean>> updateTrigger = new MutableLiveData<>();
+    private MediatorLiveData<NotificationItem> todaysWatching = new MediatorLiveData<>();
     private final LiveData<Boolean> confirmationDialogPreference;
     private final LiveData<Boolean> notificationEnablingPreference;
     private final LiveData<String> defaultListTypePreference;
     private final LiveData<Integer> timeNotificationPreference;
-    private MediatorLiveData<List<String>> todaysWatching = new MediatorLiveData<>();
+    private LiveData<NotificationItem> poggu;
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -87,10 +90,38 @@ public class MainActivityViewModel extends AndroidViewModel {
                 application.getResources().getInteger(R.integer.default_value_time_notif)
         );
 
+        final LiveData<List<String>> liveDataTitles = localRepository.getTodayItems(CustomTimeUtils.getDateFormatted(new Date()));
+        final LiveData<Integer> time = timeNotificationPreference;
+
+        poggu = Transformations.switchMap(notificationEnablingPreference,
+                new Function<Boolean, LiveData<NotificationItem>>() {
+                    @Override
+                    public LiveData<NotificationItem> apply(Boolean input) {
+                        todaysWatching.removeSource(liveDataTitles);
+                        todaysWatching.removeSource(time);
+                        todaysWatching.addSource(liveDataTitles, strings -> todaysWatching.setValue(combine(liveDataTitles, time)));
+                        todaysWatching.addSource(time, integer -> todaysWatching.setValue(combine(liveDataTitles, time)));
+
+                        return input ? todaysWatching : null;
+                    }
+                });
     }
 
-    LiveData<List<String>> getTodaysWatching() {
-        return localRepository.getTodayItems(CustomTimeUtils.getToday());
+    LiveData<NotificationItem> getPoggu() {
+        return poggu;
+    }
+
+    private NotificationItem combine(LiveData<List<String>> liveDataTitles, LiveData<Integer> liveDataTime) {
+        List<String> mTitles = new ArrayList<>();
+        int mTime = 0;
+        if (liveDataTitles.getValue() != null) {
+            mTitles = liveDataTitles.getValue();
+        }
+        if (liveDataTime.getValue() != null) {
+            mTime = liveDataTime.getValue();
+        }
+
+        return new NotificationItem(mTitles, mTime);
     }
 
     public LiveData<Boolean> getConfirmationDialogPreference() {
