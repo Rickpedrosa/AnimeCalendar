@@ -62,21 +62,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void triggerAlarm(NotificationItem notificationItem) {
-        try {
-            if (notificationItem.getAnimeTitles().size() > 0) {
-                Log.d("ITEMPOG", String.valueOf(notificationItem.getAnimeTitles().size()));
-                Log.d("ITEMPOG", String.valueOf(notificationItem.getNotificationTime()));
-                Log.d("ITEMPOG", String.valueOf(CustomTimeUtils.getTodayWithTime(notificationItem.getNotificationTime())));
-                if (notificationItem.getNotificationTime() != 0 && notificationItem.getAnimeTitles().size() > 0) {
-                    //goAlarm(notificationItem);
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void setupProgressBarVisibility() {
         ProgressBar progressBar = ActivityCompat.requireViewById(this, R.id.progressBar3);
         progressBar.setVisibility(View.INVISIBLE);
@@ -101,34 +86,6 @@ public class MainActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this, new MainActivityViewModelFactory(
                 getApplication(), AppDatabase.getInstance(this)
         )).get(MainActivityViewModel.class);
-    }
-
-    private void goAlarm() throws ParseException {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra(TITLE_EXTRA, getResources().getString(R.string.app_name)); //title
-        intent.putExtra(CONTENT_EXTRA, "Today animes!"); //content
-        //intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(notificationItem.getAnimeTitles())); //big content
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        PreferenceManager preferenceManager = new PreferenceManager(this);
-        int time = preferenceManager.getSharedPreferences().getInt(getResources().getString(R.string.time_notification_key), 90);
-
-        String date = CustomTimeUtils.getDateFormatted(new Date());
-        long millis = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date).getTime()
-                + (time * 60000L);
-        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP,
-                millis,
-                pendingIntent);
-    }
-
-    private String getAnimesBuilt(List<String> strings) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < strings.size(); i++) {
-            builder.append(strings.get(i).concat("\n"));
-        }
-        return builder.toString();
     }
 
     @Override

@@ -36,20 +36,20 @@ public class MyJobIntentService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        obtainArguments(intent);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        Notification notification = new NotificationCompat.Builder(getApplicationContext(), App.CHANNEL_ONE)
-                .setSmallIcon(R.drawable.ic_build_white_menu_24dp)
-                .setContentTitle(mTitle)
-                .setContentText(mSubtitle)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                .setContentIntent(getNavigationPendingIntent(getApplicationContext()))
-                .build();
-
-        notificationManager.notify(App.CHANNEL_ONE_INT, notification);
-        AlertReceiver.cancelAlarm(getApplicationContext());
-        stopSelf();
+//        obtainArguments(intent);
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+//        Notification notification = new NotificationCompat.Builder(getApplicationContext(), App.CHANNEL_ONE)
+//                .setSmallIcon(R.drawable.ic_build_white_menu_24dp)
+//                .setContentTitle(mTitle)
+//                .setContentText(mSubtitle)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+//                .setContentIntent(getNavigationPendingIntent(getApplicationContext()))
+//                .build();
+//
+//        notificationManager.notify(App.CHANNEL_ONE_INT, notification);
+//        AlertReceiver.cancelAlarm(getApplicationContext());
+//        stopSelf();
     }
 
     private void obtainArguments(Intent intent) {

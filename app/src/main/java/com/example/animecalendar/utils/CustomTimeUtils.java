@@ -9,7 +9,7 @@ public class CustomTimeUtils {
 
     private static final String FORMAT = "dd/MM/yyyy";
     public static final long ONE_DAY_MILLISECONDS = 86400000L;
-    private static final long ONE_MINUTE_MILLISECONDS = 60000L;
+    public static final long ONE_MINUTE_MILLISECONDS = 60000L;
     private static final String FORMAT_HOUR = "dd/MM/yyyy HH:mm";
 
     public static String getDateFormatted(Date date) {
@@ -40,7 +40,7 @@ public class CustomTimeUtils {
 
     public static long getTodayWithTime(Integer mTime) throws ParseException {
         String today = getDateFormatted(new Date());
-        return new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault()).
+        return new SimpleDateFormat(FORMAT, Locale.getDefault()).
                 parse(today).getTime() + (mTime * ONE_MINUTE_MILLISECONDS);
     }
 
