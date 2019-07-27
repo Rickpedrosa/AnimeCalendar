@@ -88,6 +88,10 @@ public class MainActivityViewModel extends AndroidViewModel {
         setupNotificationData();
     }
 
+    public LiveData<Boolean> getNotificationEnablingPreference() {
+        return notificationEnablingPreference;
+    }
+
     private void setupNotificationData() {
         final LiveData<List<String>> liveDataTitles = localRepository.getTodayItems(CustomTimeUtils.getDateFormatted(new Date()));
         final LiveData<Integer> time = timeNotificationPreference;

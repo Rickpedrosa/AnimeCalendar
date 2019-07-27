@@ -5,16 +5,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.AlarmManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.AppDatabase;
@@ -23,9 +26,11 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,19 +47,31 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
-        viewModel.getNotificationLiveData().observe(this, new Observer<NotificationItem>() {
-            @Override
-            public void onChanged(NotificationItem notificationItem) {
-                if (notificationItem.getAnimeTitles().size() > 0) {
-                    //TODO montar alarm manager
-                }
+        viewModel.getNotificationEnablingPreference().observe(this, this::setAlarmNotification);
+    }
+
+    private void setAlarmNotification(Boolean aBoolean) {
+        if (aBoolean) {
+            try {
+                AlertReceiver.setAlarm(MainActivity.this);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        });
+        } else {
+            AlertReceiver.cancelAlarm(MainActivity.this);
+        }
     }
 
     private void triggerAlarm(NotificationItem notificationItem) {
         try {
-            goAlarm(notificationItem);
+            if (notificationItem.getAnimeTitles().size() > 0) {
+                Log.d("ITEMPOG", String.valueOf(notificationItem.getAnimeTitles().size()));
+                Log.d("ITEMPOG", String.valueOf(notificationItem.getNotificationTime()));
+                Log.d("ITEMPOG", String.valueOf(CustomTimeUtils.getTodayWithTime(notificationItem.getNotificationTime())));
+                if (notificationItem.getNotificationTime() != 0 && notificationItem.getAnimeTitles().size() > 0) {
+                    //goAlarm(notificationItem);
+                }
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -86,17 +103,23 @@ public class MainActivity extends AppCompatActivity {
         )).get(MainActivityViewModel.class);
     }
 
-    private void goAlarm(NotificationItem notificationItem) throws ParseException {
+    private void goAlarm() throws ParseException {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         intent.putExtra(TITLE_EXTRA, getResources().getString(R.string.app_name)); //title
         intent.putExtra(CONTENT_EXTRA, "Today animes!"); //content
-        intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(notificationItem.getAnimeTitles())); //big content
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        //intent.putExtra(BIG_CONTENT_EXTRA, getAnimesBuilt(notificationItem.getAnimeTitles())); //big content
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Objects.requireNonNull(alarmManager).setExact(
-                AlarmManager.RTC_WAKEUP,
-                CustomTimeUtils.getTodayWithTime(notificationItem.getNotificationTime()),
+
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        int time = preferenceManager.getSharedPreferences().getInt(getResources().getString(R.string.time_notification_key), 90);
+
+        String date = CustomTimeUtils.getDateFormatted(new Date());
+        long millis = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date).getTime()
+                + (time * 60000L);
+        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP,
+                millis,
                 pendingIntent);
     }
 

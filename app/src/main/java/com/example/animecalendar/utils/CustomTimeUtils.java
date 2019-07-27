@@ -25,6 +25,11 @@ public class CustomTimeUtils {
                 .parse(date).getTime();
     }
 
+    public static long dateFromStringToLongTime(String date) throws ParseException {
+        return new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault())
+                .parse(date).getTime();
+    }
+
     public static boolean isToday(String date) {
         return getDateFormatted(new Date()).equals(date);
     }
