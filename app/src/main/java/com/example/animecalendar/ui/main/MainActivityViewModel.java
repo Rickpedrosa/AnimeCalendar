@@ -88,7 +88,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         setupNotificationData();
     }
 
-    public LiveData<Boolean> getNotificationEnablingPreference() {
+    LiveData<Boolean> getNotificationEnablingPreference() {
         return notificationEnablingPreference;
     }
 
@@ -111,17 +111,13 @@ public class MainActivityViewModel extends AndroidViewModel {
                                      LiveData<Boolean> input) {
         List<String> mTitles = new ArrayList<>();
         int mTime = 0;
-        if (input.getValue() != null) {
-            if (input.getValue()) {
-                if (liveDataTitles.getValue() != null) {
-                    mTitles = liveDataTitles.getValue();
-                }
-                if (liveDataTime.getValue() != null) {
-                    mTime = liveDataTime.getValue();
-                }
-            }
+        boolean access = false;
+        if (input.getValue() != null && liveDataTime.getValue() != null && liveDataTitles.getValue() != null) {
+            mTime = liveDataTime.getValue();
+            mTitles = liveDataTitles.getValue();
+            access = input.getValue();
         }
-        return new NotificationItem(mTitles, mTime);
+        return new NotificationItem(mTitles, mTime, access);
     }
 
     public LiveData<Boolean> getConfirmationDialogPreference() {

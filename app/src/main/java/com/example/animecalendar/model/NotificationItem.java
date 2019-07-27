@@ -6,10 +6,20 @@ public class NotificationItem {
 
     private List<String> animeTitles;
     private int notificationTime;
+    private boolean notificationAccess;
 
-    public NotificationItem(List<String> animeTitles, int notificationTime) {
+    public NotificationItem(List<String> animeTitles, int notificationTime, boolean notificationAccess) {
         this.animeTitles = animeTitles;
         this.notificationTime = notificationTime;
+        this.notificationAccess = notificationAccess;
+    }
+
+    public boolean isNotificationAccess() {
+        return notificationAccess;
+    }
+
+    public void setNotificationAccess(boolean notificationAccess) {
+        this.notificationAccess = notificationAccess;
     }
 
     public List<String> getAnimeTitles() {

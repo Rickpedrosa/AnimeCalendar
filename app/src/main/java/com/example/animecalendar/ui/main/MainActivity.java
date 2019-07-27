@@ -1,36 +1,26 @@
 package com.example.animecalendar.ui.main;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.AlarmManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.model.NotificationItem;
-import com.example.animecalendar.utils.CustomTimeUtils;
+import com.example.animecalendar.utils.ValidationUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setupProgressBarVisibility();
         viewModel.getNotificationEnablingPreference().observe(this, this::setAlarmNotification);
+        viewModel.getNotificationLiveData().observe(this, new Observer<NotificationItem>() {
+            @Override
+            public void onChanged(NotificationItem notificationItem) {
+                Log.d("POGONECHAMP", String.valueOf(notificationItem.isNotificationAccess()));
+                Log.d("POGONECHAMP", String.valueOf(notificationItem.getNotificationTime()));
+                Log.d("POGONECHAMP", String.valueOf(notificationItem.getAnimeTitles().size()));
+                if (ValidationUtils.getAlarmNotificationWard(notificationItem)) {
+                    Toast.makeText(MainActivity.this, "WE GOT IT PLS GOD", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void setAlarmNotification(Boolean aBoolean) {
