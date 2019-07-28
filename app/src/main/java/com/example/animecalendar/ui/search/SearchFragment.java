@@ -2,7 +2,9 @@ package com.example.animecalendar.ui.search;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -24,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.YesNoDialogFragment;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.FragmentSearchBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
@@ -38,6 +42,12 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     private FragmentSearchBinding b;
     private SearchFragmentViewModel viewModel;
     private SearchFragmentViewAdapter listAdapter;
+    private BaseListAdapter.OnItemClickListener usefulListener = (view, position) -> showConfirmation(position);
+    private BaseListAdapter.OnItemClickListener whileLoadingListener = (view, position) ->
+            Toast.makeText(requireContext(),
+                    "Wait until the current anime is saved into the database",
+                    Toast.LENGTH_SHORT).show();
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +75,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         setupFab();
         setupTextView();
         observeAnimeData();
+        observaSearchStatus();
     }
 
     @Override
@@ -75,7 +86,47 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void setupFab() {
         b.fab.setAlpha(0.25f);
+        setupFabKeyboard();
+        b.editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(b.editSearch.getText().toString())) {
+                    setupFabKeyboard();
+                } else {
+                    b.fab.setOnClickListener(v -> {
+                        setupFabSearch();
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    private void setupFabSearch() {
+        if (!TextUtils.isEmpty(b.editSearch.getText().toString())) {
+            viewModel.searchAnimes(b.editSearch.getText().toString());
+            b.editSearch.getText().clear();
+        } else {
+            Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
+            b.editSearch.getText().clear();
+        }
+        KeyboardUtils.hideSoftKeyboard(requireActivity());
+        b.fab.setImageResource(R.drawable.ic_search_w_24dp);
+    }
+
+    private void setupFabKeyboard() {
         b.fab.setOnClickListener(v -> showKeyboardToSearch());
+        b.fab.setImageResource(R.drawable.ic_keyboard_w_24dp);
     }
 
     private void setupToolbar() {
@@ -88,7 +139,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         b.lblNoAnimesSearch.setOnClickListener(v -> showKeyboardToSearch());
     }
 
-    private void showKeyboardToSearch(){
+    private void showKeyboardToSearch() {
         b.editSearch.requestFocus();
         b.editSearch.getText().clear();
         KeyboardUtils.showSoftKeyboard(requireActivity());
@@ -96,22 +147,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void setupRecyclerView() {
         listAdapter = new SearchFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) -> {
-            String format = "Add %s (%d eps) to your list?";
-            viewModel.setItemPosition(position);
-            YesNoDialogFragment yn = YesNoDialogFragment.newInstance(
-                    listAdapter.getItem(position).getCanonicalTitle(),
-                    String.format(Locale.US,
-                            format,
-                            listAdapter.getItem(position).getCanonicalTitle(),
-                            listAdapter.getItem(position).getEpisodeCount()),
-                    "YEA BOI",
-                    "NAY BOI",
-                    this,
-                    1
-            );
-            yn.show(requireFragmentManager(), "YesNoDialogFragment");
-        });
+        listAdapter.setOnItemClickListener(usefulListener);
         //b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
         b.listSearch.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
@@ -125,8 +161,10 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
                 KeyboardUtils.hideSoftKeyboard(requireActivity());
                 if (!TextUtils.isEmpty(b.editSearch.getText().toString())) {
                     viewModel.searchAnimes(b.editSearch.getText().toString());
+                    b.editSearch.getText().clear();
                 } else {
                     Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
+                    b.editSearch.getText().clear();
                 }
                 return true;
             }
@@ -142,11 +180,39 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         });
     }
 
+    private void observaSearchStatus() {
+        viewModel.getProgressBar().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                listAdapter.setOnItemClickListener(whileLoadingListener);
+            } else {
+                listAdapter.setOnItemClickListener(usefulListener);
+            }
+            b.listSearch.setAdapter(listAdapter);
+        });
+    }
+
     private void showTheSuccess() {
         Snackbar.make(b.lblNoAnimesSearch,
                 listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle() + " added! (fetching episodes)",
                 Snackbar.LENGTH_LONG).show();
         b.editSearch.getText().clear();
+    }
+
+    private void showConfirmation(int position) {
+        String format = "Add %s (%d eps) to your list?";
+        viewModel.setItemPosition(position);
+        YesNoDialogFragment yn = YesNoDialogFragment.newInstance(
+                listAdapter.getItem(position).getCanonicalTitle(),
+                String.format(Locale.US,
+                        format,
+                        listAdapter.getItem(position).getCanonicalTitle(),
+                        listAdapter.getItem(position).getEpisodeCount()),
+                "YEA BOI",
+                "NAY BOI",
+                SearchFragment.this,
+                1
+        );
+        yn.show(SearchFragment.this.requireFragmentManager(), "YesNoDialogFragment");
     }
 
     @Override

@@ -88,10 +88,6 @@ public class MainActivityViewModel extends AndroidViewModel {
         setupNotificationData();
     }
 
-    LiveData<Boolean> getNotificationEnablingPreference() {
-        return notificationEnablingPreference;
-    }
-
     private void setupNotificationData() {
         final LiveData<List<String>> liveDataTitles = localRepository.getTodayItems(CustomTimeUtils.getDateFormatted(new Date()));
         final LiveData<Integer> time = timeNotificationPreference;
@@ -322,7 +318,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         return updateTrigger;
     }
 
-    LiveData<Boolean> getProgressBarController() {
+    public LiveData<Boolean> getProgressBarController() {
         return progressBarController;
     }
 

@@ -21,6 +21,7 @@ import com.example.animecalendar.utils.ValidationUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,30 +38,34 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
-        viewModel.getNotificationEnablingPreference().observe(this, this::setAlarmNotification);
-        viewModel.getNotificationLiveData().observe(this, new Observer<NotificationItem>() {
-            @Override
-            public void onChanged(NotificationItem notificationItem) {
-                Log.d("POGONECHAMP", String.valueOf(notificationItem.isNotificationAccess()));
-                Log.d("POGONECHAMP", String.valueOf(notificationItem.getNotificationTime()));
-                Log.d("POGONECHAMP", String.valueOf(notificationItem.getAnimeTitles().size()));
-                if (ValidationUtils.getAlarmNotificationWard(notificationItem)) {
-                    Toast.makeText(MainActivity.this, "WE GOT IT PLS GOD", Toast.LENGTH_LONG).show();
+        viewModel.getNotificationLiveData().observe(this, notificationItem -> {
+            Log.d("POGONECHAMP", String.valueOf(notificationItem.isNotificationAccess()));
+            Log.d("POGONECHAMP", String.valueOf(notificationItem.getNotificationTime()));
+            Log.d("POGONECHAMP", String.valueOf(notificationItem.getAnimeTitles().size()));
+            if (ValidationUtils.getAlarmNotificationWard(notificationItem)) {
+                try {
+                    AlertReceiver.setAlarm(MainActivity.this,
+                            animesForNotification(notificationItem.getAnimeTitles()),
+                            notificationItem.getNotificationTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+            } else if (!notificationItem.isNotificationAccess()) {
+                AlertReceiver.cancelAlarm(MainActivity.this);
             }
         });
     }
 
-    private void setAlarmNotification(Boolean aBoolean) {
-        if (aBoolean) {
-            try {
-                AlertReceiver.setAlarm(MainActivity.this);
-            } catch (ParseException e) {
-                e.printStackTrace();
+    private String animesForNotification(List<String> animes) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < animes.size(); i++) {
+            if (i == animes.size() - 1) {
+                builder.append(animes.get(i));
+            } else {
+                builder.append(animes.get(i).concat("\n"));
             }
-        } else {
-            AlertReceiver.cancelAlarm(MainActivity.this);
         }
+        return builder.toString();
     }
 
     private void setupProgressBarVisibility() {

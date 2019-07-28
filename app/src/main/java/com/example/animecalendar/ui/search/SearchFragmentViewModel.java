@@ -27,6 +27,7 @@ public class SearchFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
     private MutableLiveData<List<MyAnime>> animeList = new MutableLiveData<>();
+    private LiveData<Boolean> progressBar;
     private MutableLiveData<Resource<AnimationList>> resourceStateLiveData = new MutableLiveData<>();
     private Disposable disposable;
     private int itemPosition;
@@ -54,6 +55,10 @@ public class SearchFragmentViewModel extends ViewModel {
 
     LiveData<List<MyAnime>> getAnimeList() {
         return animeList;
+    }
+
+    LiveData<Boolean> getProgressBar() {
+        return viewModel.getProgressBarController();
     }
 
     void disposeObservable() {

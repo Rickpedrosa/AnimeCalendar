@@ -10,7 +10,6 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.navigation.NavDeepLinkBuilder;
-import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.App;
 import com.example.animecalendar.R;
@@ -23,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.example.animecalendar.ui.main.MainActivity.BIG_CONTENT_EXTRA;
 import static com.example.animecalendar.ui.main.MainActivity.CONTENT_EXTRA;
 import static com.example.animecalendar.ui.main.MainActivity.TITLE_EXTRA;
 import static com.example.animecalendar.utils.CustomTimeUtils.ONE_MINUTE_MILLISECONDS;
@@ -32,11 +32,12 @@ public class AlertReceiver extends BroadcastReceiver {
     public static final String CUSTOM_INTENT = "com.test.intent.action.ALARM";
     private String mTitle;
     private String mSubtitle;
+    private String mContent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         /* enqueue the job */
-       // MyJobIntentService.enqueueWork(context, intent);
+        // MyJobIntentService.enqueueWork(context, intent);
         obtainArguments(intent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ONE)
@@ -45,6 +46,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 .setContentText(mSubtitle)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(mContent))
                 .setContentIntent(getNavigationPendingIntent(context))
                 .build();
 
@@ -56,30 +58,31 @@ public class AlertReceiver extends BroadcastReceiver {
         AlarmManager alarm = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 
         /* cancel any pending alarm */
-        Objects.requireNonNull(alarm).cancel(getPendingIntent(ctx));
+        Objects.requireNonNull(alarm).cancel(getPendingIntent(ctx, ""));
     }
 
-    public static void setAlarm(Context ctx) throws ParseException {
+    public static void setAlarm(Context ctx, String bigContent, int time) throws ParseException {
         cancelAlarm(ctx);
         AlarmManager alarm = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 
         /* fire the broadcast */
-        Objects.requireNonNull(alarm).setExact(AlarmManager.RTC_WAKEUP, getAlarmTime(ctx), getPendingIntent(ctx));
+        Objects.requireNonNull(alarm).set(
+                AlarmManager.RTC_WAKEUP,
+                getAlarmTime(time),
+                getPendingIntent(ctx, bigContent));
     }
 
-    private static PendingIntent getPendingIntent(Context ctx) {
+    private static PendingIntent getPendingIntent(Context ctx, String bigContent) {
         Intent alarmIntent = new Intent(ctx, AlertReceiver.class);
         alarmIntent.setAction(CUSTOM_INTENT);
         alarmIntent.putExtra(TITLE_EXTRA, ctx.getResources().getString(R.string.app_name)); //title
-        alarmIntent.putExtra(CONTENT_EXTRA, "Today animes!"); //content
+        alarmIntent.putExtra(CONTENT_EXTRA, ctx.getResources().getString(R.string.notif_title)); //content
+        alarmIntent.putExtra(BIG_CONTENT_EXTRA, bigContent);
 
-        return PendingIntent.getBroadcast(ctx, 1, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(ctx, 1, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static long getAlarmTime(Context ctx) throws ParseException {
-        PreferenceManager preferenceManager = new PreferenceManager(ctx);
-        int time = preferenceManager.getSharedPreferences().getInt(ctx.getResources().getString(R.string.time_notification_key), 90);
-
+    private static long getAlarmTime(int time) throws ParseException {
         String today = CustomTimeUtils.getDateFormatted(new Date());
         long schedule = CustomTimeUtils.getTodayWithTime(time);
         long todayComparison = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(today).getTime();
@@ -99,7 +102,7 @@ public class AlertReceiver extends BroadcastReceiver {
     private void obtainArguments(Intent intent) {
         mTitle = intent.getStringExtra(TITLE_EXTRA);
         mSubtitle = intent.getStringExtra(CONTENT_EXTRA);
-        // mContent = intent.getStringExtra(BIG_CONTENT_EXTRA);
+        mContent = intent.getStringExtra(BIG_CONTENT_EXTRA);
     }
 
     private PendingIntent getNavigationPendingIntent(Context context) { //TODO CAMBIAR DESTINO

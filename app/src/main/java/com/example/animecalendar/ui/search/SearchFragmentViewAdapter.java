@@ -29,7 +29,7 @@ public class SearchFragmentViewAdapter extends BaseListAdapter<MyAnime, BaseView
         }
     };
 
-    public SearchFragmentViewAdapter() {
+    SearchFragmentViewAdapter() {
         super(diffUtilItemCallback);
     }
 
