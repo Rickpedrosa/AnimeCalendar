@@ -63,7 +63,19 @@
     <fragment
         android:id="@+id/daysFragment"
         android:name="com.example.animecalendar.ui.days.DaysFragment"
-        android:label="DaysFragment" />
+        android:label="DaysFragment" >
+        <action
+            android:id="@+id/action_daysFragment_to_daysEpisodeFragment"
+            app:destination="@id/daysEpisodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/daysEpisodeFragment"
+        android:name="com.example.animecalendar.ui.days_episodes.DaysEpisodesFragment"
+        android:label="DaysEpisodeFragment" >
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.animecalendar.ui.settings.SettingsFragment"

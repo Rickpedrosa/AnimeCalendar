@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -13,6 +14,8 @@ import androidx.navigation.NavDeepLinkBuilder;
 
 import com.example.animecalendar.App;
 import com.example.animecalendar.R;
+import com.example.animecalendar.ui.days.DaysFragmentDirections;
+import com.example.animecalendar.ui.days_episodes.DaysEpisodesFragmentArgs;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
@@ -83,14 +86,12 @@ public class AlertReceiver extends BroadcastReceiver {
     }
 
     private static long getAlarmTime(int time) throws ParseException {
-        String today = CustomTimeUtils.getDateFormatted(new Date());
-        long schedule = CustomTimeUtils.getTodayWithTime(time);
-        long todayComparison = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(today).getTime();
-
         Calendar cToday = Calendar.getInstance();
         cToday.setTime(new Date());
         int todayTime = (cToday.get(Calendar.HOUR_OF_DAY) * 60) + cToday.get(Calendar.MINUTE);
-        todayComparison += todayTime * ONE_MINUTE_MILLISECONDS;
+
+        long todayComparison = CustomTimeUtils.getTodayWithTime(todayTime);
+        long schedule = CustomTimeUtils.getTodayWithTime(time);
 
         if (schedule < todayComparison) {
             schedule = schedule + CustomTimeUtils.ONE_DAY_MILLISECONDS;
@@ -105,10 +106,13 @@ public class AlertReceiver extends BroadcastReceiver {
         mContent = intent.getStringExtra(BIG_CONTENT_EXTRA);
     }
 
-    private PendingIntent getNavigationPendingIntent(Context context) { //TODO CAMBIAR DESTINO
+    private PendingIntent getNavigationPendingIntent(Context context) {
+        Bundle bundle = new Bundle(); // date key same in the navigation args
+        bundle.putString("date", CustomTimeUtils.getDateFormatted(new Date()));
         return new NavDeepLinkBuilder(context).setComponentName(MainActivity.class)
                 .setGraph(R.navigation.main_navigation)
-                .setDestination(R.id.calendarFragment)
+                .setDestination(R.id.daysEpisodeFragment)
+                .setArguments(bundle)
                 .createPendingIntent();
     }
 }

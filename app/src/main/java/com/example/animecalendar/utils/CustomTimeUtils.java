@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class CustomTimeUtils {
 
-    private static final String FORMAT = "dd/MM/yyyy";
+    private static final String FORMAT = "yyyy/MM/dd";
     public static final long ONE_DAY_MILLISECONDS = 86400000L;
     public static final long ONE_MINUTE_MILLISECONDS = 60000L;
     private static final String FORMAT_HOUR = "dd/MM/yyyy HH:mm";

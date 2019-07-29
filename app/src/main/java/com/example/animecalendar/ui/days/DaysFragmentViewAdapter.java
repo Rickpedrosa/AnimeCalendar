@@ -64,7 +64,7 @@ public class DaysFragmentViewAdapter extends BaseListAdapter<AnimeEpisodeDates, 
         @Override
         public void bind(AnimeEpisodeDates type) {
             b.lblDate.setText(type.getDate());
-            b.lblEpCounter.setText(String.valueOf(type.getEpsCount()));
+            b.lblEpCounter.setText(b.cardDay.getResources().getString(R.string.epsCounter_Day, type.getEpsCount()));
             try {
                 b.lblDateString.setText(CustomTimeUtils.getWeekDay(type.getDate()));
             } catch (ParseException e) {

@@ -14,6 +14,7 @@ import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
+import com.example.animecalendar.model.MyAnimeEpisodesDailyList;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -111,6 +112,11 @@ public class LocalRepositoryImpl implements LocalRepository {
     @Override
     public LiveData<List<String>> getTodayItems(String today) {
         return myAnimesDao.getTodayItems(today);
+    }
+
+    @Override
+    public LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day) {
+        return myAnimesEpisodesDao.getEpisodesOfTheDay(day);
     }
 
     @Override

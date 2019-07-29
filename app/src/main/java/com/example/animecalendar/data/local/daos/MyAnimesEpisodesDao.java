@@ -12,6 +12,7 @@ import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
+import com.example.animecalendar.model.MyAnimeEpisodesDailyList;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -25,11 +26,17 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
 
+    @Query("SELECT ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, an.canonicalTitle AS animeTitle " +
+            "FROM episodes ep INNER JOIN anime an ON ep.animeId = an.id " +
+            "WHERE ep.watchToDate LIKE :day AND ep.wasWatched = 0 " +
+            "ORDER BY an.id")
+    LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day);
+
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
             "WHERE (ep.watchToDate NOT LIKE '-' OR ep.watchToDate NOT LIKE 'Watched') AND ani.status LIKE 'following' AND ep.wasWatched = 0 " +
             "GROUP BY ani.id, ep.number " +
-            "ORDER BY date(ep.watchToDate)")
+            "ORDER BY ep.watchToDate")
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForCalendarEvents();
 
     @Query("SELECT DISTINCT ep.watchToDate, COUNT(DISTINCT ep.id) AS epsCount" +

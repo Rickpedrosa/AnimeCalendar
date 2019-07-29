@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.SimpleDividerItemDecoration;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.FragmentDaysBinding;
 import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -68,6 +69,9 @@ public class DaysFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new DaysFragmentViewAdapter();
+        listAdapter.setOnItemClickListener((view, position) ->
+                navController.navigate(DaysFragmentDirections
+                        .actionDaysFragmentToDaysEpisodeFragment(listAdapter.getItem(position).getDate())));
         b.listDays.setItemAnimator(new DefaultItemAnimator());
         b.listDays.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
         b.listDays.setLayoutManager(new LinearLayoutManager(requireContext()));

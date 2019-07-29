@@ -31,4 +31,5 @@
     <string name="notification_key">notif_key</string>
     <string name="time_notification_key">time_notif_key</string>
     <string name="notif_title">Today animes!</string>
+    <string name="epsCounter_Day">%1$d episodes</string>
 </resources>

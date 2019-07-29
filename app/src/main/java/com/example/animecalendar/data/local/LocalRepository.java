@@ -10,6 +10,7 @@ import com.example.animecalendar.model.AnimeEpisodeDates;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
+import com.example.animecalendar.model.MyAnimeEpisodesDailyList;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 
 import java.util.List;
@@ -45,5 +46,6 @@ public interface LocalRepository {
     void updateEpisodeStatusAndDatePOJO(AnimeEpDateStatusPOJO episode);
     LiveData<List<AnimesForSeries>> getAnimesToExposeBySearchQuery(String query);
     LiveData<List<String>> getTodayItems(String today);
+    LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day);
 
 }

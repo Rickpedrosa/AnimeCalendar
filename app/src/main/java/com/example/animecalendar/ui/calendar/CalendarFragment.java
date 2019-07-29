@@ -113,5 +113,15 @@ public class CalendarFragment extends Fragment {
         listAdapter.submitList(calendarAnimeEpisodes);
         b.lblNoAnime.setVisibility(calendarAnimeEpisodes.size() == 0 ?
                 View.VISIBLE : View.INVISIBLE);
+        updateAnimeStatus(calendarAnimeEpisodes);
+    }
+
+    private void updateAnimeStatus(List<CalendarAnime> calendarAnimeEpisodes) {
+        for (int i = 0; i < calendarAnimeEpisodes.size(); i++) {
+            if (calendarAnimeEpisodes.get(i).getEpWatchedCount() ==
+                    calendarAnimeEpisodes.get(i).getEpCount()) {
+                viewModel.updateAnimeStatus(calendarAnimeEpisodes.get(i).getId());
+            }
+        }
     }
 }
