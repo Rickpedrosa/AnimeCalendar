@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -98,35 +97,39 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
                 if (TextUtils.isEmpty(b.editSearch.getText().toString())) {
                     setupFabKeyboard();
                 } else {
-                    b.fab.setOnClickListener(v -> {
-                        setupFabSearch();
-                    });
+                    setupFabSearch();
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (TextUtils.isEmpty(b.editSearch.getText().toString())) {
+                    setupFabKeyboard();
+                } else {
+                    setupFabSearch();
+                }
             }
         });
 
     }
 
     private void setupFabSearch() {
-        if (!TextUtils.isEmpty(b.editSearch.getText().toString())) {
-            viewModel.searchAnimes(b.editSearch.getText().toString());
-            b.editSearch.getText().clear();
-        } else {
-            Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
-            b.editSearch.getText().clear();
-        }
-        KeyboardUtils.hideSoftKeyboard(requireActivity());
         b.fab.setImageResource(R.drawable.ic_search_w_24dp);
+        b.fab.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(b.editSearch.getText().toString())) {
+                viewModel.searchAnimes(b.editSearch.getText().toString());
+                b.editSearch.getText().clear();
+            } else {
+                Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
+                b.editSearch.getText().clear();
+            }
+            KeyboardUtils.hideSoftKeyboard(requireActivity());
+        });
     }
 
     private void setupFabKeyboard() {
-        b.fab.setOnClickListener(v -> showKeyboardToSearch());
         b.fab.setImageResource(R.drawable.ic_keyboard_w_24dp);
+        b.fab.setOnClickListener(v -> showKeyboardToSearch());
     }
 
     private void setupToolbar() {

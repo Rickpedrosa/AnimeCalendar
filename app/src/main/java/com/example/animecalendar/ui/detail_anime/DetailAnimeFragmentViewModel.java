@@ -13,7 +13,8 @@ import java.util.List;
 public class DetailAnimeFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
-    private MutableLiveData<Boolean> progressTrigger = new MutableLiveData<>();
+    private boolean collapseSynopsis = false;
+    private boolean collapseEpisodes = false;
 
     public DetailAnimeFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
@@ -27,7 +28,19 @@ public class DetailAnimeFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimeEpisodes(id);
     }
 
-    LiveData<Boolean> getProgressTrigger() {
-        return progressTrigger;
+    public boolean isCollapseSynopsis() {
+        return collapseSynopsis;
+    }
+
+    public void setCollapseSynopsis(boolean collapseSynopsis) {
+        this.collapseSynopsis = collapseSynopsis;
+    }
+
+    public boolean isCollapseEpisodes() {
+        return collapseEpisodes;
+    }
+
+    public void setCollapseEpisodes(boolean collapseEpisodes) {
+        this.collapseEpisodes = collapseEpisodes;
     }
 }

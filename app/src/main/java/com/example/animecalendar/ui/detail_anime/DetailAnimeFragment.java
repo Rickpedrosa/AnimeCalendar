@@ -63,8 +63,9 @@ public class DetailAnimeFragment extends Fragment {
     }
 
     private void setupViews() {
-        b.animeDetailed.epProgressBar.setVisibility(View.INVISIBLE);
-        setupToolbar();setupRecyclerView();
+        setupToolbar();
+        setupRecyclerView();
+        setupButtons();
     }
 
     private void setupToolbar() {
@@ -86,17 +87,34 @@ public class DetailAnimeFragment extends Fragment {
         b.animeDetailed.listEpisodes.setNestedScrollingEnabled(true);
     }
 
+    private void setupButtons() {
+        b.animeDetailed.btnEpisodes.setOnClickListener(v -> {
+            if (viewModel.isCollapseEpisodes()) {
+                b.animeDetailed.listEpisodes.setVisibility(View.VISIBLE);
+            } else {
+                b.animeDetailed.listEpisodes.setVisibility(View.INVISIBLE);
+            }
+            boolean bol = !viewModel.isCollapseEpisodes();
+            viewModel.setCollapseEpisodes(bol);
+        });
+        b.animeDetailed.btnSynopsis.setOnClickListener(v -> {
+            if (viewModel.isCollapseSynopsis()) {
+                b.animeDetailed.lblSynopsis.setVisibility(View.VISIBLE);
+            } else {
+                b.animeDetailed.lblSynopsis.setVisibility(View.GONE);
+            }
+            boolean bol = !viewModel.isCollapseSynopsis();
+            viewModel.setCollapseSynopsis(bol);
+        });
+    }
+
     private void observeData() {
         viewModel.getAnime(animeId).observe(getViewLifecycleOwner(),
                 myAnime -> {
                     b.collapsingToolbar.setTitle(myAnime.getCanonicalTitle());
-                    //b.animeDetailed.lblSynopsis.setText(myAnime.getSynopsis());
                     PicassoUtils.loadPicasso(requireContext(), myAnime.getMediumPosterImage(), b.header);
+                    b.animeDetailed.lblSynopsis.setText(myAnime.getSynopsis());
                 });
-
-        viewModel.getProgressTrigger().observe(getViewLifecycleOwner(), aBoolean ->
-                b.animeDetailed.epProgressBar.setVisibility(aBoolean ? View.VISIBLE:View.INVISIBLE));
-
         viewModel.getAnimeEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> listAdapter.submitList(myAnimeEpisodesLists));
     }
 }

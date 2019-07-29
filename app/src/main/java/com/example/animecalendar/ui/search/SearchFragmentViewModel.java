@@ -27,8 +27,6 @@ public class SearchFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
     private MutableLiveData<List<MyAnime>> animeList = new MutableLiveData<>();
-    private LiveData<Boolean> progressBar;
-    private MutableLiveData<Resource<AnimationList>> resourceStateLiveData = new MutableLiveData<>();
     private Disposable disposable;
     private int itemPosition;
 
@@ -41,16 +39,20 @@ public class SearchFragmentViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> startLoading())
-                .subscribe(listResponse -> {
-                    if (listResponse.isSuccessful() && Objects.requireNonNull(listResponse.body()).getData().size() != 0) {
-                        submitAnimeList(listResponse.body().getData());
-                    } else if (Objects.requireNonNull(listResponse.body()).getData().size() == 0) {
-                        Toast.makeText(viewModel.getApplication(), "0 founds for this anime", Toast.LENGTH_LONG).show();
-                    }
-                }, throwable -> {
-                    Toast.makeText(viewModel.getApplication(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    stopLoading();
-                }, this::stopLoading);
+                .subscribe(this::onRetroNext, this::onRetroError, this::stopLoading);
+    }
+
+    private void onRetroError(Throwable throwable){
+        Toast.makeText(viewModel.getApplication(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        stopLoading();
+    }
+
+    private void onRetroNext(Response<AnimationList> resp){
+        if (resp.isSuccessful() && Objects.requireNonNull(resp.body()).getData().size() != 0) {
+            submitAnimeList(resp.body().getData());
+        } else if (Objects.requireNonNull(resp.body()).getData().size() == 0) {
+            Toast.makeText(viewModel.getApplication(), "0 founds for this anime", Toast.LENGTH_LONG).show();
+        }
     }
 
     LiveData<List<MyAnime>> getAnimeList() {
