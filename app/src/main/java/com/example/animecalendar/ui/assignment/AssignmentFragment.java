@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
 import com.example.animecalendar.R;
-import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -26,7 +25,6 @@ import com.example.animecalendar.providers.VMProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class AssignmentFragment extends Fragment {
@@ -159,7 +157,7 @@ public class AssignmentFragment extends Fragment {
         if (viewModel.getAssignableDates() != null) {
             if (assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
                 viewModel.commitEpisodesDateAssignation(viewModel.getAssignableDates(), getAllEpisodes());
-                viewModel.updateStatus(LocalRepository.STATUS_FOLLOWING, (int) listAdapter.getItem(0).getAnimeId());
+                viewModel.updateStatus((int) listAdapter.getItem(0).getAnimeId());
                 Toast.makeText(requireContext(), getResources().getString(R.string.assign_success,
                         listAdapter.getItem(0).getAnimeTitle()), Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(this).popBackStack();

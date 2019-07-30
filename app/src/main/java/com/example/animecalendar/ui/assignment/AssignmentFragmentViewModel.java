@@ -3,6 +3,8 @@ package com.example.animecalendar.ui.assignment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.animecalendar.R;
+import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 import com.example.animecalendar.utils.CustomTimeUtils;
@@ -37,13 +39,12 @@ public class AssignmentFragmentViewModel extends ViewModel {
         viewModel.assignDateToEpisodes(days, caps);
     }
 
-    void updateStatus(String status, int id) {
-        viewModel.getLocalRepository().updateAnimeStatus(status, id);
+    void updateStatus(int id) {
+        viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_FOLLOWING, id);
     }
 
     String assignDateToEpisodes(List<Calendar> days, List<MyAnimeEpisodeListWithAnimeTitle> caps) {
         StringBuilder builder = new StringBuilder();
-        String format = "%s -> %s\n";
         float daysCount = (float) days.size();
         float capsCount = (float) caps.size();
         float capsPerDay = (capsCount / daysCount);
@@ -58,8 +59,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
             for (int i = 0; i < daysCount; i++) {
                 if (i == 0) { //día 1
                     for (int firstDay = 0; firstDay < (int) capsPerDay; firstDay++) { //capítulos del primer día
-                        builder.append(String.format(format, CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                episodeFormatted(caps.get(firstDay))));
+                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(firstDay)));
                         capReference = firstDay; // variable para ir pasando el indice del capitulo a actualizar
                     }
                     restAux = capsPerDay - ((int) capsPerDay); //parte decimal que pasa al día siguiente
@@ -68,8 +68,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
                     capsPerDayAux = capsPerDay + restAux;
                     for (int betweenDay = 0; betweenDay < (int) capsPerDayAux; betweenDay++) { //capítulos del día (parte entera de capsPerDayAux)
                         capReference++;
-                        builder.append(String.format(format, CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                episodeFormatted(caps.get(capReference))));
+                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(capReference)));
                     }
                     restAux = capsPerDayAux - ((int) capsPerDayAux); //parte decimal que pasa al día siguiente
                     totalCapsAux = totalCapsAux - ((int) capsPerDayAux); //se resta la parte entera del total de caps
@@ -78,8 +77,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
                         //el último día no se hace operación, se le asigna los
                         //capítulos que quedan y ya está
                         capReference++;
-                        builder.append(String.format(format, CustomTimeUtils.getDateFormatted(days.get(i).getTime()),
-                                episodeFormatted(caps.get(capReference))));
+                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(capReference)));
                     }
                 }
             }
@@ -87,8 +85,8 @@ public class AssignmentFragmentViewModel extends ViewModel {
         return builder.toString();
     }
 
-    private String episodeFormatted(MyAnimeEpisodeListWithAnimeTitle ep) {
-        return String.format(Locale.US, "Episode %d", ep.getNumber());
+    private String episodeFormatted(String date, MyAnimeEpisodeListWithAnimeTitle ep) {
+        return viewModel.getApplication().getResources().getString(R.string.ep_format_assign, date, ep.getNumber()).concat("\n");
     }
 
     String getSchedule() {

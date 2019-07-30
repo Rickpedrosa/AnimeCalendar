@@ -52,4 +52,5 @@
     <string name="series_warning_update">The anime is not finished in Kitsu API Servers</string>
     <string name="series_warning_update_okay">Anime can be updated. Fetching new data</string>
     <string name="no_animes_found">0 founds for this anime</string>
+    <string name="ep_format_assign"><![CDATA[%1$s -> Episode %2$d]]></string>
 </resources>
