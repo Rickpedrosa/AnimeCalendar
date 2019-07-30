@@ -97,4 +97,9 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
     LiveData<String> getTypePreference() {
         return viewModel.getDefaultListTypePreference();
     }
+
+    void retrieveEpisodes(int animeId) {
+        viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_FINISHED, animeId);
+        viewModel.retrieveRetroEpisodes(animeId, true);
+    }
 }

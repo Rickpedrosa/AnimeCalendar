@@ -115,6 +115,11 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
+    public void addEpisodesWithReplace(List<MyAnimeEpisode> episodes) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.addEpisodesWithReplace(episodes));
+    }
+
+    @Override
     public LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day) {
         return myAnimesEpisodesDao.getEpisodesOfTheDay(day);
     }

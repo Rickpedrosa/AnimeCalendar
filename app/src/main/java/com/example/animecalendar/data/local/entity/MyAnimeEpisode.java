@@ -9,7 +9,6 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@SuppressWarnings("WeakerAccess")
 @Entity(tableName = "episodes",
         indices = {@Index(value = "animeId")},
         foreignKeys = @ForeignKey(

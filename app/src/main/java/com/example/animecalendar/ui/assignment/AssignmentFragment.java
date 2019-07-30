@@ -62,7 +62,6 @@ public class AssignmentFragment extends Fragment {
         restoreDataFromDeviceRotation();
     }
 
-    //TODO AÑADIR FAB PARA ASIGNACIÓN
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -123,7 +122,7 @@ public class AssignmentFragment extends Fragment {
             viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
             b.innerInclude.textviewlol.setText(viewModel.getSchedule());
         } else {
-            Toast.makeText(requireContext(), "DO NOT", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.warning_pick_assign), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -144,8 +143,8 @@ public class AssignmentFragment extends Fragment {
     }
 
     private void restoreDataFromDeviceRotation() {
-        new Handler().postDelayed(() -> b.innerInclude.textviewlol.setText(viewModel.getSchedule() == null ? String.format(Locale.US,
-                "%d episodes to assign:", listAdapter.getItemCount()) : viewModel.getSchedule()), 50);
+        new Handler().postDelayed(() -> b.innerInclude.textviewlol.setText(viewModel.getSchedule() == null ?
+                getResources().getString(R.string.assign_resume, listAdapter.getItemCount()) : viewModel.getSchedule()), 100);
         if (viewModel.getAssignableDates() != null) {
             if (viewModel.getAssignableDates().size() > 0) {
                 b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(0)));
@@ -161,14 +160,15 @@ public class AssignmentFragment extends Fragment {
             if (assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
                 viewModel.commitEpisodesDateAssignation(viewModel.getAssignableDates(), getAllEpisodes());
                 viewModel.updateStatus(LocalRepository.STATUS_FOLLOWING, (int) listAdapter.getItem(0).getAnimeId());
-                Toast.makeText(requireContext(), "DONE!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getResources().getString(R.string.assign_success,
+                        listAdapter.getItem(0).getAnimeTitle()), Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(this).popBackStack();
 
             } else {
-                Toast.makeText(requireContext(), "DO NOT", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getResources().getString(R.string.warning_pick_assign), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(requireContext(), "You must assign the date range before commit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.warning_assign), Toast.LENGTH_SHORT).show();
         }
 
     }

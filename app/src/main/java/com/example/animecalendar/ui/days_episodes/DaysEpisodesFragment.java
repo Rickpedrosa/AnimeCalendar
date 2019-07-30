@@ -79,7 +79,7 @@ public class DaysEpisodesFragment extends Fragment {
         if (isToday) {
             innerUpdateEpisode(position);
         } else {
-            Toast.makeText(requireContext(), "The episode is not for today", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.not_today), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -96,7 +96,12 @@ public class DaysEpisodesFragment extends Fragment {
     }
 
     private void observeData() {
-        viewModel.getEpisodes(date).observe(getViewLifecycleOwner(), list -> listAdapter.submitList(list));
+        viewModel.getEpisodes(date).observe(getViewLifecycleOwner(), list -> {
+            listAdapter.submitList(list);
+            if (list.size() == 0){
+                NavHostFragment.findNavController(this).popBackStack(R.id.calendarFragment, false);
+            }
+        });
     }
 
     private void setupFab() {
@@ -118,6 +123,7 @@ public class DaysEpisodesFragment extends Fragment {
                 NavHostFragment.findNavController(this),
                 AppbarConfigProvider.getAppBarConfiguration()
         );
+        b.toolbar.setTitle(getResources().getString(R.string.daysfragment_title, date));
     }
 
     private void obtainArguments() {

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.animecalendar.R;
 import com.example.animecalendar.base.Resource;
 import com.example.animecalendar.data.local.entity.MyAnime;
 import com.example.animecalendar.data.remote.pojos.animelist.AnimationList;
@@ -42,16 +43,16 @@ public class SearchFragmentViewModel extends ViewModel {
                 .subscribe(this::onRetroNext, this::onRetroError, this::stopLoading);
     }
 
-    private void onRetroError(Throwable throwable){
+    private void onRetroError(Throwable throwable) {
         Toast.makeText(viewModel.getApplication(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         stopLoading();
     }
 
-    private void onRetroNext(Response<AnimationList> resp){
+    private void onRetroNext(Response<AnimationList> resp) {
         if (resp.isSuccessful() && Objects.requireNonNull(resp.body()).getData().size() != 0) {
             submitAnimeList(resp.body().getData());
         } else if (Objects.requireNonNull(resp.body()).getData().size() == 0) {
-            Toast.makeText(viewModel.getApplication(), "0 founds for this anime", Toast.LENGTH_LONG).show();
+            Toast.makeText(viewModel.getApplication(), viewModel.getApplication().getResources().getString(R.string.no_animes_found), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -73,7 +74,7 @@ public class SearchFragmentViewModel extends ViewModel {
 
     void addAnimeToDatabase(MyAnime anime) {
         viewModel.getLocalRepository().addAnime(anime);
-        viewModel.retrieveRetroEpisodes((int) anime.getId());
+        viewModel.retrieveRetroEpisodes((int) anime.getId(), false);
     }
 
     int getItemPosition() {

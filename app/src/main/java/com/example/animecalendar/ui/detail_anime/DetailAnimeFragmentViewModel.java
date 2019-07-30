@@ -28,19 +28,19 @@ public class DetailAnimeFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimeEpisodes(id);
     }
 
-    public boolean isCollapseSynopsis() {
+    boolean isCollapseSynopsis() {
         return collapseSynopsis;
     }
 
-    public void setCollapseSynopsis(boolean collapseSynopsis) {
+    void setCollapseSynopsis(boolean collapseSynopsis) {
         this.collapseSynopsis = collapseSynopsis;
     }
 
-    public boolean isCollapseEpisodes() {
+    boolean isCollapseEpisodes() {
         return collapseEpisodes;
     }
 
-    public void setCollapseEpisodes(boolean collapseEpisodes) {
+    void setCollapseEpisodes(boolean collapseEpisodes) {
         this.collapseEpisodes = collapseEpisodes;
     }
 }

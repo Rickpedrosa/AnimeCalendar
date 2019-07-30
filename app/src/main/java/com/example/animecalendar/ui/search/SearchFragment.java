@@ -33,7 +33,6 @@ import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.KeyboardUtils;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Locale;
 
 public class SearchFragment extends Fragment implements YesNoDialogFragment.Listener {
 
@@ -44,7 +43,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     private BaseListAdapter.OnItemClickListener usefulListener = (view, position) -> showConfirmation(position);
     private BaseListAdapter.OnItemClickListener whileLoadingListener = (view, position) ->
             Toast.makeText(requireContext(),
-                    "Wait until the current anime is saved into the database",
+                    getResources().getString(R.string.warning_wait),
                     Toast.LENGTH_SHORT).show();
 
 
@@ -120,7 +119,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
                 viewModel.searchAnimes(b.editSearch.getText().toString());
                 b.editSearch.getText().clear();
             } else {
-                Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getResources().getString(R.string.empty_idiot), Toast.LENGTH_SHORT).show();
                 b.editSearch.getText().clear();
             }
             KeyboardUtils.hideSoftKeyboard(requireActivity());
@@ -166,7 +165,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
                     viewModel.searchAnimes(b.editSearch.getText().toString());
                     b.editSearch.getText().clear();
                 } else {
-                    Toast.makeText(requireContext(), "EMPTY QUERY, IDIOT", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getResources().getString(R.string.empty_idiot), Toast.LENGTH_SHORT).show();
                     b.editSearch.getText().clear();
                 }
                 return true;
@@ -196,22 +195,20 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
 
     private void showTheSuccess() {
         Snackbar.make(b.lblNoAnimesSearch,
-                listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle() + " added! (fetching episodes)",
+                getResources().getString(R.string.success_add, listAdapter.getItem(viewModel.getItemPosition()).getCanonicalTitle()),
                 Snackbar.LENGTH_LONG).show();
         b.editSearch.getText().clear();
     }
 
     private void showConfirmation(int position) {
-        String format = "Add %s (%d eps) to your list?";
         viewModel.setItemPosition(position);
         YesNoDialogFragment yn = YesNoDialogFragment.newInstance(
                 listAdapter.getItem(position).getCanonicalTitle(),
-                String.format(Locale.US,
-                        format,
+                getResources().getString(R.string.confirm_body,
                         listAdapter.getItem(position).getCanonicalTitle(),
                         listAdapter.getItem(position).getEpisodeCount()),
-                "YEA BOI",
-                "NAY BOI",
+                getResources().getString(R.string.confirm_okay),
+                getResources().getString(R.string.confirm_cancel),
                 SearchFragment.this,
                 1
         );

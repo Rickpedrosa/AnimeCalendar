@@ -32,4 +32,24 @@
     <string name="time_notification_key">time_notif_key</string>
     <string name="notif_title">Today animes!</string>
     <string name="epsCounter_Day">%1$d episodes</string>
+    <string name="confirm_okay">OKAY</string>
+    <string name="confirm_cancel">CANCEL</string>
+    <string name="confirm_body">Add %1$s (%2$d eps) to your list?</string>
+    <string name="success_add">%1$s added! (fetching episodes)</string>
+    <string name="empty_idiot">The search text is empty</string>
+    <string name="warning_assign">You must assign the date range before commit</string>
+    <string name="warning_pick_assign">You must pick the dates first</string>
+    <string name="assign_resume">%1$d episodes to assign:</string>
+    <string name="assign_success">%1$s scheduled!</string>
+    <string name="episode_insert_title_not">Title not available</string>
+    <string name="episode_insert_synopsis_not">Synopsis not available</string>
+    <string name="ep_fetching_completed">All episodes fetched</string>
+    <string name="daysfragment_title">Episodes of %1$s</string>
+    <string name="not_today">The episode is not for today</string>
+    <string name="calendar_episodes_dialog_title">Caps realignment</string>
+    <string name="calendar_episodes_dialog_message">This episode is not for today, ARE YOU SURE?!</string>
+    <string name="warning_wait">Wait until the current anime is saved into the database</string>
+    <string name="series_warning_update">The anime is not finished in Kitsu API Servers</string>
+    <string name="series_warning_update_okay">Anime can be updated. Fetching new data</string>
+    <string name="no_animes_found">0 founds for this anime</string>
 </resources>

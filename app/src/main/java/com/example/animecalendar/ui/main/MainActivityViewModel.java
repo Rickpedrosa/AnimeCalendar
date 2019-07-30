@@ -140,17 +140,17 @@ public class MainActivityViewModel extends AndroidViewModel {
         return localRepository;
     }
 
-    public void retrieveRetroEpisodes(int animeId) {
+    public void retrieveRetroEpisodes(int animeId, boolean replace) {
         disposable = getEpisodesFromResponse(String.valueOf(animeId), 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> progressBarLoading())
-                .subscribe(animeEpisode -> setupEpisodesForInsertion(animeId, animeEpisode),
+                .subscribe(animeEpisode -> setupEpisodesForInsertion(animeId, animeEpisode, replace),
                         throwable -> asyncStateInform(throwable.getLocalizedMessage()),
-                        () -> asyncStateInform("All episodes fetched"));
+                        () -> asyncStateInform(application.getResources().getString(R.string.ep_fetching_completed)));
     }
 
-    private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode) {
+    private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode, boolean replace) {
         List<MyAnimeEpisode> listEpisodes = new ArrayList<>();
         MyAnimeEpisode episode;
 
@@ -163,7 +163,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 thumb = animeEpisode.getData().get(i).getAttributes().getThumbnail().getOriginal();
             }
             if (animeEpisode.getData().get(i).getAttributes().getCanonicalTitle() == null) {
-                title = "Title not available";
+                title = application.getResources().getString(R.string.episode_insert_title_not);
             } else {
                 title = animeEpisode.getData().get(i).getAttributes().getCanonicalTitle();
             }
@@ -178,12 +178,12 @@ public class MainActivityViewModel extends AndroidViewModel {
                 number = animeEpisode.getData().get(i).getAttributes().getNumber();
             }
             if (animeEpisode.getData().get(i).getAttributes().getSynopsis() == null) {
-                synopsis = "Synopsis not available";
+                synopsis = application.getResources().getString(R.string.episode_insert_synopsis_not);
             } else {
                 synopsis = animeEpisode.getData().get(i).getAttributes().getSynopsis();
             }
             if (animeEpisode.getData().get(i).getAttributes().getAirdate() == null) {
-                airDate = "Air date not available";
+                airDate = "Air date not available"; //UNUSED
             } else {
                 airDate = animeEpisode.getData().get(i).getAttributes().getAirdate();
             }
@@ -207,7 +207,11 @@ public class MainActivityViewModel extends AndroidViewModel {
             );
             listEpisodes.add(episode);
         }
-        addEpisodesToDatabase(listEpisodes);
+        if (replace) {
+            localRepository.addEpisodesWithReplace(listEpisodes);
+        } else {
+            addEpisodesToDatabase(listEpisodes);
+        }
     }
 
     private void addEpisodesToDatabase(List<MyAnimeEpisode> list) {

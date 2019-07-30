@@ -56,6 +56,7 @@ public class DetailAnimeFragment extends Fragment {
         obtainArguments();
         setupViews();
         observeData();
+        restoreViews();
     }
 
     private void obtainArguments() {
@@ -79,26 +80,26 @@ public class DetailAnimeFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new DetailAnimeFragmentViewAdapter();
-        b.animeDetailed.listEpisodes.setHasFixedSize(true);
+//        b.animeDetailed.listEpisodes.setHasFixedSize(true);
         b.animeDetailed.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.animeDetailed.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.animeDetailed.listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
         b.animeDetailed.listEpisodes.setAdapter(listAdapter);
-        b.animeDetailed.listEpisodes.setNestedScrollingEnabled(true);
+
     }
 
     private void setupButtons() {
         b.animeDetailed.btnEpisodes.setOnClickListener(v -> {
-            if (viewModel.isCollapseEpisodes()) {
+            if (!viewModel.isCollapseEpisodes()) {
                 b.animeDetailed.listEpisodes.setVisibility(View.VISIBLE);
             } else {
-                b.animeDetailed.listEpisodes.setVisibility(View.INVISIBLE);
+                b.animeDetailed.listEpisodes.setVisibility(View.GONE);
             }
             boolean bol = !viewModel.isCollapseEpisodes();
             viewModel.setCollapseEpisodes(bol);
         });
         b.animeDetailed.btnSynopsis.setOnClickListener(v -> {
-            if (viewModel.isCollapseSynopsis()) {
+            if (!viewModel.isCollapseSynopsis()) {
                 b.animeDetailed.lblSynopsis.setVisibility(View.VISIBLE);
             } else {
                 b.animeDetailed.lblSynopsis.setVisibility(View.GONE);
@@ -116,5 +117,10 @@ public class DetailAnimeFragment extends Fragment {
                     b.animeDetailed.lblSynopsis.setText(myAnime.getSynopsis());
                 });
         viewModel.getAnimeEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> listAdapter.submitList(myAnimeEpisodesLists));
+    }
+
+    private void restoreViews() {
+        b.animeDetailed.lblSynopsis.setVisibility(!viewModel.isCollapseSynopsis() ? View.GONE: View.VISIBLE);
+        b.animeDetailed.listEpisodes.setVisibility(!viewModel.isCollapseEpisodes() ? View.GONE: View.VISIBLE);
     }
 }

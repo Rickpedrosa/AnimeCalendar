@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.animecalendar.ui.calendar.CalendarFragment"
-        android:label="Agenda" >
+        android:label="Following animes" >
         <action
             android:id="@+id/action_calendarFragment_to_calendarEpisodesFragment"
             app:destination="@id/calendarEpisodesFragment"
@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/detailAnimeFragment"
         android:name="com.example.animecalendar.ui.detail_anime.DetailAnimeFragment"
-        android:label="DetailAnimeFragment" >
+        android:label="Detail" >
         <argument
             android:name="animeId"
             app:argType="integer"
@@ -63,15 +63,16 @@
     <fragment
         android:id="@+id/daysFragment"
         android:name="com.example.animecalendar.ui.days.DaysFragment"
-        android:label="DaysFragment" >
+        android:label="Agenda" >
         <action
             android:id="@+id/action_daysFragment_to_daysEpisodeFragment"
-            app:destination="@id/daysEpisodeFragment" />
+            app:destination="@id/daysEpisodeFragment"
+            app:popUpTo="@+id/calendarFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/daysEpisodeFragment"
-        android:name="com.example.animecalendar.ui.days_episodes.DaysEpisodesFragment"
-        android:label="DaysEpisodeFragment" >
+        android:name="com.example.animecalendar.ui.days_episodes.DaysEpisodesFragment">
         <argument
             android:name="date"
             app:argType="string" />
@@ -79,5 +80,5 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.animecalendar.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Settings" />
 </navigation>

@@ -61,6 +61,9 @@ public interface MyAnimesEpisodesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addEpisodesWithReplace(List<MyAnimeEpisode> episodes);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
 

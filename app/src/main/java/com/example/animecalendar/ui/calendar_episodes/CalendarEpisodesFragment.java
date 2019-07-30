@@ -111,10 +111,6 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
                 e.printStackTrace();
             }
         });
-        listAdapter.setOnItemLongClickListener((view, position) -> {
-            //TODO
-            return true;
-        });
         b.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listEpisodes.setLayoutManager(linearLayoutManager);
@@ -144,11 +140,10 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         } else {
             if (preference) {
                 YesNoDialogFragment.newInstance(
-                        "Caps realignment",
-                        "You are a nasty otaku," +
-                                "this episode is not for today, ARE YOU SURE?!",
-                        "OKAY",
-                        "NAY",
+                        getResources().getString(R.string.calendar_episodes_dialog_title),
+                        getResources().getString(R.string.calendar_episodes_dialog_message),
+                        getResources().getString(R.string.confirm_okay),
+                        getResources().getString(R.string.confirm_cancel),
                         CalendarEpisodesFragment.this,
                         6).show(requireFragmentManager(), "POGGU");
             } else {

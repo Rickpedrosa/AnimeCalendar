@@ -9,16 +9,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="@color/colorPrimaryPogDark"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:drawableEnd="@android:drawable/arrow_down_float"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:text="Synopsis"
+            android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            android:textColor="@android:color/background_light"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_synopsis" />
@@ -39,12 +44,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:text="Episodes"
+            android:textAlignment="viewStart"
+            android:drawableEnd="@android:drawable/arrow_down_float"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lbl_synopsis" />
 
         <androidx.recyclerview.widget.RecyclerView
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:visibility="gone"
             android:id="@+id/listEpisodes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

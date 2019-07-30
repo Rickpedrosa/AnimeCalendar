@@ -15,13 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.animecalendar.R;
@@ -183,12 +181,13 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             if (!aBoolean.hasBeenHandled()) {
                 if (aBoolean.getContentIfNotHandled()) {
                     Toast.makeText(requireContext(),
-                            "The anime is not finished in Kitsu API Servers",
+                            getResources().getString(R.string.series_warning_update),
                             Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(requireContext(),
-                            "Anime can be updated. Fetching new data",
+                            getResources().getString(R.string.series_warning_update_okay),
                             Toast.LENGTH_LONG).show();
+                    viewModel.retrieveEpisodes(viewModel.getItemPosition());
                 }
             }
         });
