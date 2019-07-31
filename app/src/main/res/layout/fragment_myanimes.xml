@@ -41,7 +41,7 @@
                 android:id="@+id/lbl_noAnimes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No animes yet for this category"
+                android:text="@string/no_animes_yet_for_this_category"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
                 android:visibility="invisible"

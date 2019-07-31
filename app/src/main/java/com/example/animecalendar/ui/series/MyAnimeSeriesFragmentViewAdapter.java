@@ -90,7 +90,7 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
                     break;
                 default:
                     //FINISHED STATUS
-                    b.lblEpCounts.setText("Ready to schedule!");
+                    b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.ready_sche));
                     break;
             }
         }

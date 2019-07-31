@@ -80,7 +80,7 @@
                 android:id="@+id/lbl_noAnimesSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Search some animes!"
+                android:text="@string/lbl_search"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold|italic"

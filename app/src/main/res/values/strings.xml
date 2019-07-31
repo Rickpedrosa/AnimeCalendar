@@ -53,4 +53,8 @@
     <string name="series_warning_update_okay">Anime can be updated. Fetching new data</string>
     <string name="no_animes_found">0 founds for this anime</string>
     <string name="ep_format_assign"><![CDATA[%1$s -> Episode %2$d]]></string>
+    <string name="no_animes_yet_for_this_category">No animes yet for this category</string>
+    <string name="no_animes_following_yet">No animes following yet</string>
+    <string name="not_available_days_because_you_are_not_following_animes">Not available days because you are not following animes</string>
+    <string name="ready_sche">Ready to schedule!</string>
 </resources>

@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:textStyle="bold|italic"
-                android:text="Not available days because you are not following animes"
+                android:text="@string/not_available_days_because_you_are_not_following_animes"
                 android:textColor="@android:color/background_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">AnimeCalendar</string>
+    <string name="this_is_the_detail_fragment">x</string>
+    <string name="search_hint">Nombre del anime…</string>
+    <string name="lbl_search">¡Encuentra algún anime!</string>
+    <array name="dialog_opts_1">
+        <item>Seguir</item>
+        <item>Delete</item>
+    </array>
+    <array name="dialog_opts_2">
+        <item>Dejar de seguir</item>
+        <item>Borrar</item>
+    </array>
+    <array name="dialog_opts_3">
+        <item>Borrar</item>
+    </array>
+    <array name="dialog_opts_4">
+        <item>Seguir</item>
+        <item>Borrar</item>
+        <item>Actualizar</item>
+    </array>
+    <string name="update_anime_status">%1$s ha sido actualizado a %2$s</string>
+    <string name="hide_ep_title">Ocultar episodios</string>
+    <string name="episodes_per_day">Episodes per day…</string>
+    <string name="epsCounter">%1$d/%2$d</string>
+    <string name="animeStatus">Estado: %1$s</string>
+    <string name="episode">%1$d - %2$s</string>
+    <string name="animeTitle">%1$s (%2$s eps)</string>
+    <string name="myseries_fragment_toolbar_title">Mis animes (%1$s)</string>
+    <string name="reorder_key">pref_sync</string>
+    <string name="notification_key">notif_key</string>
+    <string name="time_notification_key">time_notif_key</string>
+    <string name="notif_title">¡Animes de hoy!</string>
+    <string name="epsCounter_Day">%1$d episodios</string>
+    <string name="confirm_okay">OKAY</string>
+    <string name="confirm_cancel">CANCELAR</string>
+    <string name="confirm_body">¿Quieres añadir %1$s (%2$d eps) a tu lista?</string>
+    <string name="success_add">¡%1$s añadido! (obteniendo episodios)</string>
+    <string name="empty_idiot">El campo de búsqueda está vacío</string>
+    <string name="warning_assign">Debes escoger alguna fecha antes de hacer la asignación</string>
+    <string name="warning_pick_assign">Debes escoger las fechas primero</string>
+    <string name="assign_resume">%1$d episodios para asignar:</string>
+    <string name="assign_success">¡%1$s programado!</string>
+    <string name="episode_insert_title_not">Título no disponible</string>
+    <string name="episode_insert_synopsis_not">Sinopsis no disponible</string>
+    <string name="ep_fetching_completed">Episodios obtenidos</string>
+    <string name="daysfragment_title">Episodios de %1$s</string>
+    <string name="not_today">Este episodio no es para verlo hoy</string>
+    <string name="calendar_episodes_dialog_title">Reasignación de capítulos</string>
+    <string name="calendar_episodes_dialog_message">¡¿Este episodio no es para hoy, ESTÁS SEGURO?!</string>
+    <string name="warning_wait">Espera mientras el anime actual es guardado en la base de datos</string>
+    <string name="series_warning_update">El anime no ha terminado en los servidores de KITSU</string>
+    <string name="series_warning_update_okay">El anime puede ser actualizado, obteniendo nuevos datos</string>
+    <string name="no_animes_found">0 coincidencias para este anime</string>
+    <string name="ep_format_assign">%1$s -> Episodio %2$d</string>
+    <string name="no_animes_yet_for_this_category">No hay animes en esta categoría</string>
+    <string name="no_animes_following_yet">Todavía no sigues ningún anime</string>
+    <string name="not_available_days_because_you_are_not_following_animes">Días no disponibles (todavía no sigues ningún anime)</string>
+    <string name="ready_sche">¡Preparado para ser programado!</string>
+</resources>
