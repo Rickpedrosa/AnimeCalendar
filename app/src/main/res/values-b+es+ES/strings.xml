@@ -47,7 +47,7 @@
     <string name="daysfragment_title">Episodios de %1$s</string>
     <string name="not_today">Este episodio no es para verlo hoy</string>
     <string name="calendar_episodes_dialog_title">Reasignación de capítulos</string>
-    <string name="calendar_episodes_dialog_message">¡¿Este episodio no es para hoy, ESTÁS SEGURO?!</string>
+    <string name="calendar_episodes_dialog_message">Este episodio no es para hoy, ¡¿ESTÁS SEGURO?!</string>
     <string name="warning_wait">Espera mientras el anime actual es guardado en la base de datos</string>
     <string name="series_warning_update">El anime no ha terminado en los servidores de KITSU</string>
     <string name="series_warning_update_okay">El anime puede ser actualizado, obteniendo nuevos datos</string>
@@ -57,4 +57,24 @@
     <string name="no_animes_following_yet">Todavía no sigues ningún anime</string>
     <string name="not_available_days_because_you_are_not_following_animes">Días no disponibles (todavía no sigues ningún anime)</string>
     <string name="ready_sche">¡Preparado para ser programado!</string>
+    <string name="enable_notif">Habilitar notificaciones</string>
+    <string name="reorder">Confirmación de reordenación de capítulos</string>
+    <string name="time_summary">Hora de notifación</string>
+    <string name="confirm_assignment">Confirmar asignación</string>
+    <string name="clear_calendar">Limpiar calendario</string>
+    <string name="assign_episodes">Asignar episodios</string>
+    <string name="item_delete">Borrar</string>
+    <string name="item_follow">Seguir</string>
+    <string name="item_update">Actualizar</string>
+    <string name="item_unfollow">Dejar de seguir</string>
+    <string name="show_all">Todos</string>
+    <string name="following">Siguiendo</string>
+    <string name="finished">Terminados</string>
+    <string name="current">En emisión</string>
+    <string name="completed">Completados</string>
+    <string name="series_title">Mis animes</string>
+    <string name="calendar_title">Seguimiento</string>
+    <string name="calendarep_title">Episodios</string>
+    <string name="days_title">Agenda</string>
+    <string name="settings_title">Configuración</string>
 </resources>

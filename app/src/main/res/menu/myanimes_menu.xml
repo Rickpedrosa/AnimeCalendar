@@ -17,18 +17,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/mnuAll"
-            android:title="Show all" />
+            android:title="@string/show_all" />
         <item
             android:id="@+id/mnuFollowing"
-            android:title="Following" />
+            android:title="@string/following" />
         <item
             android:id="@+id/mnuFinished"
-            android:title="Watch" />
+            android:title="@string/finished" />
         <item
             android:id="@+id/mnuCurrent"
-            android:title="Current" />
+            android:title="@string/current" />
         <item
             android:id="@+id/mnuCompleted"
-            android:title="Completed" />
+            android:title="@string/completed" />
     </group>
 </menu>

@@ -33,15 +33,10 @@ public interface LocalRepository {
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
     void addEpisodes(List<MyAnimeEpisode> episodes);
     void updateAnimeStatus(String status, int animeId);
-    void updateEpisodeStatus(int value, int id);
-    void updateEpisodeDateToWatch(String date, int episodeId);
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForCalendarEvents();
     LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
     void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes);
     LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category);
-    void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes);
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForASingleDate(String date);
     LiveData<List<AnimeEpisodeDates>> getDatesFromWatchableEpisodes();
     void updateEpisodeStatusAndDatePOJO(AnimeEpDateStatusPOJO episode);
     LiveData<List<AnimesForSeries>> getAnimesToExposeBySearchQuery(String query);

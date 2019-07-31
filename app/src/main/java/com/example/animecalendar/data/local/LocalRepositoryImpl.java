@@ -65,23 +65,8 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void updateEpisodeStatus(int value, int id) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeStatus(value, id));
-    }
-
-    @Override
-    public void updateEpisodeDateToWatch(String date, int episodeId) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeDateToWatch(date, episodeId));
-    }
-
-    @Override
     public LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar() {
         return myAnimesDao.getAnimesToExposeForCalendar();
-    }
-
-    @Override
-    public LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForCalendarEvents() {
-        return myAnimesEpisodesDao.getAnimeEpisodesForCalendarEvents();
     }
 
     @Override
@@ -97,11 +82,6 @@ public class LocalRepositoryImpl implements LocalRepository {
     @Override
     public LiveData<List<AnimesForSeries>> getAnimesToExposeByCategory(String category) {
         return myAnimesDao.getAnimesToExposeByCategory(category);
-    }
-
-    @Override
-    public void addEpisodesOnReplaceStrategy(List<MyAnimeEpisode> episodes) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.addEpisodesOnReplaceStrategy(episodes));
     }
 
     @Override
@@ -134,8 +114,4 @@ public class LocalRepositoryImpl implements LocalRepository {
         return myAnimesEpisodesDao.getDatesFromWatchableEpisodes();
     }
 
-    @Override
-    public LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesForASingleDate(String date) {
-        return myAnimesEpisodesDao.getAnimeEpisodesForASingleDate(date);
-    }
 }

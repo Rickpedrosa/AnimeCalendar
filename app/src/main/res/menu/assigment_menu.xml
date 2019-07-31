@@ -4,16 +4,16 @@
     <item
         android:id="@+id/confirmAssignment"
         android:icon="@drawable/ic_check_circle_black_24dp"
-        android:title="Confirm assignment"
+        android:title="@string/confirm_assignment"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/clearAssignment"
         android:icon="@drawable/ic_clear_white_24dp"
-        android:title="Clear calendar" />
+        android:title="@string/clear_calendar" />
 
     <item
         android:id="@+id/assignment"
         android:icon="@drawable/ic_check_circle_black_24dp"
-        android:title="Assign episodes" />
+        android:title="@string/assign_episodes" />
 </menu>

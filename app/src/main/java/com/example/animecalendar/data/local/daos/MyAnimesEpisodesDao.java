@@ -28,7 +28,7 @@ public interface MyAnimesEpisodesDao {
 
     @Query("SELECT ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, an.canonicalTitle AS animeTitle " +
             "FROM episodes ep INNER JOIN anime an ON ep.animeId = an.id " +
-            "WHERE ep.watchToDate LIKE :day AND ep.wasWatched = 0 " +
+            "WHERE ep.watchToDate LIKE :day AND ep.wasWatched = 0 AND an.status LIKE 'following'" +
             "ORDER BY an.id")
     LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day);
 

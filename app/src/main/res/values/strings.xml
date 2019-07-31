@@ -57,4 +57,25 @@
     <string name="no_animes_following_yet">No animes following yet</string>
     <string name="not_available_days_because_you_are_not_following_animes">Not available days because you are not following animes</string>
     <string name="ready_sche">Ready to schedule!</string>
+
+    <string name="enable_notif">Enable notifications</string>
+    <string name="reorder">Reorder caps confirmation</string>
+    <string name="time_summary">Notification hour</string>
+    <string name="confirm_assignment">Confirm assignment</string>
+    <string name="clear_calendar">Clear calendar</string>
+    <string name="assign_episodes">Assign episodes</string>
+    <string name="item_delete">Delete</string>
+    <string name="item_follow">Follow</string>
+    <string name="item_update">Update</string>
+    <string name="item_unfollow">Unfollow</string>
+    <string name="show_all">Show all</string>
+    <string name="following">Following</string>
+    <string name="finished">Finished</string>
+    <string name="current">Current</string>
+    <string name="completed">Completed</string>
+    <string name="series_title">My animes</string>
+    <string name="calendar_title">Following animes</string>
+    <string name="calendarep_title">Episodes</string>
+    <string name="days_title">Agenda</string>
+    <string name="settings_title">Settings</string>
 </resources>

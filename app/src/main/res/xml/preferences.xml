@@ -6,7 +6,7 @@
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
             android:key="@string/reorder_key"
-            android:title="Reorder caps confirmation" />
+            android:title="@string/reorder" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="Animes">
@@ -26,14 +26,14 @@
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
             android:key="@string/notification_key"
-            android:title="Enable notifications" />
+            android:title="@string/enable_notif" />
 
         <com.example.animecalendar.base.pref.DateTimePreferenceCompat
+            android:dependency="@string/notification_key"
             android:defaultValue="90"
             android:icon="@drawable/ic_today_lol_24dp"
             android:key="@string/time_notification_key"
-            android:summary="Time Summary"
-            android:title="Time Preference" />
+            android:title="@string/time_summary" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

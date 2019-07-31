@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_all">All</string>
-    <string name="pref_finished">finished</string>
-    <string name="pref_current">current</string>
-    <string name="pref_following">following</string>
-    <string name="pref_completed">completed</string>
+    <string name="pref_all" translatable="false">All</string>
+    <string name="pref_finished" translatable="false">finished</string>
+    <string name="pref_current" translatable="false">current</string>
+    <string name="pref_following" translatable="false">following</string>
+    <string name="pref_completed" translatable="false">completed</string>
 
     <string-array name="animeListEntries">
         <item>@string/pref_all</item>
@@ -22,7 +22,7 @@
         <item>@string/pref_following</item>
     </string-array>
 
-    <string name="anime_list_key">animeListKey</string>
-    <string name="anime_list_dialog_title">Default display type</string>
-    <string name="anime_list_defaultValue">@string/pref_all</string>
+    <string name="anime_list_key" translatable="false">animeListKey</string>
+    <string name="anime_list_dialog_title" translatable="false">Default display type</string>
+    <string name="anime_list_defaultValue" translatable="false">@string/pref_all</string>
 </resources>
