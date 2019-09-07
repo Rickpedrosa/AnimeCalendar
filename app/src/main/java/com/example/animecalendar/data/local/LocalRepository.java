@@ -43,5 +43,4 @@ public interface LocalRepository {
     LiveData<List<String>> getTodayItems(String today);
     LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day);
     void addEpisodesWithReplace(List<MyAnimeEpisode> episodes);
-
 }
