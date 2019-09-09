@@ -11,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
+import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
+import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -24,6 +27,7 @@ import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,6 +62,15 @@ public class AssignmentFragment extends Fragment {
         setupToolbar();
         observeData();
         restoreDataFromDeviceRotation();
+        b.innerInclude.cosmoCalendar.setSelectionManager(new RangeSelectionManager(() -> {
+            viewModel.setCalendarLiveData(b.innerInclude.cosmoCalendar.getSelectedDates());
+            viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
+            if (assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
+                Toast.makeText(requireContext(), String.valueOf(viewModel.getAssignableDates().size()), Toast.LENGTH_SHORT).show();
+                viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
+                b.innerInclude.textviewlol.setText(viewModel.getSchedule());
+            }
+        }));
     }
 
     @Override
@@ -79,19 +92,11 @@ public class AssignmentFragment extends Fragment {
     private void setupToolbar() {
         b.toolbarAssign.inflateMenu(R.menu.assigment_menu);
         b.toolbarAssign.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.clearAssignment:
-                    clearAssignment();
-                    return true;
-                case R.id.assignment:
-                    confirmAssignment(listAdapter.getItemCount());
-                    return true;
-                case R.id.confirmAssignment:
-                    commitUpdate();
-                    return true;
-                default:
-                    return false;
+            if (item.getItemId() == R.id.clearAssignment) {
+                clearAssignment();
+                return true;
             }
+            return false;
         });
         NavigationUI.setupWithNavController(b.toolbarAssign,
                 NavHostFragment.findNavController(this),
@@ -106,6 +111,14 @@ public class AssignmentFragment extends Fragment {
         viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodeListWithAnimeTitles -> {
             setToolbarTitle(myAnimeEpisodeListWithAnimeTitles.get(0).getAnimeTitle());
             listAdapter.submitList(myAnimeEpisodeListWithAnimeTitles);
+        });
+        viewModel.getCalendarLiveData().observe(getViewLifecycleOwner(), calendars -> {
+            if (calendars.size() > 0 && assignmentController(calendars.size(), listAdapter.getItemCount())) {
+                b.fab.show();
+                b.fab.setOnClickListener(view -> commitUpdate());
+            } else {
+                b.fab.hide();
+            }
         });
     }
 
@@ -137,6 +150,8 @@ public class AssignmentFragment extends Fragment {
         if (viewModel.getAssignableDates().size() > 0) {
             b.innerInclude.cosmoCalendar.clearSelections();
             viewModel.getAssignableDates().clear();
+            b.innerInclude.textviewlol.setText(
+                    getResources().getString(R.string.assign_resume, listAdapter.getItemCount()));
         }
     }
 
