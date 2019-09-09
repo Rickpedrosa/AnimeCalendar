@@ -187,7 +187,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                     Toast.makeText(requireContext(),
                             getResources().getString(R.string.series_warning_update_okay),
                             Toast.LENGTH_LONG).show();
-                    viewModel.retrieveEpisodes(viewModel.getItemPosition());
+                    viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
                 }
             }
         });

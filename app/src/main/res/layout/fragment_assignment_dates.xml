@@ -2,15 +2,25 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/backgroundNight"
         android:layout_height="match_parent"
+        android:background="@color/backgroundNight"
         android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedInclude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/innerInclude"
+                layout="@layout/inner_assignment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarLayout"
@@ -29,21 +39,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </com.google.android.material.appbar.AppBarLayout>
 
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedInclude"
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include
-                android:id="@+id/innerInclude"
-                layout="@layout/inner_assignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </androidx.core.widget.NestedScrollView>
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_search_w_24dp"
+            app:elevation="1dp"
+            app:pressedTranslationZ="0dp" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <data>
+
+    </data>
 </layout>

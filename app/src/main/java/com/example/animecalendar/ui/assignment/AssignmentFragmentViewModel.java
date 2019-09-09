@@ -43,6 +43,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
         viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_FOLLOWING, id);
     }
 
+    //TODO PROBAR
     String assignDateToEpisodes(List<Calendar> days, List<MyAnimeEpisodeListWithAnimeTitle> caps) {
         StringBuilder builder = new StringBuilder();
         float daysCount = (float) days.size();
@@ -50,43 +51,30 @@ public class AssignmentFragmentViewModel extends ViewModel {
         float capsPerDay = (capsCount / daysCount);
 
         float restAux = 0;
-        int capReference = -1;
         float capsPerDayAux;
         float totalCapsAux = capsCount;
 
         if (capsCount >= daysCount) {
-            //READY TO UPDATE!
             for (int i = 0; i < daysCount; i++) {
                 if (i == 0) { //día 1
-                    for (int firstDay = 0; firstDay < (int) capsPerDay; firstDay++) { //capítulos del primer día
-                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(firstDay)));
-                        capReference = firstDay; // variable para ir pasando el indice del capitulo a actualizar
-                    }
+                    builder.append(episodeResumed(i, (int) capsPerDay)).append("\n");
                     restAux = capsPerDay - ((int) capsPerDay); //parte decimal que pasa al día siguiente
                     totalCapsAux = totalCapsAux - (int) capsPerDay; //se resta X parte entera capítulo del total
                 } else if (i != (daysCount - 1)) { //días entre el primero y el último
                     capsPerDayAux = capsPerDay + restAux;
-                    for (int betweenDay = 0; betweenDay < (int) capsPerDayAux; betweenDay++) { //capítulos del día (parte entera de capsPerDayAux)
-                        capReference++;
-                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(capReference)));
-                    }
+                    builder.append(episodeResumed(i, (int) capsPerDayAux)).append("\n");
                     restAux = capsPerDayAux - ((int) capsPerDayAux); //parte decimal que pasa al día siguiente
                     totalCapsAux = totalCapsAux - ((int) capsPerDayAux); //se resta la parte entera del total de caps
                 } else {
-                    for (int lastDay = 0; lastDay < (int) totalCapsAux; lastDay++) {
-                        //el último día no se hace operación, se le asigna los
-                        //capítulos que quedan y ya está
-                        capReference++;
-                        builder.append(episodeFormatted(CustomTimeUtils.getDateFormatted(days.get(i).getTime()), caps.get(capReference)));
-                    }
+                    builder.append(episodeResumed(i, (int) totalCapsAux));
                 }
             }
         }
         return builder.toString();
     }
 
-    private String episodeFormatted(String date, MyAnimeEpisodeListWithAnimeTitle ep) {
-        return viewModel.getApplication().getResources().getString(R.string.ep_format_assign, date, ep.getNumber()).concat("\n");
+    private String episodeResumed(int day, int caps) {
+        return viewModel.getApplication().getResources().getString(R.string.asign_format, day + 1, caps);
     }
 
     String getSchedule() {

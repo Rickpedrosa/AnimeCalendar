@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_all">All</string>
-    <string name="pref_finished">finished</string>
-    <string name="pref_current">current</string>
-    <string name="pref_following">following</string>
-    <string name="pref_completed">completed</string>
+    <string name="pref_all">Todos</string>
+    <string name="pref_finished">Emitidos</string>
+    <string name="pref_current">En emisión</string>
+    <string name="pref_following">Siguiendo</string>
+    <string name="pref_completed">Completados</string>
 
     <string name="pref_all_val" translatable="false">All</string>
     <string name="pref_finished_val" translatable="false">finished</string>
