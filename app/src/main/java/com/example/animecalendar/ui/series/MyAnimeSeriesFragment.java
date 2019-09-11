@@ -201,6 +201,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void updateStatus() {
         viewModel.updateStatus(LocalRepository.STATUS_FINISHED, listAdapter.getItem(viewModel.getItemPosition()).getId());
+        //TODO CAMBIAR ESTADO DE EPISODIOS POR VER A NULL, ES DECIR, A -
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),

@@ -11,14 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
-import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
@@ -27,7 +25,6 @@ import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +59,10 @@ public class AssignmentFragment extends Fragment {
         setupToolbar();
         observeData();
         restoreDataFromDeviceRotation();
+        pickDateRange();
+    }
+
+    private void pickDateRange() {
         b.innerInclude.cosmoCalendar.setSelectionManager(new RangeSelectionManager(() -> {
             viewModel.setCalendarLiveData(b.innerInclude.cosmoCalendar.getSelectedDates());
             viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
@@ -76,7 +77,7 @@ public class AssignmentFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
+        //viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
     }
 
     private void obtainArguments() {
@@ -113,9 +114,8 @@ public class AssignmentFragment extends Fragment {
             listAdapter.submitList(myAnimeEpisodeListWithAnimeTitles);
         });
         viewModel.getCalendarLiveData().observe(getViewLifecycleOwner(), calendars -> {
-            if (calendars.size() > 0 && assignmentController(calendars.size(), listAdapter.getItemCount())) {
-                b.fab.show();
-                b.fab.setOnClickListener(view -> commitUpdate());
+            if (calendars.size() > 0) {
+                enableFab();
             } else {
                 b.fab.hide();
             }
@@ -126,15 +126,9 @@ public class AssignmentFragment extends Fragment {
         b.toolbarAssign.setTitle(title);
     }
 
-    private void confirmAssignment(int caps) {
-        viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
-        if (assignmentController(viewModel.getAssignableDates().size(), caps)) {
-            Toast.makeText(requireContext(), String.valueOf(viewModel.getAssignableDates().size()), Toast.LENGTH_SHORT).show();
-            viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
-            b.innerInclude.textviewlol.setText(viewModel.getSchedule());
-        } else {
-            Toast.makeText(requireContext(), getResources().getString(R.string.warning_pick_assign), Toast.LENGTH_SHORT).show();
-        }
+    private void enableFab() {
+        b.fab.show();
+        b.fab.setOnClickListener(view -> commitUpdate());
     }
 
     private List<MyAnimeEpisodeListWithAnimeTitle> getAllEpisodes() {
@@ -147,6 +141,7 @@ public class AssignmentFragment extends Fragment {
 
     private void clearAssignment() {
         viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
+        viewModel.setCalendarLiveData(new ArrayList<>());
         if (viewModel.getAssignableDates().size() > 0) {
             b.innerInclude.cosmoCalendar.clearSelections();
             viewModel.getAssignableDates().clear();
