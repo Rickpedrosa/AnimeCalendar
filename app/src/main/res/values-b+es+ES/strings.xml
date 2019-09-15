@@ -78,4 +78,5 @@
     <string name="days_title">Agenda</string>
     <string name="settings_title">Configuración</string>
     <string name="asign_format">Día %1$d (%3$s) -> %2$d eps</string>
+    <string name="current_warning_follow">Los animes en emisión no se pueden seguir</string>
 </resources>

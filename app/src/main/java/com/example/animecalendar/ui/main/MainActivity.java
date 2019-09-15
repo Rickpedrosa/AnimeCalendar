@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setupProgressBarVisibility();
         viewModel.getNotificationLiveData().observe(this, notificationItem -> {
-            Log.d("POGONECHAMP", String.valueOf(notificationItem.isNotificationAccess()));
-            Log.d("POGONECHAMP", String.valueOf(notificationItem.getNotificationTime()));
-            Log.d("POGONECHAMP", String.valueOf(notificationItem.getAnimeTitles().size()));
             if (ValidationUtils.getAlarmNotificationWard(notificationItem)) {
                 try {
                     AlertReceiver.setAlarm(MainActivity.this,

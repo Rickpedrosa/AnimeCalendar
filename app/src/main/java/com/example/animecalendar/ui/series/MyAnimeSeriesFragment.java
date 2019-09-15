@@ -201,7 +201,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void updateStatus() {
         viewModel.updateStatus(LocalRepository.STATUS_FINISHED, listAdapter.getItem(viewModel.getItemPosition()).getId());
-        //TODO CAMBIAR ESTADO DE EPISODIOS POR VER A NULL, ES DECIR, A -
+        //TODO CAMBIAR ESTADO DE EPISODIOS POR VER A NULL, ES DECIR, A - (OPT?)
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
                         listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),
@@ -221,7 +221,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             case LocalRepository.STATUS_CURRENT:
                 switch (item.getItemId()) {
                     case R.id.dialog_current_follow:
-                        Toast.makeText(requireContext(), "Current animes cannot be followed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(requireContext(), getResources().getString(R.string.current_warning_follow), Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                         return true;
                     case R.id.dialog_current_delete:

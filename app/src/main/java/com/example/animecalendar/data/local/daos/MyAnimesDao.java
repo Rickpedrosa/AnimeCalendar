@@ -46,7 +46,6 @@ public interface MyAnimesDao {
             " GROUP BY ani.id ORDER BY ani.status DESC")
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
 
-    //TODO AÑADIR STATUS FOLLOWING DE ANIME AL WHERE
     @Query("SELECT DISTINCT an.canonicalTitle FROM anime an INNER JOIN episodes ep ON an.id = ep.animeId" +
             " WHERE ep.watchToDate LIKE :today AND an.status LIKE 'following'")
     LiveData<List<String>> getTodayItems(String today);

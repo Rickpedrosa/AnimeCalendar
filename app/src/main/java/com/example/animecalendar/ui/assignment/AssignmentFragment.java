@@ -35,6 +35,7 @@ public class AssignmentFragment extends Fragment {
     private AssignmentFragmentViewAdapter listAdapter;
     private int animeId;
 
+    //TODO AL ROTAR NO ES EL MISMO MANAGER CALENDAR, HABRÁ SOLUCIÓN??
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -44,7 +44,7 @@ public class AlertReceiver extends BroadcastReceiver {
         obtainArguments(intent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ONE)
-                .setSmallIcon(R.drawable.ic_build_white_menu_24dp)
+                .setSmallIcon(R.drawable.ic_stat_call_white)
                 .setContentTitle(mTitle)
                 .setContentText(mSubtitle)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

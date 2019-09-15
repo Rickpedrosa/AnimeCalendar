@@ -31,6 +31,7 @@ import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
+import com.example.animecalendar.utils.ValidationUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -128,14 +129,9 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     private void updateEpisode(int position, boolean preference) throws ParseException {
-        boolean equalDate = CustomTimeUtils.getDateFormatted(Calendar.getInstance().getTime())
-                .equals(listAdapter.getItem(position).getWatchToDate());
-        boolean smallerThanDate = CustomTimeUtils.dateFromStringToLong(listAdapter.getItem(position)
-                .getWatchToDate())
-                < Calendar.getInstance().getTime().getTime();
-        if (equalDate) {
+        if (ValidationUtils.isEqualDate(listAdapter.getItem(position))) {
             innerUpdateEpisode(position);
-        } else if (smallerThanDate) {
+        } else if (ValidationUtils.isMinorDate(listAdapter.getItem(position))) {
             innerUpdateEpisode(position);
         } else {
             if (preference) {
