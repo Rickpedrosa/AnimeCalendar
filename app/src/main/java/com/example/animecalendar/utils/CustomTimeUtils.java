@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CustomTimeUtils {
 
@@ -21,13 +22,13 @@ public class CustomTimeUtils {
     }
 
     public static long dateFromStringToLong(String date) throws ParseException {
-        return new SimpleDateFormat(FORMAT, Locale.getDefault())
-                .parse(date).getTime();
+        return Objects.requireNonNull(new SimpleDateFormat(FORMAT, Locale.getDefault())
+                .parse(date)).getTime();
     }
 
     public static long dateFromStringToLongTime(String date) throws ParseException {
-        return new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault())
-                .parse(date).getTime();
+        return Objects.requireNonNull(new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault())
+                .parse(date)).getTime();
     }
 
     public static boolean isToday(String date) {
@@ -40,8 +41,8 @@ public class CustomTimeUtils {
 
     public static long getTodayWithTime(Integer mTime) throws ParseException {
         String today = getDateFormatted(new Date());
-        return new SimpleDateFormat(FORMAT, Locale.getDefault()).
-                parse(today).getTime() + (mTime * ONE_MINUTE_MILLISECONDS);
+        return Objects.requireNonNull(new SimpleDateFormat(FORMAT, Locale.getDefault()).
+                parse(today)).getTime() + (mTime * ONE_MINUTE_MILLISECONDS);
     }
 
     private CustomTimeUtils() {

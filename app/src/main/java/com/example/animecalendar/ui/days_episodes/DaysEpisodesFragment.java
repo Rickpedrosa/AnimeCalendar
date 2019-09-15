@@ -25,7 +25,10 @@ import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.CustomTimeUtils;
+import com.example.animecalendar.utils.ValidationUtils;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Objects;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
@@ -68,15 +71,21 @@ public class DaysEpisodesFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new DaysEpisodesFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) -> updateEpisode(position));
+        listAdapter.setOnItemClickListener((view, position) -> {
+            try {
+                updateEpisode(position);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
         b.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listEpisodes.setLayoutManager(linearLayoutManager);
         b.listEpisodes.setAdapter(listAdapter);
     }
 
-    private void updateEpisode(int position) {
-        if (isToday) {
+    private void updateEpisode(int position) throws ParseException {
+        if (isToday || ValidationUtils.isMinorDate(date)) {
             innerUpdateEpisode(position);
         } else {
             Toast.makeText(requireContext(), getResources().getString(R.string.not_today), Toast.LENGTH_SHORT).show();
@@ -98,7 +107,7 @@ public class DaysEpisodesFragment extends Fragment {
     private void observeData() {
         viewModel.getEpisodes(date).observe(getViewLifecycleOwner(), list -> {
             listAdapter.submitList(list);
-            if (list.size() == 0){
+            if (list.size() == 0) {
                 NavHostFragment.findNavController(this).popBackStack(R.id.calendarFragment, false);
             }
         });

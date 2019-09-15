@@ -23,6 +23,7 @@ import com.example.animecalendar.databinding.FragmentAssignmentDatesBinding;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
+import com.example.animecalendar.utils.ValidationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ public class AssignmentFragment extends Fragment {
     private AssignmentFragmentViewAdapter listAdapter;
     private int animeId;
 
-    //TODO AL ROTAR NO ES EL MISMO MANAGER CALENDAR, HABRÁ SOLUCIÓN??
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +67,11 @@ public class AssignmentFragment extends Fragment {
         b.innerInclude.cosmoCalendar.setSelectionManager(new RangeSelectionManager(() -> {
             viewModel.setCalendarLiveData(b.innerInclude.cosmoCalendar.getSelectedDates());
             viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
-            if (assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
+            if (ValidationUtils.assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
                 Toast.makeText(requireContext(), String.valueOf(viewModel.getAssignableDates().size()), Toast.LENGTH_SHORT).show();
                 viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
                 b.innerInclude.textviewlol.setText(viewModel.getSchedule());
+                toggleSelectedDays();
             }
         }));
     }
@@ -103,10 +104,6 @@ public class AssignmentFragment extends Fragment {
         NavigationUI.setupWithNavController(b.toolbarAssign,
                 NavHostFragment.findNavController(this),
                 AppbarConfigProvider.getAppBarConfiguration());
-    }
-
-    private boolean assignmentController(int days, int caps) {
-        return caps >= days && days > 0;
     }
 
     private void observeData() {
@@ -156,17 +153,21 @@ public class AssignmentFragment extends Fragment {
                 getResources().getString(R.string.assign_resume, listAdapter.getItemCount()) : viewModel.getSchedule()), 100);
         if (viewModel.getAssignableDates() != null) {
             if (viewModel.getAssignableDates().size() > 0) {
-                b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(0)));
-                b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(
-                        viewModel.getAssignableDates().size() - 1
-                )));
+                toggleSelectedDays();
             }
         }
     }
 
+    private void toggleSelectedDays() {
+        b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(0)));
+        b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(
+                viewModel.getAssignableDates().size() - 1
+        )));
+    }
+
     private void commitUpdate() {
         if (viewModel.getAssignableDates() != null) {
-            if (assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
+            if (ValidationUtils.assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
                 viewModel.commitEpisodesDateAssignation(viewModel.getAssignableDates(), getAllEpisodes());
                 viewModel.updateStatus((int) listAdapter.getItem(0).getAnimeId());
                 Toast.makeText(requireContext(), getResources().getString(R.string.assign_success,

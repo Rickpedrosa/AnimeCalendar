@@ -1,6 +1,5 @@
 package com.example.animecalendar.utils;
 
-import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.model.NotificationItem;
 
 import java.text.ParseException;
@@ -13,16 +12,20 @@ public class ValidationUtils {
                 && notif.getNotificationTime() != 0;
     }
 
-    public static boolean isEqualDate(MyAnimeEpisodesList episode){
+    public static boolean isEqualDate(String episode){
         return CustomTimeUtils.getDateFormatted(Calendar.getInstance().getTime())
-                .equals(episode.getWatchToDate());
+                .equals(episode);
     }
 
-    public static boolean isMinorDate(MyAnimeEpisodesList episode) throws ParseException {
-        return CustomTimeUtils.dateFromStringToLong(episode
-                .getWatchToDate())
+    public static boolean isMinorDate(String episode) throws ParseException {
+        return CustomTimeUtils.dateFromStringToLong(episode)
                 < Calendar.getInstance().getTime().getTime();
     }
+
+    public static boolean assignmentController(int days, int caps) {
+        return caps >= days && days > 0;
+    }
+
 
     private ValidationUtils() {
     }

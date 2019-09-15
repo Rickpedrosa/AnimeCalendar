@@ -129,9 +129,9 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     private void updateEpisode(int position, boolean preference) throws ParseException {
-        if (ValidationUtils.isEqualDate(listAdapter.getItem(position))) {
+        if (ValidationUtils.isEqualDate(listAdapter.getItem(position).getWatchToDate())) {
             innerUpdateEpisode(position);
-        } else if (ValidationUtils.isMinorDate(listAdapter.getItem(position))) {
+        } else if (ValidationUtils.isMinorDate(listAdapter.getItem(position).getWatchToDate())) {
             innerUpdateEpisode(position);
         } else {
             if (preference) {
