@@ -71,7 +71,7 @@ public class AssignmentFragment extends Fragment {
                 Toast.makeText(requireContext(), String.valueOf(viewModel.getAssignableDates().size()), Toast.LENGTH_SHORT).show();
                 viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
                 b.innerInclude.textviewlol.setText(viewModel.getSchedule());
-                toggleSelectedDays();
+                //toggleSelectedDays();
             }
         }));
     }
