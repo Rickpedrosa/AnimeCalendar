@@ -97,8 +97,7 @@ public class DetailAnimeFragment extends Fragment {
             } else {
                 b.animeDetailed.listEpisodes.setVisibility(View.GONE);
             }
-            boolean bol = !viewModel.isCollapseEpisodes();
-            viewModel.setCollapseEpisodes(bol);
+            viewModel.setCollapseEpisodes(!viewModel.isCollapseEpisodes());
         });
         b.animeDetailed.btnSynopsis.setOnClickListener(v -> {
             if (!viewModel.isCollapseSynopsis()) {
@@ -106,8 +105,7 @@ public class DetailAnimeFragment extends Fragment {
             } else {
                 b.animeDetailed.lblSynopsis.setVisibility(View.GONE);
             }
-            boolean bol = !viewModel.isCollapseSynopsis();
-            viewModel.setCollapseSynopsis(bol);
+            viewModel.setCollapseSynopsis(!viewModel.isCollapseSynopsis());
         });
     }
 
