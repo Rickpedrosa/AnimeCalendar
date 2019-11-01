@@ -1,14 +1,13 @@
 package com.example.animecalendar.data.remote.repos;
 
 import com.example.animecalendar.data.remote.pojos.anime.Anime;
+import com.example.animecalendar.data.remote.pojos.anime_character_detail.AnimeCharacterDetail;
+import com.example.animecalendar.data.remote.pojos.anime_character_ids.AnimeCharacterIDs;
 import com.example.animecalendar.data.remote.pojos.anime_episode.AnimeEpisode;
 import com.example.animecalendar.data.remote.pojos.animelist.AnimationList;
 import com.example.animecalendar.data.remote.services.AnimeService;
 
-import java.util.List;
-
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import retrofit2.Response;
 
 
@@ -37,5 +36,15 @@ public class AnimeRepositoryImpl implements AnimeRepository {
                 id,
                 offset,
                 limit);
+    }
+
+    @Override
+    public Observable<AnimeCharacterIDs> getAnimeCharactersIds(String id) {
+        return AnimeService.getInstance().getAnimeRepository().getAnimeCharactersIds(id);
+    }
+
+    @Override
+    public Observable<AnimeCharacterDetail> getAnimeCharacterDetails(String characterId) {
+        return AnimeService.getInstance().getAnimeRepository().getAnimeCharacterDetails(characterId);
     }
 }

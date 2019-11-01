@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setupViewModel();
         setupBottomNavigationView();
         setupProgressBarVisibility();
+        viewModel.testAnimeCharacterIDSApiCall();
         viewModel.getNotificationLiveData().observe(this, notificationItem -> {
             if (ValidationUtils.getAlarmNotificationWard(notificationItem)) {
                 try {

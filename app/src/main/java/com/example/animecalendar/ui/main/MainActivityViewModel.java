@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.main;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,9 @@ import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.data.local.LocalRepositoryImpl;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
+import com.example.animecalendar.data.remote.pojos.anime_character_detail.AnimeCharacterDetail;
+import com.example.animecalendar.data.remote.pojos.anime_character_ids.AnimeCharacterIDs;
+import com.example.animecalendar.data.remote.pojos.anime_character_ids.DatumCharacter;
 import com.example.animecalendar.data.remote.pojos.anime_episode.AnimeEpisode;
 import com.example.animecalendar.data.remote.pojos.anime_episode.Datum;
 import com.example.animecalendar.data.remote.repos.AnimeRepository;
@@ -34,14 +38,24 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -364,5 +378,33 @@ public class MainActivityViewModel extends AndroidViewModel {
         if (updateListFlag) {
             localRepository.updateEpisodeDateToWatchPojoVersion(nonWatchedEps);
         }
+    }
+
+    void testAnimeCharacterIDSApiCall() {
+        Observable<List<AnimeCharacterDetail>> pog = animeRepository.getAnimeCharactersIds("21")
+                .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
+                        animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
+                .map(new Function<List<DatumCharacter>, List<AnimeCharacterDetail>>() {
+                    @Override
+                    public List<AnimeCharacterDetail> apply(List<DatumCharacter> datumCharacters) throws Exception {
+                        return null;
+                    }
+                });
+        disposable = pog.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(animeCharacterDetails -> {
+                    for (int i = 0; i < animeCharacterDetails.size(); i++) {
+                        Log.d("RXOMEGALOL", animeCharacterDetails.get(i).getData().getAttributes().getCanonicalName());
+                    }
+                }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
+//        disposable = animeRepository.getAnimeCharacterDetails("1153")
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<AnimeCharacterDetail>() {
+//                    @Override
+//                    public void accept(AnimeCharacterDetail animeCharacterDetails) throws Exception {
+//                        Log.d("RXOMEGALOL", animeCharacterDetails.getData().getAttributes().getCanonicalName());
+//                    }
+//                }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
     }
 }
