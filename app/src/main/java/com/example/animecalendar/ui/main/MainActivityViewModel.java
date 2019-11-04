@@ -51,6 +51,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
@@ -381,30 +382,29 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     void testAnimeCharacterIDSApiCall() {
-        Observable<List<AnimeCharacterDetail>> pog = animeRepository.getAnimeCharactersIds("21")
+        Single<List<AnimeCharacterDetail>> pog = animeRepository.getAnimeCharactersIds("21")
+                .subscribeOn(Schedulers.io())
                 .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
-                        animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
-                .map(new Function<List<DatumCharacter>, List<AnimeCharacterDetail>>() {
-                    @Override
-                    public List<AnimeCharacterDetail> apply(List<DatumCharacter> datumCharacters) throws Exception {
-                        return null;
-                    }
-                });
-        disposable = pog.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(animeCharacterDetails -> {
-                    for (int i = 0; i < animeCharacterDetails.size(); i++) {
-                        Log.d("RXOMEGALOL", animeCharacterDetails.get(i).getData().getAttributes().getCanonicalName());
-                    }
-                }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
-//        disposable = animeRepository.getAnimeCharacterDetails("1153")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<AnimeCharacterDetail>() {
-//                    @Override
-//                    public void accept(AnimeCharacterDetail animeCharacterDetails) throws Exception {
-//                        Log.d("RXOMEGALOL", animeCharacterDetails.getData().getAttributes().getCanonicalName());
-//                    }
-//                }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
+                        animeCharacterIDs -> Observable.just(animeCharacterIDs.getData())).flatMapIterable(items -> items)
+                .flatMap(new Function<DatumCharacter, ObservableSource<? extends AnimeCharacterDetail>>() {
+                             @Override
+                             public ObservableSource<? extends AnimeCharacterDetail> apply(DatumCharacter it) throws Exception {
+                                 Log.d("RXOMEGALOL", it.getId());
+                                 return animeRepository.getAnimeCharacterDetails(it.getId());
+                             }
+                         }
+
+                ).subscribeOn(Schedulers.io())
+                .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread());
+        disposable = pog.subscribe(new Consumer<List<AnimeCharacterDetail>>() {
+            @Override
+            public void accept(List<AnimeCharacterDetail> it) throws Exception {
+                for (int i = 0; i < it.size(); i++) {
+                    Log.d("RXOMEGALOL", it.get(i).getData().getAttributes().getCanonicalName());
+                }
+            }
+        }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
     }
 }
