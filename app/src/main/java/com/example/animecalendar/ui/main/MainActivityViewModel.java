@@ -382,28 +382,20 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     void testAnimeCharacterIDSApiCall() {
-        Single<List<AnimeCharacterDetail>> pog = animeRepository.getAnimeCharactersIds("21")
-                .subscribeOn(Schedulers.io())
-                .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
-                        animeCharacterIDs -> Observable.just(animeCharacterIDs.getData())).flatMapIterable(items -> items)
-                .flatMap(new Function<DatumCharacter, ObservableSource<? extends AnimeCharacterDetail>>() {
-                             @Override
-                             public ObservableSource<? extends AnimeCharacterDetail> apply(DatumCharacter it) throws Exception {
-                                 Log.d("RXOMEGALOL", it.getId());
-                                 return animeRepository.getAnimeCharacterDetails(it.getId());
-                             }
-                         }
-
-                ).subscribeOn(Schedulers.io())
-                .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
-                .toList()
-                .observeOn(AndroidSchedulers.mainThread());
-        disposable = pog.subscribe(new Consumer<List<AnimeCharacterDetail>>() {
-            @Override
-            public void accept(List<AnimeCharacterDetail> it) throws Exception {
-                for (int i = 0; i < it.size(); i++) {
-                    Log.d("RXOMEGALOL", it.get(i).getData().getAttributes().getCanonicalName());
-                }
+        Single<List<AnimeCharacterDetail>> pog =
+                animeRepository.getAnimeCharactersIds("21")
+                        .subscribeOn(Schedulers.io())
+                        .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
+                                animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
+                        .flatMapIterable(items -> items)
+                        .flatMap(it -> animeRepository.getAnimeCharacterDetails(it.getId()))
+                        .subscribeOn(Schedulers.io())
+                        .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
+                        .toList()
+                        .observeOn(AndroidSchedulers.mainThread());
+        disposable = pog.subscribe(it -> {
+            for (int i = 0; i < it.size(); i++) {
+                Log.d("RXOMEGALOL", it.get(i).getData().getAttributes().getCanonicalName());
             }
         }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
     }
