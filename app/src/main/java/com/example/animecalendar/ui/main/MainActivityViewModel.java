@@ -380,23 +380,4 @@ public class MainActivityViewModel extends AndroidViewModel {
             localRepository.updateEpisodeDateToWatchPojoVersion(nonWatchedEps);
         }
     }
-
-    void testAnimeCharacterIDSApiCall() {
-        Single<List<AnimeCharacterDetail>> pog =
-                animeRepository.getAnimeCharactersIds("21")
-                        .subscribeOn(Schedulers.io())
-                        .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
-                                animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
-                        .flatMapIterable(items -> items)
-                        .flatMap(it -> animeRepository.getAnimeCharacterDetails(it.getId()))
-                        .subscribeOn(Schedulers.io())
-                        .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
-                        .toList()
-                        .observeOn(AndroidSchedulers.mainThread());
-        disposable = pog.subscribe(it -> {
-            for (int i = 0; i < it.size(); i++) {
-                Log.d("RXOMEGALOL", it.get(i).getData().getAttributes().getCanonicalName());
-            }
-        }, throwable -> Log.d("RXOMEGALOLERROR", Objects.requireNonNull(throwable.getMessage())));
-    }
 }

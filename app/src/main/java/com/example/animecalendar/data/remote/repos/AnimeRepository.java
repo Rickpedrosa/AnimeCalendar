@@ -31,6 +31,6 @@ public interface AnimeRepository {
     @GET("anime/{id}/relationships/characters")
     Observable<AnimeCharacterIDs> getAnimeCharactersIds(@Path("id") String id);
 
-    @GET("characters/{id}")
+    @GET("media-characters/{id}/character")
     Observable<AnimeCharacterDetail> getAnimeCharacterDetails(@Path("id") String characterId);
 }

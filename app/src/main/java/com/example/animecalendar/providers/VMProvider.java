@@ -11,7 +11,8 @@ import com.example.animecalendar.ui.main.MainActivityViewModelFactory;
 public class VMProvider {
 
     public enum FRAGMENTS {
-        SEARCH, CALENDAR, SERIES, DETAIL_ANIME, DETAIL_EPISODE, CALENDAR_EPISODES, ASSIGNMENT, DAYS, DAYS_EPISODE
+        SEARCH, CALENDAR, SERIES, DETAIL_ANIME, DETAIL_EPISODE, CALENDAR_EPISODES, ASSIGNMENT,
+        DAYS, DAYS_EPISODE, CHARACTERS
     }
 
     public static ViewModelFragmentFactory viewModelFragmentFactory(Fragment fragment, FRAGMENTS enumFragment) {

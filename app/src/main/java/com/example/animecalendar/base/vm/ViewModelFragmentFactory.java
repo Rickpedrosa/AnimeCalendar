@@ -8,6 +8,7 @@ import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.ui.assignment.AssignmentFragmentViewModel;
 import com.example.animecalendar.ui.calendar.CalendarFragmentViewModel;
 import com.example.animecalendar.ui.calendar_episodes.CalendarEpisodesFragmentViewModel;
+import com.example.animecalendar.ui.characters.CharactersFragmentViewModel;
 import com.example.animecalendar.ui.days.DaysFragmentViewModel;
 import com.example.animecalendar.ui.days_episodes.DaysEpisodesFragmentViewModel;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragmentViewModel;
@@ -49,6 +50,8 @@ public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
                 return (T) new DaysFragmentViewModel(mainActivityViewModel);
             case DAYS_EPISODE:
                 return (T) new DaysEpisodesFragmentViewModel(mainActivityViewModel);
+            case CHARACTERS:
+                return (T) new CharactersFragmentViewModel(mainActivityViewModel);
             default:
                 return null;
         }

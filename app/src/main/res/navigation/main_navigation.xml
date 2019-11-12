@@ -43,6 +43,9 @@
             android:name="animeId"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_detailAnimeFragment_to_charactersFragment"
+            app:destination="@id/charactersFragment" />
     </fragment>
     <fragment
         android:id="@+id/calendarEpisodesFragment"
@@ -81,4 +84,13 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.animecalendar.ui.settings.SettingsFragment"
         android:label="@string/settings_title" />
+    <fragment
+        android:id="@+id/charactersFragment"
+        android:name="com.example.animecalendar.ui.characters.CharactersFragment"
+        android:label="fragment_characters"
+        tools:layout="@layout/fragment_characters" >
+        <argument
+            android:name="animeId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

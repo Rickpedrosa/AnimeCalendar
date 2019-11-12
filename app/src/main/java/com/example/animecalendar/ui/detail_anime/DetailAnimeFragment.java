@@ -107,6 +107,10 @@ public class DetailAnimeFragment extends Fragment {
             }
             viewModel.setCollapseSynopsis(!viewModel.isCollapseSynopsis());
         });
+        b.animeDetailed.btnCharacters.setOnClickListener(view -> { // todo cambiar
+            navController.navigate(DetailAnimeFragmentDirections
+            .actionDetailAnimeFragmentToCharactersFragment(animeId));
+        });
     }
 
     private void observeData() {
