@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.Event;
+import com.example.animecalendar.base.Resource;
 import com.example.animecalendar.base.pref.SharedPreferencesBooleanLiveData;
 import com.example.animecalendar.base.pref.SharedPreferencesIntegerLiveData;
 import com.example.animecalendar.base.pref.SharedPreferencesStringLiveData;
@@ -73,6 +74,9 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final LiveData<Boolean> notificationEnablingPreference;
     private final LiveData<String> defaultListTypePreference;
     private final LiveData<Integer> timeNotificationPreference;
+    private MutableLiveData<List<AnimeCharacterDetail>> characters = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressBarCharacterController = new MutableLiveData<>();
+    private MutableLiveData<Resource<String>> resourceCharacter = new MutableLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -379,5 +383,58 @@ public class MainActivityViewModel extends AndroidViewModel {
         if (updateListFlag) {
             localRepository.updateEpisodeDateToWatchPojoVersion(nonWatchedEps);
         }
+    }
+
+    public void testAnimeCharacterIDSApiCall(int id) {
+        Single<List<AnimeCharacterDetail>> pog =
+                animeRepository.getAnimeCharactersIds(String.valueOf(id))
+                        .subscribeOn(Schedulers.io())
+                        .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
+                                animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
+                        .flatMapIterable(items -> items)
+                        .flatMap(it -> {
+                            informResource(it.getId());
+                            return animeRepository.getAnimeCharacterDetails(it.getId());
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
+                        .toList()
+                        .observeOn(AndroidSchedulers.mainThread());
+        disposable = pog.
+                doOnSubscribe(disposable -> goToTheLoading())
+                .subscribe(it -> {
+                            characters.postValue(it);
+                            goToTheStopLoading();
+                            informResource("");
+                            Toast.makeText(application, it.size() + " personajes", Toast.LENGTH_LONG).show();
+                        },
+                        throwable -> {
+                            goToTheStopLoading();
+                            Toast.makeText(application, throwable.getMessage(), Toast.LENGTH_LONG).show();
+                        });
+    }
+
+    public LiveData<List<AnimeCharacterDetail>> getCharacters() {
+        return characters;
+    }
+
+    public LiveData<Boolean> getProgressBarCharacterController() {
+        return progressBarCharacterController;
+    }
+
+    private void goToTheLoading() {
+        progressBarCharacterController.postValue(true);
+    }
+
+    private void goToTheStopLoading() {
+        progressBarCharacterController.postValue(false);
+    }
+
+    private void informResource(String id) {
+        resourceCharacter.postValue(Resource.success(id));
+    }
+
+    public LiveData<Resource<String>> getResourceCharacter() {
+        return resourceCharacter;
     }
 }

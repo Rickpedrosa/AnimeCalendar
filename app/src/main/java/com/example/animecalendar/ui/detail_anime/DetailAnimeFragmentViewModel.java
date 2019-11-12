@@ -43,4 +43,5 @@ public class DetailAnimeFragmentViewModel extends ViewModel {
     void setCollapseEpisodes(boolean collapseEpisodes) {
         this.collapseEpisodes = collapseEpisodes;
     }
+
 }
