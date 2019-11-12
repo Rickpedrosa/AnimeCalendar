@@ -14,9 +14,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.CharacterPagerAdapter;
 import com.example.animecalendar.data.remote.pojos.anime_character_detail.AnimeCharacterDetail;
 import com.example.animecalendar.databinding.FragmentCharactersBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -39,7 +42,7 @@ public class CharactersFragment extends Fragment {
                 VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CHARACTERS))
                 .get(CharactersFragmentViewModel.class);
         obtainArguments();
-        viewModel.testAnimeCharacterIDSApiCall(animeId);
+        viewModel.retrieveCharacters(animeId);
     }
 
     @Nullable
@@ -54,7 +57,13 @@ public class CharactersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
         setupToolbar();
-        setupViewPager();
+        setupProgressBar();
+        setupRecyclerView();
+    }
+
+    private void setupProgressBar() {
+        viewModel.getCharactersLoading().observe(getViewLifecycleOwner(), aBoolean ->
+                b.progressBar.setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE));
     }
 
     private void obtainArguments() {
@@ -69,11 +78,19 @@ public class CharactersFragment extends Fragment {
         );
     }
 
-    private void setupViewPager() {
-        viewModel.getCharacters().observe(getViewLifecycleOwner(), animeCharacterDetails ->
-                b.viewPagerCharacter.setAdapter(new CharacterPagerAdapter(
-                        requireContext(),
-                        animeCharacterDetails
-                )));
+    private void setupRecyclerView() {
+        viewModel.getCharacters().observe(getViewLifecycleOwner(), this::setupAdapter);
+    }
+
+    private void setupAdapter(List<AnimeCharacterDetail> animeCharacterDetails) {
+//        b.lblNoCharacters.setVisibility(animeCharacterDetails.size() == 0 ? View.VISIBLE : View.INVISIBLE);
+        CharactersFragmentViewAdapter listAdapter = new CharactersFragmentViewAdapter();
+        listAdapter.setOnItemClickListener((view, position) -> {
+        });
+        b.listCharacters.setItemAnimator(new DefaultItemAnimator());
+        b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));
+        b.listCharacters.setAdapter(listAdapter);
+        listAdapter.submitList(animeCharacterDetails);
     }
 }

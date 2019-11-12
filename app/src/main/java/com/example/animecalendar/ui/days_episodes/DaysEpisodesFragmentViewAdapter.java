@@ -31,7 +31,7 @@ public class DaysEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnimeEpis
         }
     };
 
-    public DaysEpisodesFragmentViewAdapter() {
+    DaysEpisodesFragmentViewAdapter() {
         super(diffUtilItemCallback);
     }
 
@@ -50,8 +50,6 @@ public class DaysEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnimeEpis
     class EpisodeViewHolder extends BaseViewHolder<MyAnimeEpisodesDailyList> {
 
         private FragmentCalendarEpisodeItemBinding b;
-        private int white = 0xffffffff;
-        private int golden = 0xFFFFA823;
 
         EpisodeViewHolder(FragmentCalendarEpisodeItemBinding itemView) {
             super(itemView.getRoot(), getOnItemClickListener(), getOnItemLongClickListener());
@@ -79,6 +77,8 @@ public class DaysEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnimeEpis
         }
 
         private int getColor(int wasWatched) {
+            int white = 0xffffffff;
+            int golden = 0xFFFFA823;
             return wasWatched == NOT_WATCHED ? white : golden;
         }
     }
