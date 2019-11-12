@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -42,7 +41,7 @@ public class CharactersFragment extends Fragment {
                 VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CHARACTERS))
                 .get(CharactersFragmentViewModel.class);
         obtainArguments();
-        viewModel.retrieveCharacters(animeId);
+        if (savedInstanceState == null) viewModel.retrieveCharacters(animeId);
     }
 
     @Nullable
@@ -58,6 +57,8 @@ public class CharactersFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         setupToolbar();
         setupProgressBar();
+        viewModel.getCharacterAsyncInfo().observe(getViewLifecycleOwner(), stringResource ->
+                b.lblNoCharacters.setText(stringResource.getData()));
         setupRecyclerView();
     }
 

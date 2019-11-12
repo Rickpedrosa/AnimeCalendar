@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.Event;
+import com.example.animecalendar.base.Resource;
 import com.example.animecalendar.base.pref.SharedPreferencesBooleanLiveData;
 import com.example.animecalendar.base.pref.SharedPreferencesIntegerLiveData;
 import com.example.animecalendar.base.pref.SharedPreferencesStringLiveData;
@@ -75,6 +76,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final LiveData<Integer> timeNotificationPreference;
     private MutableLiveData<List<AnimeCharacterDetail>> characters = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressBarCharacterController = new MutableLiveData<>();
+    private MutableLiveData<Resource<String>> resourceCharacter = new MutableLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
@@ -390,7 +392,10 @@ public class MainActivityViewModel extends AndroidViewModel {
                         .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
                                 animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
                         .flatMapIterable(items -> items)
-                        .flatMap(it -> animeRepository.getAnimeCharacterDetails(it.getId()))
+                        .flatMap(it -> {
+                            informResource(it.getId());
+                            return animeRepository.getAnimeCharacterDetails(it.getId());
+                        })
                         .subscribeOn(Schedulers.io())
                         .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
                         .toList()
@@ -400,6 +405,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 .subscribe(it -> {
                             characters.postValue(it);
                             goToTheStopLoading();
+                            informResource("");
                             Toast.makeText(application, it.size() + " personajes", Toast.LENGTH_LONG).show();
                         },
                         throwable -> {
@@ -422,5 +428,13 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private void goToTheStopLoading() {
         progressBarCharacterController.postValue(false);
+    }
+
+    private void informResource(String id) {
+        resourceCharacter.postValue(Resource.success(id));
+    }
+
+    public LiveData<Resource<String>> getResourceCharacter() {
+        return resourceCharacter;
     }
 }

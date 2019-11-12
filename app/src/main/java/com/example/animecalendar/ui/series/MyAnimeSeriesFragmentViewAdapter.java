@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.series;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -70,7 +71,7 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         private void setGeneralInfo(AnimesForSeries type) {
             b.lblTitle.setText(type.getTitle());
             b.lblStatus.setText(b.lblStatus.getResources().getString(R.string.animeStatus, type.getStatus()));
-           // b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
+            // b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
             PicassoUtils.loadPicasso(b.imgPoster.getContext(), type.getPoster(), b.imgPoster);
         }
 
@@ -79,7 +80,7 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
             switch (type.getStatus()) {
                 case LocalRepository.STATUS_CURRENT:
                     b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
-                    b.lblEpCounts.setText("");
+                    b.lblEpCounts.setVisibility(View.GONE);
                     break;
                 case LocalRepository.STATUS_FOLLOWING:
                     b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
@@ -98,7 +99,7 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
         private void cleanLabels() {
             b.innerConstraint.setAlpha(1f);
             b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(android.R.color.background_light));
-            b.lblNextEpisode.setText("");
+            b.lblNextEpisode.setVisibility(View.GONE);
         }
     }
 }
