@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.calendar_episodes;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragmentViewAdapter;
 import com.example.animecalendar.utils.PicassoUtils;
+import com.squareup.picasso.Callback;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
 
@@ -51,8 +53,6 @@ public class CalendarEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnime
     class EpisodeViewHolder extends BaseViewHolder<MyAnimeEpisodesList> {
 
         private FragmentCalendarEpisodeItemBinding b;
-        private int white = 0xffffffff;
-        private int golden = 0xFFFFA823;
 
         EpisodeViewHolder(FragmentCalendarEpisodeItemBinding itemView) {
             super(itemView.getRoot(), getOnItemClickListener(), getOnItemLongClickListener());
@@ -66,9 +66,24 @@ public class CalendarEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnime
         }
 
         private void setImmutableValues(MyAnimeEpisodesList type) {
+            b.progressBar2.setVisibility(View.VISIBLE);
             b.lblEpisode.setText(b.lblEpisode.getResources().getString(R.string.episode, type.getNumber(), type.getCanonicalTitle()));
             b.lblDate.setText(type.getWatchToDate());
-            PicassoUtils.loadPicassoWithError(b.empresaImg.getContext(), type.getThumbnail(), b.empresaImg);
+            PicassoUtils.loadPicassoWithErrorAndCallback(
+                    b.empresaImg.getContext(),
+                    type.getThumbnail(),
+                    b.empresaImg,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+                    });
         }
 
         private void setMutableValues(MyAnimeEpisodesList type) {
@@ -80,6 +95,8 @@ public class CalendarEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnime
         }
 
         private int getColor(int wasWatched) {
+            int white = 0xffffffff;
+            int golden = 0xFFFFA823;
             return wasWatched == NOT_WATCHED ? white : golden;
         }
     }

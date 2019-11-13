@@ -1,22 +1,18 @@
 package com.example.animecalendar.ui.main;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.data.local.AppDatabase;
-import com.example.animecalendar.model.NotificationItem;
 import com.example.animecalendar.utils.ValidationUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

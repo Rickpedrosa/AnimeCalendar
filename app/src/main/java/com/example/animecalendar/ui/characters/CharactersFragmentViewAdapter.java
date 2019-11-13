@@ -14,6 +14,7 @@ import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.data.local.entity.MyAnimeCharacter;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
 import com.example.animecalendar.utils.PicassoUtils;
+import com.squareup.picasso.Callback;
 
 public class CharactersFragmentViewAdapter extends BaseListAdapter<MyAnimeCharacter, BaseViewHolder<MyAnimeCharacter>> {
 
@@ -56,9 +57,20 @@ public class CharactersFragmentViewAdapter extends BaseListAdapter<MyAnimeCharac
 
         @Override
         public void bind(MyAnimeCharacter type) {
-            PicassoUtils.loadPicassoWithError(b.empresaImg.getContext(),
+            b.progressBar2.setVisibility(View.VISIBLE);
+            PicassoUtils.loadPicassoWithErrorAndCallback(b.empresaImg.getContext(),
                     type.getImage(),
-                    b.empresaImg);
+                    b.empresaImg, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+                    });
             b.lblEpisode.setText(type.getCanonicalName());
             b.lblDate.setVisibility(View.GONE);
             b.imgCheck.setVisibility(View.GONE);
