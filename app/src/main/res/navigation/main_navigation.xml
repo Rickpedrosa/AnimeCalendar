@@ -87,7 +87,7 @@
     <fragment
         android:id="@+id/charactersFragment"
         android:name="com.example.animecalendar.ui.characters.CharactersFragment"
-        android:label="fragment_characters"
+        android:label="@string/fragment_characters_title"
         tools:layout="@layout/fragment_characters" >
         <argument
             android:name="animeId"

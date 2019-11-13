@@ -175,10 +175,13 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         });
     }
 
-    private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes() {
+    private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes() throws ParseException {
         List<AnimeEpisodeDateUpdatePOJO> mList = new ArrayList<>();
         for (int i = 0; i < listAdapter.getItemCount(); i++) {
-            if (listAdapter.getItem(i).getWasWatched() == NOT_WATCHED) {
+            if (listAdapter.getItem(i).getWasWatched() == NOT_WATCHED &&
+                    !ValidationUtils.isEqualDate(listAdapter.getItem(i).getWatchToDate()) &&
+                    !ValidationUtils.isMinorDate(listAdapter.getItem(i).getWatchToDate())
+            ) {
                 mList.add(new AnimeEpisodeDateUpdatePOJO(
                         listAdapter.getItem(i).getId(),
                         listAdapter.getItem(i).getWatchToDate()

@@ -1,7 +1,6 @@
 package com.example.animecalendar.ui.main;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +19,7 @@ import com.example.animecalendar.base.pref.SharedPreferencesStringLiveData;
 import com.example.animecalendar.data.local.AppDatabase;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.data.local.LocalRepositoryImpl;
+import com.example.animecalendar.data.local.entity.MyAnimeCharacter;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.data.remote.pojos.anime_character_detail.AnimeCharacterDetail;
 import com.example.animecalendar.data.remote.pojos.anime_character_ids.AnimeCharacterIDs;
@@ -39,24 +39,16 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -74,14 +66,16 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final LiveData<Boolean> notificationEnablingPreference;
     private final LiveData<String> defaultListTypePreference;
     private final LiveData<Integer> timeNotificationPreference;
-    private MutableLiveData<List<AnimeCharacterDetail>> characters = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressBarCharacterController = new MutableLiveData<>();
     private MutableLiveData<Resource<String>> resourceCharacter = new MutableLiveData<>();
 
     MainActivityViewModel(@NonNull Application application, AppDatabase appDatabase) {
         super(application);
         this.application = application;
-        this.localRepository = new LocalRepositoryImpl(appDatabase.myAnimesEpisodesDao(), appDatabase.myAnimesDao());
+        this.localRepository = new LocalRepositoryImpl(
+                appDatabase.myAnimesEpisodesDao(),
+                appDatabase.myAnimesDao(),
+                appDatabase.myAnimeCharactersDao());
         this.animeRepository = new AnimeRepositoryImpl();
         this.confirmationDialogPreference = new SharedPreferencesBooleanLiveData(
                 PreferenceManager.getDefaultSharedPreferences(application),
@@ -403,7 +397,18 @@ public class MainActivityViewModel extends AndroidViewModel {
         disposable = pog.
                 doOnSubscribe(disposable -> goToTheLoading())
                 .subscribe(it -> {
-                            characters.postValue(it);
+                            List<MyAnimeCharacter> characters = new ArrayList<>();
+                            for (int i = 0; i < it.size(); i++) {
+                                characters.add(new MyAnimeCharacter(
+                                        Long.parseLong(it.get(i).getData().getId()),
+                                        (long) id,
+                                        it.get(i).getData().getAttributes().getCanonicalName(),
+                                        it.get(i).getData().getAttributes().getDescription(),
+                                        it.get(i).getData().getAttributes().getImage() == null ?
+                                                null : it.get(i).getData().getAttributes().getImage().getOriginal()
+                                ));
+                            }
+                            localRepository.addAnimeCharacters(characters);
                             goToTheStopLoading();
                             informResource("");
                             Toast.makeText(application, it.size() + " personajes", Toast.LENGTH_LONG).show();
@@ -412,10 +417,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                             goToTheStopLoading();
                             Toast.makeText(application, throwable.getMessage(), Toast.LENGTH_LONG).show();
                         });
-    }
-
-    public LiveData<List<AnimeCharacterDetail>> getCharacters() {
-        return characters;
     }
 
     public LiveData<Boolean> getProgressBarCharacterController() {
