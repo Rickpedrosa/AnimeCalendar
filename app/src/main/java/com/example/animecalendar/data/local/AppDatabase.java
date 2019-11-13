@@ -6,12 +6,14 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.animecalendar.data.local.daos.MyAnimeCharactersDao;
 import com.example.animecalendar.data.local.daos.MyAnimesDao;
 import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
+import com.example.animecalendar.data.local.entity.MyAnimeCharacter;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 
-@Database(entities = {MyAnime.class, MyAnimeEpisode.class}, version = 1)
+@Database(entities = {MyAnime.class, MyAnimeEpisode.class, MyAnimeCharacter.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "animeCalendar";
@@ -37,4 +39,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract MyAnimesDao myAnimesDao();
     public abstract MyAnimesEpisodesDao myAnimesEpisodesDao();
+    public abstract MyAnimeCharactersDao myAnimeCharactersDao();
 }

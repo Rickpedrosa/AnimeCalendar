@@ -4,9 +4,11 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.animecalendar.data.local.daos.MyAnimeCharactersDao;
 import com.example.animecalendar.data.local.daos.MyAnimesDao;
 import com.example.animecalendar.data.local.daos.MyAnimesEpisodesDao;
 import com.example.animecalendar.data.local.entity.MyAnime;
+import com.example.animecalendar.data.local.entity.MyAnimeCharacter;
 import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
@@ -23,10 +25,14 @@ public class LocalRepositoryImpl implements LocalRepository {
 
     private final MyAnimesEpisodesDao myAnimesEpisodesDao;
     private final MyAnimesDao myAnimesDao;
+    private final MyAnimeCharactersDao myAnimeCharactersDao;
 
-    public LocalRepositoryImpl(MyAnimesEpisodesDao myAnimesEpisodesDao, MyAnimesDao myAnimesDao) {
+    public LocalRepositoryImpl(MyAnimesEpisodesDao myAnimesEpisodesDao,
+                               MyAnimesDao myAnimesDao,
+                               MyAnimeCharactersDao myAnimeCharactersDao) {
         this.myAnimesEpisodesDao = myAnimesEpisodesDao;
         this.myAnimesDao = myAnimesDao;
+        this.myAnimeCharactersDao = myAnimeCharactersDao;
     }
 
     @Override
@@ -97,6 +103,21 @@ public class LocalRepositoryImpl implements LocalRepository {
     @Override
     public void addEpisodesWithReplace(List<MyAnimeEpisode> episodes) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.addEpisodesWithReplace(episodes));
+    }
+
+    @Override
+    public LiveData<List<MyAnimeCharacter>> getAnimeCharacters(long animeId) {
+        return myAnimeCharactersDao.getAnimeCharacters(animeId);
+    }
+
+    @Override
+    public void addAnimeCharacters(List<MyAnimeCharacter> characters) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimeCharactersDao.addAnimeCharacters(characters));
+    }
+
+    @Override
+    public void deleteAnimeCharacters(long animeId) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimeCharactersDao.deleteAnimeCharacters(animeId));
     }
 
     @Override

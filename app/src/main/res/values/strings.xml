@@ -81,4 +81,5 @@
 
     <string name="asign_format">Day %1$d (%3$s) -> %2$d eps</string>
     <string name="current_warning_follow">Current animes cannot be followed</string>
+    <string name="fragment_characters_title">Characters</string>
 </resources>
