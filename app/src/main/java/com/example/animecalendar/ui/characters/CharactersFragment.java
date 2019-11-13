@@ -58,7 +58,7 @@ public class CharactersFragment extends Fragment {
         setupToolbar();
         setupProgressBar();
         viewModel.getCharacterAsyncInfo().observe(getViewLifecycleOwner(), stringResource ->
-                b.lblNoCharacters.setText(stringResource.getData()));
+                b.lblInfoCharacters.setText(stringResource.getData()));
         setupRecyclerView();
     }
 
@@ -84,9 +84,9 @@ public class CharactersFragment extends Fragment {
     }
 
     private void setupAdapter(List<AnimeCharacterDetail> animeCharacterDetails) {
-//        b.lblNoCharacters.setVisibility(animeCharacterDetails.size() == 0 ? View.VISIBLE : View.INVISIBLE);
         CharactersFragmentViewAdapter listAdapter = new CharactersFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> {
+            //todo navegar a detalle
         });
         b.listCharacters.setItemAnimator(new DefaultItemAnimator());
         b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
