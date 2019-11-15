@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.characters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,20 +58,27 @@ public class CharactersFragmentViewAdapter extends BaseListAdapter<MyAnimeCharac
 
         @Override
         public void bind(MyAnimeCharacter type) {
-            b.progressBar2.setVisibility(View.VISIBLE);
-            PicassoUtils.loadPicassoWithErrorAndCallback(b.empresaImg.getContext(),
-                    type.getImage(),
-                    b.empresaImg, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            b.progressBar2.setVisibility(View.GONE);
-                        }
+            if (type.getImage() == null) {
+                PicassoUtils.loadPicassoWithError(b.empresaImg.getContext(),
+                        type.getImage(),
+                        b.empresaImg);
+            } else {
+                b.progressBar2.setVisibility(View.VISIBLE);
+                PicassoUtils.loadPicassoWithErrorAndCallback(b.empresaImg.getContext(),
+                        type.getImage(),
+                        b.empresaImg, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                b.progressBar2.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onError() {
-                            b.progressBar2.setVisibility(View.GONE);
-                        }
-                    });
+                            @Override
+                            public void onError() {
+                                b.progressBar2.setVisibility(View.GONE);
+                            }
+                        });
+            }
+
             b.lblEpisode.setText(type.getCanonicalName());
             b.lblDate.setVisibility(View.GONE);
             b.imgCheck.setVisibility(View.GONE);
