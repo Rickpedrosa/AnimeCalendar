@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.days_episodes;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,8 @@ import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.base.recycler.BaseViewHolder;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeItemBinding;
 import com.example.animecalendar.model.MyAnimeEpisodesDailyList;
-import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.utils.PicassoUtils;
+import com.squareup.picasso.Callback;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
 
@@ -65,7 +66,20 @@ public class DaysEpisodesFragmentViewAdapter extends BaseListAdapter<MyAnimeEpis
         private void setImmutableValues(MyAnimeEpisodesDailyList type) {
             b.lblEpisode.setText(b.lblEpisode.getResources().getString(R.string.episode, type.getNumber(), type.getCanonicalTitle()));
             b.lblDate.setText(type.getAnimeTitle());
-            PicassoUtils.loadPicassoWithError(b.empresaImg.getContext(), type.getThumbnail(), b.empresaImg);
+            PicassoUtils.loadPicassoWithErrorAndCallback(
+                    b.empresaImg.getContext(),
+                    type.getThumbnail(),
+                    b.empresaImg, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            b.progressBar2.setVisibility(View.GONE);
+                        }
+                    });
         }
 
         private void setMutableValues(MyAnimeEpisodesDailyList type) {

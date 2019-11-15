@@ -21,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -153,7 +154,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         //b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
         b.listSearch.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.listSearch.setLayoutManager(new LinearLayoutManager(requireContext()));
+        b.listSearch.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         b.listSearch.setAdapter(listAdapter);
     }
 

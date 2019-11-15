@@ -80,4 +80,7 @@
     <string name="asign_format">Día %1$d (%3$s) -> %2$d eps</string>
     <string name="current_warning_follow">Los animes en emisión no se pueden seguir</string>
     <string name="fragment_characters_title">Personajes</string>
+    <string name="loading_character">Cargando personaje %1$s …</string>
+    <string name="on_characters_loaded">%1$d personajes</string>
+
 </resources>

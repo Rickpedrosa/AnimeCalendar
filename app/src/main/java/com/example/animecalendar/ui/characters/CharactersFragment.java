@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.characters;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,6 +97,7 @@ public class CharactersFragment extends Fragment {
                 if (myAnimeCharacters.size() == 0) {
                     viewModel.retrieveCharacters(animeId);
                 } else {
+                    b.parentConstraint.setBackgroundColor(Color.WHITE);
                     setupAdapter(myAnimeCharacters);
                 }
             });

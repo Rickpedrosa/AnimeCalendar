@@ -387,7 +387,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                                 animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
                         .flatMapIterable(items -> items)
                         .flatMap(it -> {
-                            informResource(it.getId());
+                            informResource(application.getString(R.string.loading_character, it.getId()));
                             return animeRepository.getAnimeCharacterDetails(it.getId());
                         })
                         .subscribeOn(Schedulers.io())
@@ -411,7 +411,9 @@ public class MainActivityViewModel extends AndroidViewModel {
                             localRepository.addAnimeCharacters(characters);
                             goToTheStopLoading();
                             informResource("");
-                            Toast.makeText(application, it.size() + " personajes", Toast.LENGTH_LONG).show();
+                            Toast.makeText(application,
+                                    application.getString(R.string.on_characters_loaded, it.size()),
+                                    Toast.LENGTH_LONG).show();
                         },
                         throwable -> {
                             goToTheStopLoading();
