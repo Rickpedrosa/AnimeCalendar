@@ -12,7 +12,20 @@ public class VMProvider {
 
     public enum FRAGMENTS {
         SEARCH, CALENDAR, SERIES, DETAIL_ANIME, DETAIL_EPISODE, CALENDAR_EPISODES, ASSIGNMENT,
-        DAYS, DAYS_EPISODE, CHARACTERS
+        DAYS, DAYS_EPISODE, CHARACTERS;
+
+        private int animeId;
+
+        FRAGMENTS() {
+        }
+
+        public int getAnimeId() {
+            return animeId;
+        }
+
+        public void setAnimeId(int animeId) {
+            this.animeId = animeId;
+        }
     }
 
     public static ViewModelFragmentFactory viewModelFragmentFactory(Fragment fragment, FRAGMENTS enumFragment) {

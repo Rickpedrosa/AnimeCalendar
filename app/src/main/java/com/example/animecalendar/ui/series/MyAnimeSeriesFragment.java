@@ -152,21 +152,24 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(requireContext());
-        listAdapter = new MyAnimeSeriesFragmentViewAdapter(position -> {
-            viewModel.setItemPosition(position);
-            DirectSelectionDialogFragmentMaterial.newInstance(
-                    listAdapter.getItem(position).getStatus(),
-                    this,
-                    4)
-                    .show(requireFragmentManager(), "XD");
-        });
-        listAdapter.setOnItemClickListener((view, position) -> navController.navigate(MyAnimeSeriesFragmentDirections
+        listAdapter = new MyAnimeSeriesFragmentViewAdapter(this::setOnOptionsClickAnimeItem);
+        listAdapter.setOnItemClickListener((view, position) ->
+                navController.navigate(MyAnimeSeriesFragmentDirections
                 .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
                 .setAnimeId(listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
         b.listAnimes.setLayoutManager(manager);
         b.listAnimes.setAdapter(listAdapter);
+    }
+
+    private void setOnOptionsClickAnimeItem(int position) {
+        viewModel.setItemPosition(position);
+        DirectSelectionDialogFragmentMaterial.newInstance(
+                listAdapter.getItem(position).getStatus(),
+                this,
+                4)
+                .show(requireFragmentManager(), "XD");
     }
 
     private void observeData() {

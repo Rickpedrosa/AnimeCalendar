@@ -17,6 +17,14 @@ public interface MyAnimeCharactersDao {
             "WHERE animeId = :animeId")
     LiveData<List<MyAnimeCharacter>> getAnimeCharacters(long animeId);
 
+    @Query("SELECT COUNT(id) FROM character " +
+            "WHERE animeId = :animeId")
+    LiveData<Integer> checkIfAnimeHasCharacters(long animeId);
+
+    @Query("SELECT id, animeId, canonicalName, description, image FROM character " +
+            "WHERE animeId = :animeId AND canonicalName LIKE :query")
+    LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addAnimeCharacters(List<MyAnimeCharacter> characters);
 

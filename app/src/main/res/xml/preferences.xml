@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.PreferenceCategory android:title="Episodes">
-        <androidx.preference.SwitchPreference
+    <PreferenceCategory android:title="Notifications">
+        <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
-            android:key="@string/reorder_key"
-            android:title="@string/reorder" />
-    </androidx.preference.PreferenceCategory>
+            android:key="@string/notification_key"
+            android:title="@string/enable_notif" />
+
+        <com.example.animecalendar.base.pref.DateTimePreferenceCompat
+            android:defaultValue="90"
+            android:dependency="@string/notification_key"
+            android:icon="@drawable/ic_today_lol_24dp"
+            android:key="@string/time_notification_key"
+            android:title="@string/time_summary" />
+    </PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="Animes">
         <androidx.preference.ListPreference
@@ -21,19 +28,12 @@
             app:useSimpleSummaryProvider="true" />
     </androidx.preference.PreferenceCategory>
 
-    <PreferenceCategory android:title="Notifications">
-        <SwitchPreference
+    <androidx.preference.PreferenceCategory android:title="Episodes">
+        <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
-            android:key="@string/notification_key"
-            android:title="@string/enable_notif" />
-
-        <com.example.animecalendar.base.pref.DateTimePreferenceCompat
-            android:dependency="@string/notification_key"
-            android:defaultValue="90"
-            android:icon="@drawable/ic_today_lol_24dp"
-            android:key="@string/time_notification_key"
-            android:title="@string/time_summary" />
-    </PreferenceCategory>
+            android:key="@string/reorder_key"
+            android:title="@string/reorder" />
+    </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

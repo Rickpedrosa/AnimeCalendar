@@ -121,6 +121,16 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
+    public LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query) {
+        return myAnimeCharactersDao.getAnimeCharactersByQuery(animeId, query);
+    }
+
+    @Override
+    public LiveData<Integer> checkIfAnimeHasCharacters(long animeId) {
+        return myAnimeCharactersDao.checkIfAnimeHasCharacters(animeId);
+    }
+
+    @Override
     public LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day) {
         return myAnimesEpisodesDao.getEpisodesOfTheDay(day);
     }

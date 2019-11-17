@@ -66,4 +66,8 @@ public interface LocalRepository {
     void addAnimeCharacters(List<MyAnimeCharacter> characters);
 
     void deleteAnimeCharacters(long animeId);
+
+    LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query);
+
+    LiveData<Integer> checkIfAnimeHasCharacters(long animeId);
 }

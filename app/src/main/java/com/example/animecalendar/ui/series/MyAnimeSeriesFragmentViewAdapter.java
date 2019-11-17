@@ -80,7 +80,7 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
             switch (type.getStatus()) {
                 case LocalRepository.STATUS_CURRENT:
                     b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorAccent));
-                    b.lblEpCounts.setVisibility(View.GONE);
+                    b.lblEpCounts.setVisibility(View.INVISIBLE);
                     break;
                 case LocalRepository.STATUS_FOLLOWING:
                     b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));

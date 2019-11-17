@@ -39,8 +39,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        /* enqueue the job */
-        // MyJobIntentService.enqueueWork(context, intent);
         obtainArguments(intent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ONE)
@@ -51,6 +49,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(mContent))
                 .setContentIntent(getNavigationPendingIntent(context))
+                .setAutoCancel(true)
                 .build();
 
         notificationManager.notify(App.CHANNEL_ONE_INT, notification);

@@ -51,7 +51,7 @@ public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
             case DAYS_EPISODE:
                 return (T) new DaysEpisodesFragmentViewModel(mainActivityViewModel);
             case CHARACTERS:
-                return (T) new CharactersFragmentViewModel(mainActivityViewModel);
+                return (T) new CharactersFragmentViewModel(mainActivityViewModel, this.enumFragment.getAnimeId());
             default:
                 return null;
         }

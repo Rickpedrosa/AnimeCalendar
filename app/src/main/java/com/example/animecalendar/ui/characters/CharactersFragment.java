@@ -2,12 +2,16 @@ package com.example.animecalendar.ui.characters;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.SimpleDividerItemDecoration;
 import com.example.animecalendar.data.local.entity.MyAnimeCharacter;
 import com.example.animecalendar.databinding.FragmentCharactersBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
@@ -34,14 +39,20 @@ public class CharactersFragment extends Fragment {
     private CharactersFragmentViewModel viewModel;
     private NavController navController;
     private int animeId;
+    private SearchView searchView;
+    private MenuItem mnuSearch;
+    private CharactersFragmentViewAdapter listAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this,
-                VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.CHARACTERS))
-                .get(CharactersFragmentViewModel.class);
+        setHasOptionsMenu(true);
         obtainArguments();
+        VMProvider.FRAGMENTS enumCharacter = VMProvider.FRAGMENTS.CHARACTERS;
+        enumCharacter.setAnimeId(animeId);
+        viewModel = ViewModelProviders.of(this,
+                VMProvider.viewModelFragmentFactory(this, enumCharacter))
+                .get(CharactersFragmentViewModel.class);
     }
 
     @Nullable
@@ -57,7 +68,15 @@ public class CharactersFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         setupToolbar();
         setupProgressBar();
-        observeData(savedInstanceState);
+        setupAdapter();
+        if (savedInstanceState == null) {
+            viewModel.getAnimeCharactersWard(animeId).observe(getViewLifecycleOwner(), integer -> {
+                if (integer == 0) {
+                    viewModel.retrieveCharacters(animeId);
+                }
+            });
+        }
+        observeData();
     }
 
     private void setupProgressBar() {
@@ -71,6 +90,8 @@ public class CharactersFragment extends Fragment {
     }
 
     private void setupToolbar() {
+        b.toolbarCharacter.inflateMenu(R.menu.characters_menu);
+        setupSearchView();
         NavigationUI.setupWithNavController(
                 b.toolbarCharacter,
                 navController,
@@ -78,27 +99,69 @@ public class CharactersFragment extends Fragment {
         );
     }
 
-    private void setupAdapter(List<MyAnimeCharacter> animeCharacterDetails) {
-        CharactersFragmentViewAdapter listAdapter = new CharactersFragmentViewAdapter();
+    private void setupAdapter() {
+         listAdapter = new CharactersFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) -> {//todo navegar a detalle
         });
         b.listCharacters.setItemAnimator(new DefaultItemAnimator());
-        b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listCharacters.addItemDecoration(new SimpleDividerItemDecoration(Color.WHITE, 1));
         b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));
         b.listCharacters.setAdapter(listAdapter);
-        listAdapter.submitList(animeCharacterDetails);
     }
 
-    private void observeData(@Nullable Bundle savedInstanceState) {
+    private void observeData() {
         viewModel.getCharacterAsyncInfo().observe(getViewLifecycleOwner(), stringResource ->
                 b.lblInfoCharacters.setText(stringResource.getData()));
-        if (savedInstanceState == null) {
-            viewModel.getAnimeCharacters(animeId).observe(getViewLifecycleOwner(), myAnimeCharacters -> {
-                if (myAnimeCharacters.size() == 0) {
-                    viewModel.retrieveCharacters(animeId);
-                } else {
-                    b.parentConstraint.setBackgroundColor(Color.WHITE);
-                    setupAdapter(myAnimeCharacters);
+
+        viewModel.getAnimeCharactersV2().observe(getViewLifecycleOwner(), myAnimeCharacters -> {
+            if (myAnimeCharacters.size() != 0) {
+                listAdapter.submitList(myAnimeCharacters);
+            }
+        });
+    }
+
+    private void setupSearchView() {
+        mnuSearch = b.toolbarCharacter.getMenu().findItem(R.id.mnuSearchCharacters);
+        searchView = (SearchView) mnuSearch.getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        mnuSearch.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                viewModel.setSearchViewExpanded(true);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                viewModel.setSearchViewExpanded(false);
+                return true;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.setSearchQuery(newText);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // Restore searching state (in this order).
+        String query = viewModel.getSearchQuery();
+        if (viewModel.isSearchViewExpanded()) {
+            // If done directly, menu item disappears after collapsing.
+            b.listCharacters.post(() -> {
+                mnuSearch.expandActionView();
+                if (!TextUtils.isEmpty(query)) {
+                    searchView.setQuery(query, false);
                 }
             });
         }

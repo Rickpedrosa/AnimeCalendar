@@ -1,6 +1,5 @@
 package com.example.animecalendar.ui.characters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
