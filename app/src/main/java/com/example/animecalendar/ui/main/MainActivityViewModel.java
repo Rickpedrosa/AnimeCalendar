@@ -385,7 +385,12 @@ public class MainActivityViewModel extends AndroidViewModel {
                         .subscribeOn(Schedulers.io())
                         .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
                                 animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
-                        .flatMapIterable(items -> items)
+                        .flatMapIterable(new Function<List<DatumCharacter>, Iterable<? extends DatumCharacter>>() {
+                            @Override
+                            public Iterable<? extends DatumCharacter> apply(List<DatumCharacter> items) throws Exception {
+                                return items;
+                            }
+                        })
                         .flatMap(it -> {
                             informResource(application.getString(R.string.loading_character, it.getId()));
                             return animeRepository.getAnimeCharacterDetails(it.getId());

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.YesNoDialogFragment;
+import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
@@ -105,11 +106,14 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
 
     private void setupRecyclerView(Boolean preference) {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) -> {
-            try {
-                updateEpisode(position, preference);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        listAdapter.setOnItemClickListener(new BaseListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                try {
+                    CalendarEpisodesFragment.this.updateEpisode(position, preference);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
         b.listEpisodes.setItemAnimator(new DefaultItemAnimator());

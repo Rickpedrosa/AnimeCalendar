@@ -82,5 +82,7 @@
     <string name="fragment_characters_title">Personajes</string>
     <string name="loading_character">Cargando personaje %1$s …</string>
     <string name="on_characters_loaded">%1$d personajes</string>
-
+    <string name="characters_label_myanime">Personajes</string>
+    <string name="synopsis_label_myanime">Synopsis</string>
+    <string name="episodes_label_myanime">Episodios</string>
 </resources>
