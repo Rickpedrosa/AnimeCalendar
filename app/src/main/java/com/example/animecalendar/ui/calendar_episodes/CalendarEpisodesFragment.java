@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.dialogs.YesNoDialogFragment;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentCalendarEpisodeBinding;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
@@ -32,12 +31,10 @@ import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.utils.CustomTimeUtils;
 import com.example.animecalendar.utils.ValidationUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,6 +51,7 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
     private Parcelable mListState = null;
+    private NavController navController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,18 +73,19 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        navController = NavHostFragment.findNavController(this);
         setupToolbar();
         setupFab();
         setupRecyclerView();
         observeData();
         viewModel.reorderCapsConfirmationPreference().observe(getViewLifecycleOwner(), aBoolean ->
                 listAdapter.setOnItemClickListener((view, position) -> {
-            try {
-                CalendarEpisodesFragment.this.updateEpisode(position, aBoolean);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }));
+                    try {
+                        CalendarEpisodesFragment.this.updateEpisode(position, aBoolean);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }));
     }
 
     @Override
@@ -132,21 +131,36 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     private void updateEpisode(int position, boolean preference) throws ParseException {
-        if (ValidationUtils.isEqualDate(listAdapter.getItem(position).getWatchToDate())) {
-            innerUpdateEpisode(position);
-        } else if (ValidationUtils.isMinorDate(listAdapter.getItem(position).getWatchToDate())) {
-            innerUpdateEpisode(position);
-        } else {
-            if (preference) {
-                YesNoDialogFragment.newInstance(
-                        getResources().getString(R.string.calendar_episodes_dialog_title),
-                        getResources().getString(R.string.calendar_episodes_dialog_message),
-                        getResources().getString(R.string.confirm_okay),
-                        getResources().getString(R.string.confirm_cancel),
-                        CalendarEpisodesFragment.this,
-                        6).show(requireFragmentManager(), "POGGU");
+        MyAnimeEpisodesList episode = listAdapter.getItem(position);
+
+        if (episode.getWasWatched() == WATCHED) {
+            viewModel.updateEpisodeStatusOnly(
+                    LocalRepository.NOT_WATCHED,
+                    (int) episode.getId());
+        } else if (episode.getWasWatched() == NOT_WATCHED) {
+            if (episode.getWatchToDate().equals(LocalRepository.WATCH_DATE_DONE)) {
+                viewModel.updateEpisodeStatusOnly(
+                        LocalRepository.WATCHED,
+                        (int) episode.getId());
             } else {
-                viewModel.reorderCaps(getNonWatchedEpisodes());
+                if (ValidationUtils.isEqualDate(episode.getWatchToDate())) {
+                    innerUpdateEpisode(position);
+                } else if (ValidationUtils.isMinorDate(episode.getWatchToDate())) {
+                    innerUpdateEpisode(position);
+                } else {
+                    viewModel.setEpisodeToReorderPosition(position);
+                    if (preference) {
+                        YesNoDialogFragment.newInstance(
+                                getResources().getString(R.string.calendar_episodes_dialog_title),
+                                getResources().getString(R.string.calendar_episodes_dialog_message),
+                                getResources().getString(R.string.confirm_okay),
+                                getResources().getString(R.string.confirm_cancel),
+                                CalendarEpisodesFragment.this,
+                                6).show(requireFragmentManager(), "POGGU");
+                    } else {
+                        viewModel.reorderCaps(getNonWatchedEpisodes(position));
+                    }
+                }
             }
         }
     }
@@ -166,7 +180,7 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     private void setupToolbar() {
         NavigationUI.setupWithNavController(
                 b.toolbar,
-                NavHostFragment.findNavController(this),
+                navController,
                 AppbarConfigProvider.getAppBarConfiguration()
         );
     }
@@ -178,9 +192,9 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         });
     }
 
-    private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes() throws ParseException {
+    private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes(int position) throws ParseException {
         List<AnimeEpisodeDateUpdatePOJO> mList = new ArrayList<>();
-        for (int i = 0; i < listAdapter.getItemCount(); i++) {
+        for (int i = position; i < listAdapter.getItemCount(); i++) {
             if (listAdapter.getItem(i).getWasWatched() == NOT_WATCHED &&
                     !ValidationUtils.isEqualDate(listAdapter.getItem(i).getWatchToDate()) &&
                     !ValidationUtils.isMinorDate(listAdapter.getItem(i).getWatchToDate())
@@ -203,6 +217,8 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         }
         if (counter == (myAnimeEpisodes.size())) {
             viewModel.updateAnimeStatus((int) myAnimeEpisodes.get(0).getAnimeId());
+            navController.popBackStack();
+
         }
     }
 
@@ -213,7 +229,7 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     @Override
     public void onPositiveButtonClick(DialogInterface dialog) {
         try {
-            viewModel.reorderCaps(getNonWatchedEpisodes());
+            viewModel.reorderCaps(getNonWatchedEpisodes(viewModel.getEpisodeToReorderPosition()));
         } catch (ParseException e) {
             Toast.makeText(requireContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             dialog.dismiss();

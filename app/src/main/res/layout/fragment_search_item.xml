@@ -26,17 +26,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/lbl_avg"
-                style="@style/item_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:textStyle="bold|italic"
-                app:layout_constraintEnd_toEndOf="@+id/img_coverTiny"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/lbl_episodeCount"
                 style="@style/item_search"
                 android:layout_width="wrap_content"
@@ -46,22 +35,24 @@
                 android:layout_marginBottom="8dp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/img_coverTiny"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_avg" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_canonicalTitle" />
 
             <TextView
                 android:id="@+id/lbl_canonicalTitle"
                 style="@style/item_search"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/lbl_avg"
+                app:layout_constraintBottom_toTopOf="@id/lbl_episodeCount"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/img_coverTiny"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

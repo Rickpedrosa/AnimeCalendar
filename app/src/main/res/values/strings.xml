@@ -87,4 +87,13 @@
     <string name="characters_label_myanime">Characters</string>
     <string name="synopsis_label_myanime">Synopsis</string>
     <string name="episodes_label_myanime">Episodes</string>
+    <string name="search_episodes_label">%1$d episodes</string>
+
+    <string name="finished_val">can be followed</string>
+    <string name="current_val" >current</string>
+    <string name="following_val">following</string>
+    <string name="completed_val">completed</string>
+    <string name="reorder_summary">Enable this option to activate double check to watch an episode with a date higher than the one you have</string>
+    <string name="pref_title_notif">Notifications</string>
+    <string name="pref_title_eps">Episodes</string>
 </resources>

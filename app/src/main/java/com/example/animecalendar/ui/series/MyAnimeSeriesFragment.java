@@ -53,8 +53,10 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        b = DataBindingUtil.inflate(inflater, R.layout.fragment_myanimes, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        b = DataBindingUtil.inflate(inflater, R.layout.fragment_myanimes,
+                container, false);
         return b.getRoot();
     }
 
@@ -155,8 +157,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         listAdapter = new MyAnimeSeriesFragmentViewAdapter(this::setOnOptionsClickAnimeItem);
         listAdapter.setOnItemClickListener((view, position) ->
                 navController.navigate(MyAnimeSeriesFragmentDirections
-                .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
-                .setAnimeId(listAdapter.getItem(position).getId())));
+                        .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
+                        .setAnimeId(listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
         b.listAnimes.setLayoutManager(manager);

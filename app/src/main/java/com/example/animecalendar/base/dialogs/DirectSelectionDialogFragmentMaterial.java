@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DirectSelectionDialogFragmentMaterial extends BottomSheetDialogFragment {
 
-    private static final int SHEET_PEAK_HEIGHT = 650;
+    private static final int SHEET_PEAK_HEIGHT = 900;
     private static final String ARG_ANIME_STATUS = "ARG_ANIME_STATUS";
     private String status;
     private Listener listener = null;
@@ -91,19 +91,31 @@ public class DirectSelectionDialogFragmentMaterial extends BottomSheetDialogFrag
         switch (status) {
             case LocalRepository.STATUS_COMPLETED:
                 navigationView.inflateMenu(R.menu.dialog_navigation_completed);
-                navigationView.setNavigationItemSelectedListener(menuItem -> listener.onNavItemSelected(DirectSelectionDialogFragmentMaterial.this, menuItem));
+                navigationView.setNavigationItemSelectedListener(menuItem ->
+                        listener.onNavItemSelected(
+                                DirectSelectionDialogFragmentMaterial.this,
+                                menuItem));
                 break;
             case LocalRepository.STATUS_FINISHED:
                 navigationView.inflateMenu(R.menu.dialog_navigation_finished);
-                navigationView.setNavigationItemSelectedListener(menuItem -> listener.onNavItemSelected(DirectSelectionDialogFragmentMaterial.this, menuItem));
+                navigationView.setNavigationItemSelectedListener(menuItem ->
+                        listener.onNavItemSelected(
+                                DirectSelectionDialogFragmentMaterial.this,
+                                menuItem));
                 break;
             case LocalRepository.STATUS_CURRENT:
                 navigationView.inflateMenu(R.menu.dialog_navigation_current);
-                navigationView.setNavigationItemSelectedListener(menuItem -> listener.onNavItemSelected(DirectSelectionDialogFragmentMaterial.this, menuItem));
+                navigationView.setNavigationItemSelectedListener(menuItem ->
+                        listener.onNavItemSelected(
+                                DirectSelectionDialogFragmentMaterial.this,
+                                menuItem));
                 break;
             case LocalRepository.STATUS_FOLLOWING:
                 navigationView.inflateMenu(R.menu.dialog_navigation_following);
-                navigationView.setNavigationItemSelectedListener(menuItem -> listener.onNavItemSelected(DirectSelectionDialogFragmentMaterial.this, menuItem));
+                navigationView.setNavigationItemSelectedListener(menuItem ->
+                        listener.onNavItemSelected(
+                                DirectSelectionDialogFragmentMaterial.this,
+                                menuItem));
                 break;
         }
 

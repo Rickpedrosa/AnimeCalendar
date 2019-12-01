@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Notifications">
+    <PreferenceCategory android:title="@string/pref_title_notif">
         <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
@@ -28,12 +28,13 @@
             app:useSimpleSummaryProvider="true" />
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory android:title="Episodes">
+    <androidx.preference.PreferenceCategory android:title="@string/pref_title_eps">
         <androidx.preference.SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_today_lol_24dp"
             android:key="@string/reorder_key"
-            android:title="@string/reorder" />
+            android:title="@string/reorder"
+            app:summary="@string/reorder_summary" />
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

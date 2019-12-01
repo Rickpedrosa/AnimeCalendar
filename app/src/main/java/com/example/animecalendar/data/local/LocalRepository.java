@@ -70,4 +70,6 @@ public interface LocalRepository {
     LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query);
 
     LiveData<Integer> checkIfAnimeHasCharacters(long animeId);
+
+    void updateEpisodeStatus(int value, int episodeId);
 }

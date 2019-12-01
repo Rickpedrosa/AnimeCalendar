@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.series;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,6 @@ import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentSeriesItemBinding;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.utils.PicassoUtils;
-
-import java.util.Locale;
 
 public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForSeries, BaseViewHolder<AnimesForSeries>> {
 
@@ -70,8 +69,8 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
 
         private void setGeneralInfo(AnimesForSeries type) {
             b.lblTitle.setText(type.getTitle());
-            b.lblStatus.setText(b.lblStatus.getResources().getString(R.string.animeStatus, type.getStatus()));
-            // b.lblEpCounts.setText(b.lblEpCounts.getResources().getString(R.string.epsCounter, type.getEpWatchedCount(), type.getEpCount()));
+            b.lblStatus.setText(b.lblStatus.getResources().getString(R.string.animeStatus,
+                    applyStatus(type.getStatus())));
             PicassoUtils.loadPicasso(b.imgPoster.getContext(), type.getPoster(), b.imgPoster);
         }
 
@@ -84,7 +83,6 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
                     break;
                 case LocalRepository.STATUS_FOLLOWING:
                     b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(R.color.colorBottomItem));
-                    //b.lblNextEpisode.setText("Next episode: 06/07/2019");
                     break;
                 case LocalRepository.STATUS_COMPLETED:
                     b.innerConstraint.setAlpha(0.5f);
@@ -100,6 +98,22 @@ public class MyAnimeSeriesFragmentViewAdapter extends BaseListAdapter<AnimesForS
             b.innerConstraint.setAlpha(1f);
             b.lblTitle.setTextColor(b.lblTitle.getResources().getColor(android.R.color.background_light));
             b.lblNextEpisode.setVisibility(View.GONE);
+        }
+
+        private String applyStatus(String status) {
+            Context context = b.lblStatus.getContext();
+            switch (status) {
+                case "finished":
+                    return context.getResources().getString(R.string.finished_val);
+                case "current":
+                    return context.getResources().getString(R.string.current_val);
+                case "following":
+                    return context.getResources().getString(R.string.following_val);
+                case "completed":
+                    return context.getResources().getString(R.string.completed_val);
+                default:
+                    return "";
+            }
         }
     }
 }

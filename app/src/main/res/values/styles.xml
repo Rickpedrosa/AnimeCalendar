@@ -30,9 +30,9 @@
     <style name="item_search">
         <item name="android:textColor">@android:color/background_light</item>
         <item name="android:shadowColor">@color/colorPrimaryPogDark</item>
-        <item name="android:shadowDx">5</item>
-        <item name="android:shadowDy">5</item>
-        <item name="android:shadowRadius">3</item>
+        <item name="android:shadowDx">7</item>
+        <item name="android:shadowDy">7</item>
+        <item name="android:shadowRadius">5</item>
     </style>
 
     <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
@@ -43,5 +43,10 @@
 
     <style name="PrefsTheme" parent="PreferenceThemeOverlay.v14.Material">
         <item name="android:layout">@layout/fragment_settings</item>
+    </style>
+
+    <style name="PopupMenuStyle">
+        <item name="android:background">@color/colorPrimaryPogDark</item>
+        <item name="android:textColor">@android:color/background_light</item>
     </style>
 </resources>

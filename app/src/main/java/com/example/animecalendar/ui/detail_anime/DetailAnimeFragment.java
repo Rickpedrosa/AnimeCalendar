@@ -84,23 +84,11 @@ public class DetailAnimeFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new DetailAnimeFragmentViewAdapter();
-//        b.animeDetailed.listEpisodes.setHasFixedSize(true);
-//        b.animeDetailed.listEpisodes.setItemAnimator(new DefaultItemAnimator());
-//        b.animeDetailed.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-//        b.animeDetailed.listEpisodes.setLayoutManager(new LinearLayoutManager(requireContext()));
-//        b.animeDetailed.listEpisodes.setAdapter(listAdapter);
-
     }
 
     private void setupButtons() {
-        b.animeDetailed.btnEpisodes.setOnClickListener(v -> {
-//            if (!viewModel.isCollapseEpisodes()) {
-//                b.animeDetailed.listEpisodes.setVisibility(View.VISIBLE);
-//            } else {
-//                b.animeDetailed.listEpisodes.setVisibility(View.GONE);
-//            }
-            viewModel.setCollapseEpisodes(!viewModel.isCollapseEpisodes());
-        });
+        b.animeDetailed.btnEpisodes.setOnClickListener(v ->
+                viewModel.setCollapseEpisodes(!viewModel.isCollapseEpisodes()));
         b.animeDetailed.btnSynopsis.setOnClickListener(v -> {
             if (!viewModel.isCollapseSynopsis()) {
                 b.animeDetailed.lblSynopsis.setVisibility(View.VISIBLE);
@@ -126,7 +114,10 @@ public class DetailAnimeFragment extends Fragment {
                             b.header, new Callback() {
                                 @Override
                                 public void onSuccess() {
-                                    setPaletteColoursToUI(myAnime);
+                                    //noinspection CatchMayIgnoreException
+                                    try {
+                                        setPaletteColoursToUI(myAnime);
+                                    } catch (java.lang.IllegalStateException e) { }
                                 }
 
                                 @Override

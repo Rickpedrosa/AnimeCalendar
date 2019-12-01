@@ -15,6 +15,7 @@ import java.util.List;
 public class CalendarEpisodesFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
+    private int episodeToReorderPosition;
 
     public CalendarEpisodesFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
@@ -38,5 +39,20 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
 
     LiveData<Boolean> reorderCapsConfirmationPreference() {
         return viewModel.getConfirmationDialogPreference();
+    }
+
+    void updateEpisodeStatusOnly(int watched, int id) {
+        viewModel.getLocalRepository().updateEpisodeStatus(
+                watched,
+                id
+        );
+    }
+
+    int getEpisodeToReorderPosition() {
+        return episodeToReorderPosition;
+    }
+
+    void setEpisodeToReorderPosition(int episodeToReorderPosition) {
+        this.episodeToReorderPosition = episodeToReorderPosition;
     }
 }

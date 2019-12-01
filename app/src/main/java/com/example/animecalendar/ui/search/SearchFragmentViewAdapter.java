@@ -57,8 +57,9 @@ public class SearchFragmentViewAdapter extends BaseListAdapter<MyAnime, BaseView
         @Override
         public void bind(MyAnime type) {
             PicassoUtils.loadPicasso(b.imgCoverTiny.getContext(), type.getCoverImage(), b.imgCoverTiny);
-            b.lblAvg.setText(String.valueOf(type.getAverageRating()));
-            b.lblEpisodeCount.setText(String.valueOf(type.getEpisodeCount()));
+            b.lblEpisodeCount.setText(b.lblCanonicalTitle.getContext()
+                    .getResources().getString(R.string.search_episodes_label,
+                            type.getEpisodeCount()));
             b.lblCanonicalTitle.setText(type.getCanonicalTitle());
         }
     }

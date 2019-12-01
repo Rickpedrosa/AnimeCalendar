@@ -131,6 +131,13 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
+    public void updateEpisodeStatus(int value, int episodeId) {
+        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeStatus(
+                value, episodeId)
+        );
+    }
+
+    @Override
     public LiveData<List<MyAnimeEpisodesDailyList>> getEpisodesOfTheDay(String day) {
         return myAnimesEpisodesDao.getEpisodesOfTheDay(day);
     }
