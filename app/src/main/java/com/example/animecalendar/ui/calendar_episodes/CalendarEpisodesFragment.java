@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -74,10 +75,18 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel.reorderCapsConfirmationPreference().observe(getViewLifecycleOwner(), this::setupRecyclerView);
         setupToolbar();
         setupFab();
+        setupRecyclerView();
         observeData();
+        viewModel.reorderCapsConfirmationPreference().observe(getViewLifecycleOwner(), aBoolean ->
+                listAdapter.setOnItemClickListener((view, position) -> {
+            try {
+                CalendarEpisodesFragment.this.updateEpisode(position, aBoolean);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     @Override
@@ -104,18 +113,8 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         b.fab.setOnClickListener(v -> linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10));
     }
 
-    private void setupRecyclerView(Boolean preference) {
+    private void setupRecyclerView() {
         listAdapter = new CalendarEpisodesFragmentViewAdapter();
-        listAdapter.setOnItemClickListener(new BaseListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                try {
-                    CalendarEpisodesFragment.this.updateEpisode(position, preference);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         b.listEpisodes.setItemAnimator(new DefaultItemAnimator());
         b.listEpisodes.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listEpisodes.setLayoutManager(linearLayoutManager);

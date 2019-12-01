@@ -84,7 +84,7 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
     }
 
     private void setupFab() {
-        b.fab.setAlpha(0.25f);
+        b.fab.setAlpha(0.75f);
         setupFabKeyboard();
         b.editSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,7 +154,9 @@ public class SearchFragment extends Fragment implements YesNoDialogFragment.List
         //b.listSearch.setHasFixedSize(true);
         b.listSearch.setItemAnimator(new DefaultItemAnimator());
         b.listSearch.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.listSearch.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        b.listSearch.setLayoutManager(new LinearLayoutManager(requireContext(),
+                RecyclerView.VERTICAL,
+                false));
         b.listSearch.setAdapter(listAdapter);
     }
 
