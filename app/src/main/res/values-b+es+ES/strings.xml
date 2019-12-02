@@ -91,7 +91,7 @@
     <string name="current_val" >en emisión</string>
     <string name="following_val">siguiendo</string>
     <string name="completed_val">completado</string>
-    <string name="reorder_summary">Habilita esta opción para activar el doble check para ver un episodio con una fecha superior a la que tiene</string>
+    <string name="reorder_summary">Habilita esta opción para activar el doble check para ver un episodio con una fecha superior a la de hoy</string>
     <string name="pref_title_notif">Notificaciones</string>
     <string name="pref_title_eps">Episodios</string>
 </resources>

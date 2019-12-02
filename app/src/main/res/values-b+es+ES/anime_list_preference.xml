@@ -14,7 +14,7 @@
 
     <string name="anime_list_key" translatable="false">animeListKey</string>
 
-    <string name="anime_list_dialog_title">Categoría mostrado por defecto</string>
+    <string name="anime_list_dialog_title">Categoría mostrada por defecto</string>
 
     <string name="anime_list_defaultValue" translatable="false">@string/pref_all_val</string>
 
