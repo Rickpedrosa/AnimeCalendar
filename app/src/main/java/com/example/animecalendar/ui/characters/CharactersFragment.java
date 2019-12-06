@@ -99,9 +99,9 @@ public class CharactersFragment extends Fragment {
         listAdapter = new CharactersFragmentViewAdapter();
         listAdapter.setOnItemClickListener((view, position) ->
                 navController.navigate(CharactersFragmentDirections
-                        .actionCharactersFragmentToDetailItemFragment(
-                                -1,
-                                listAdapter.getItem(position).getId())));
+                .actionCharactersFragmentToDetailItemFragment(
+                        -1,
+                        listAdapter.getItem(position).getId())));
         b.listCharacters.setItemAnimator(new DefaultItemAnimator());
         b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));

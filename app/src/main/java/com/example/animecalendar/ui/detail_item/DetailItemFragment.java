@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.detail_item;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,11 @@ public class DetailItemFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         obtainArguments();
-        viewModel = ViewModelProviders.of(this,
-                VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.DETAIL_ITEM))
+        viewModel = ViewModelProviders.of(
+                this,
+                VMProvider.viewModelFragmentFactory(
+                        this,
+                        VMProvider.FRAGMENTS.DETAIL_ITEM))
                 .get(DetailItemFragmentViewModel.class);
     }
 
@@ -98,6 +102,10 @@ public class DetailItemFragment extends Fragment {
                 img,
                 b.imgItem
         );
-        b.lblDescriptionItem.setText(body);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            b.lblDescriptionItem.setText(Html.fromHtml(body, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            b.lblDescriptionItem.setText(Html.fromHtml(body));
+        }
     }
 }

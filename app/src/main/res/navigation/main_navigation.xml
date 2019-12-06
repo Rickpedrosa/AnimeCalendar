@@ -27,7 +27,9 @@
         <action
             android:id="@+id/action_calendarFragment_to_calendarEpisodesFragment"
             app:destination="@id/calendarEpisodesFragment"
+            app:exitAnim="@anim/slidein"
             app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slideout"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_calendarFragment_to_daysFragment"
@@ -43,12 +45,16 @@
         <action
             android:id="@+id/action_detailAnimeFragment_to_charactersFragment"
             app:destination="@id/charactersFragment"
-            app:popUpTo="@+id/myAnimeSeriesFragment"
+            app:exitAnim="@anim/slidein"
+            app:popEnterAnim="@anim/slideout"
+            app:popUpTo="@+id/detailAnimeFragment"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_detailAnimeFragment_to_episodesFragment"
             app:destination="@id/episodesFragment"
-            app:popUpTo="@+id/myAnimeSeriesFragment"
+            app:exitAnim="@anim/slidein"
+            app:popEnterAnim="@anim/slideout"
+            app:popUpTo="@+id/detailAnimeFragment"
             app:popUpToInclusive="false" />
         <argument
             android:name="animeId"
@@ -78,6 +84,8 @@
         <action
             android:id="@+id/action_daysFragment_to_daysEpisodeFragment"
             app:destination="@id/daysEpisodeFragment"
+            app:exitAnim="@anim/slidein"
+            app:popEnterAnim="@anim/slideout"
             app:popUpTo="@+id/calendarFragment"
             app:popUpToInclusive="false" />
     </fragment>
