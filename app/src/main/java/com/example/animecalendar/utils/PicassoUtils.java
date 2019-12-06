@@ -24,6 +24,16 @@ public class PicassoUtils {
                 .into(img);
     }
 
+    public static void loadPicassoWithErrorXY(Context context,
+                                            String url,
+                                            ImageView img) {
+        Picasso.with(context)
+                .load(url)
+                .fit()
+                .error(R.drawable.ic_person_w_24dp)
+                .into(img);
+    }
+
     public static void loadPicassoWithErrorAndCallback(Context context,
                                                        String url,
                                                        ImageView img,

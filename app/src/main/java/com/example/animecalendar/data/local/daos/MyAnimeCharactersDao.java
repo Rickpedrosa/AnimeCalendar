@@ -17,6 +17,10 @@ public interface MyAnimeCharactersDao {
             "WHERE animeId = :animeId")
     LiveData<List<MyAnimeCharacter>> getAnimeCharacters(long animeId);
 
+    @Query("SELECT id, animeId, canonicalName, description, image FROM character " +
+            "WHERE id = :characterId")
+    LiveData<MyAnimeCharacter> getAnimeCharacter(long characterId);
+
     @Query("SELECT COUNT(id) FROM character " +
             "WHERE animeId = :animeId")
     LiveData<Integer> checkIfAnimeHasCharacters(long animeId);

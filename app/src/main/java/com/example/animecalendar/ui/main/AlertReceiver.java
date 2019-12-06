@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
@@ -43,6 +44,7 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ONE)
                 .setSmallIcon(R.drawable.ic_stat_call_white)
+                .setLights(Color.RED, 6000, 2500)
                 .setContentTitle(mTitle)
                 .setContentText(mSubtitle)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

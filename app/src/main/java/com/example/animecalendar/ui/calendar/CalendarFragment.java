@@ -1,44 +1,28 @@
 package com.example.animecalendar.ui.calendar;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
-import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager;
-import com.applikeysolutions.cosmocalendar.settings.appearance.ConnectedDayIconPosition;
-import com.applikeysolutions.cosmocalendar.settings.lists.connected_days.ConnectedDays;
 import com.example.animecalendar.R;
-import com.example.animecalendar.base.recycler.BaseListAdapter;
 import com.example.animecalendar.databinding.OuterFragmentCalendarBinding;
 import com.example.animecalendar.model.CalendarAnime;
-import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.utils.CustomTimeUtils;
 
-import java.text.ParseException;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class CalendarFragment extends Fragment {
 

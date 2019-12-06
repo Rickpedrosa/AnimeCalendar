@@ -11,6 +11,7 @@ import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimeEpisodeDates;
+import com.example.animecalendar.model.AnimeEpisodeSingleItem;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
 import com.example.animecalendar.model.MyAnimeEpisodesDailyList;
 import com.example.animecalendar.model.MyAnimeEpisodesList;
@@ -25,6 +26,14 @@ public interface MyAnimesEpisodesDao {
     @Query("SELECT id, animeId, canonicalTitle, number, thumbnail, wasWatched, watchToDate  " +
             "FROM episodes WHERE animeId = :id ORDER BY number")
     LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
+
+    @Query("SELECT canonicalTitle, thumbnail, synopsis " +
+            "FROM episodes WHERE id = :id")
+    LiveData<AnimeEpisodeSingleItem> getAnimeEpisode(long id);
+
+    @Query("SELECT id, animeId, canonicalTitle, number, thumbnail, wasWatched, watchToDate  " +
+            "FROM episodes WHERE animeId = :id AND canonicalTitle LIKE :query ORDER BY number")
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query);
 
     @Query("SELECT ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, an.canonicalTitle AS animeTitle " +
             "FROM episodes ep INNER JOIN anime an ON ep.animeId = an.id " +

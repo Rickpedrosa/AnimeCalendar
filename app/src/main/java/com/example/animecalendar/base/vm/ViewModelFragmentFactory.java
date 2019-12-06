@@ -12,7 +12,8 @@ import com.example.animecalendar.ui.characters.CharactersFragmentViewModel;
 import com.example.animecalendar.ui.days.DaysFragmentViewModel;
 import com.example.animecalendar.ui.days_episodes.DaysEpisodesFragmentViewModel;
 import com.example.animecalendar.ui.detail_anime.DetailAnimeFragmentViewModel;
-import com.example.animecalendar.ui.detail_episode.DetailAnimeEpisodeFragmentViewModel;
+import com.example.animecalendar.ui.detail_item.DetailItemFragmentViewModel;
+import com.example.animecalendar.ui.episodes.EpisodesFragmentViewModel;
 import com.example.animecalendar.ui.main.MainActivityViewModel;
 import com.example.animecalendar.ui.search.SearchFragmentViewModel;
 import com.example.animecalendar.ui.series.MyAnimeSeriesFragmentViewModel;
@@ -40,8 +41,8 @@ public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
                 return (T) new CalendarFragmentViewModel(mainActivityViewModel);
             case DETAIL_ANIME:
                 return (T) new DetailAnimeFragmentViewModel(mainActivityViewModel);
-            case DETAIL_EPISODE:
-                return (T) new DetailAnimeEpisodeFragmentViewModel(mainActivityViewModel);
+            case DETAIL_ITEM:
+                return (T) new DetailItemFragmentViewModel(mainActivityViewModel);
             case CALENDAR_EPISODES:
                 return (T) new CalendarEpisodesFragmentViewModel(mainActivityViewModel);
             case ASSIGNMENT:
@@ -52,6 +53,8 @@ public class ViewModelFragmentFactory implements ViewModelProvider.Factory {
                 return (T) new DaysEpisodesFragmentViewModel(mainActivityViewModel);
             case CHARACTERS:
                 return (T) new CharactersFragmentViewModel(mainActivityViewModel, this.enumFragment.getAnimeId());
+            case EPISODES:
+                return (T) new EpisodesFragmentViewModel(mainActivityViewModel, this.enumFragment.getAnimeId());
             default:
                 return null;
         }

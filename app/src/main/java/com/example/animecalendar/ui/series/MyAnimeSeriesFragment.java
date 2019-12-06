@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.animecalendar.R;
+import com.example.animecalendar.base.EventObserver;
 import com.example.animecalendar.base.SimpleDividerItemDecoration;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragmentMaterial;
 import com.example.animecalendar.data.local.LocalRepository;
@@ -182,20 +183,35 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             listAdapter.submitList(animesForSeries);
         });
 
-        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (!aBoolean.hasBeenHandled()) {
-                if (aBoolean.getContentIfNotHandled()) {
-                    Toast.makeText(requireContext(),
-                            getResources().getString(R.string.series_warning_update),
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(requireContext(),
-                            getResources().getString(R.string.series_warning_update_okay),
-                            Toast.LENGTH_LONG).show();
-                    viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
-                }
-            }
-        });
+//        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
+//            if (!aBoolean.hasBeenHandled()) {
+//                if (aBoolean.getContentIfNotHandled()) {
+//                    Toast.makeText(requireContext(),
+//                            getResources().getString(R.string.series_warning_update),
+//                            Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(requireContext(),
+//                            getResources().getString(R.string.series_warning_update_okay),
+//                            Toast.LENGTH_LONG).show();
+//                    viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
+//                }
+//            }
+//        });
+        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(),
+                new EventObserver<>(this::onCheckAnimeCurrentStatus));
+    }
+
+    private void onCheckAnimeCurrentStatus(Boolean value) {
+        if (value) {
+            Toast.makeText(requireContext(),
+                    getResources().getString(R.string.series_warning_update),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(requireContext(),
+                    getResources().getString(R.string.series_warning_update_okay),
+                    Toast.LENGTH_LONG).show();
+            viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
+        }
     }
 
 

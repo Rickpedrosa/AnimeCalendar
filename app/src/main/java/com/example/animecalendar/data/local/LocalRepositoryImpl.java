@@ -13,6 +13,7 @@ import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimeEpisodeDates;
+import com.example.animecalendar.model.AnimeEpisodeSingleItem;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -26,6 +27,16 @@ public class LocalRepositoryImpl implements LocalRepository {
     private final MyAnimesEpisodesDao myAnimesEpisodesDao;
     private final MyAnimesDao myAnimesDao;
     private final MyAnimeCharactersDao myAnimeCharactersDao;
+
+    @Override
+    public LiveData<AnimeEpisodeSingleItem> getAnimeEpisode(long id) {
+        return myAnimesEpisodesDao.getAnimeEpisode(id);
+    }
+
+    @Override
+    public LiveData<MyAnimeCharacter> getAnimeCharacter(long characterId) {
+        return myAnimeCharactersDao.getAnimeCharacter(characterId);
+    }
 
     public LocalRepositoryImpl(MyAnimesEpisodesDao myAnimesEpisodesDao,
                                MyAnimesDao myAnimesDao,
@@ -135,6 +146,11 @@ public class LocalRepositoryImpl implements LocalRepository {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesEpisodesDao.updateEpisodeStatus(
                 value, episodeId)
         );
+    }
+
+    @Override
+    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query) {
+        return myAnimesEpisodesDao.getAnimeEpisodesWithQuery(id, query);
     }
 
     @Override

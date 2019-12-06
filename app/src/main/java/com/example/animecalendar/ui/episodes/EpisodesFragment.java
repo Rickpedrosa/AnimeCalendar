@@ -1,4 +1,4 @@
-package com.example.animecalendar.ui.characters;
+package com.example.animecalendar.ui.episodes;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,34 +26,36 @@ import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentCharactersBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
+import com.example.animecalendar.ui.characters.CharactersFragmentDirections;
 
 import java.util.Objects;
 
-public class CharactersFragment extends Fragment {
+public class EpisodesFragment extends Fragment {
 
     private FragmentCharactersBinding b;
-    private CharactersFragmentViewModel viewModel;
+    private EpisodesFragmentViewModel viewModel;
     private NavController navController;
     private int animeId;
     private SearchView searchView;
     private MenuItem mnuSearch;
-    private CharactersFragmentViewAdapter listAdapter;
+    private EpisodesFragmentViewAdapter listAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         obtainArguments();
-        VMProvider.FRAGMENTS enumCharacter = VMProvider.FRAGMENTS.CHARACTERS;
+        VMProvider.FRAGMENTS enumCharacter = VMProvider.FRAGMENTS.EPISODES;
         enumCharacter.setAnimeId(animeId);
         viewModel = ViewModelProviders.of(this,
                 VMProvider.viewModelFragmentFactory(this, enumCharacter))
-                .get(CharactersFragmentViewModel.class);
+                .get(EpisodesFragmentViewModel.class);
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         b = DataBindingUtil.inflate(inflater, R.layout.fragment_characters, container, false);
         return b.getRoot();
     }
@@ -62,27 +64,28 @@ public class CharactersFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
+        b.progressBar.setVisibility(View.INVISIBLE);
         setupToolbar();
-        setupProgressBar();
         setupAdapter();
-        if (savedInstanceState == null) {
-            viewModel.getAnimeCharactersWard(animeId).observe(getViewLifecycleOwner(), integer -> {
-                if (integer == 0) {
-                    viewModel.retrieveCharacters(animeId);
-                }
-            });
-        }
         observeData();
     }
 
-    private void setupProgressBar() {
-        b.progressBar.setVisibility(View.INVISIBLE);
-        viewModel.getCharactersLoading().observe(getViewLifecycleOwner(), aBoolean ->
-                b.progressBar.setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE));
+    private void obtainArguments() {
+        animeId = EpisodesFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getAnimeId();
     }
 
-    private void obtainArguments() {
-        animeId = CharactersFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getAnimeId();
+    private void setupAdapter() {
+        listAdapter = new EpisodesFragmentViewAdapter();
+        listAdapter.setOnItemClickListener((view, position) -> {
+            navController.navigate(EpisodesFragmentDirections
+                    .actionEpisodesFragmentToDetailItemFragment(
+                            listAdapter.getItem(position).getId(),
+                            -1));
+        });
+        b.listCharacters.setItemAnimator(new DefaultItemAnimator());
+        b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+        b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));
+        b.listCharacters.setAdapter(listAdapter);
     }
 
     private void setupToolbar() {
@@ -95,28 +98,9 @@ public class CharactersFragment extends Fragment {
         );
     }
 
-    private void setupAdapter() {
-        listAdapter = new CharactersFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) ->
-                navController.navigate(CharactersFragmentDirections
-                        .actionCharactersFragmentToDetailItemFragment(
-                                -1,
-                                listAdapter.getItem(position).getId())));
-        b.listCharacters.setItemAnimator(new DefaultItemAnimator());
-        b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-        b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));
-        b.listCharacters.setAdapter(listAdapter);
-    }
-
     private void observeData() {
-        viewModel.getCharacterAsyncInfo().observe(getViewLifecycleOwner(), stringResource ->
-                b.lblInfoCharacters.setText(stringResource.getData()));
-
-        viewModel.getAnimeCharactersV2().observe(getViewLifecycleOwner(), myAnimeCharacters -> {
-            if (myAnimeCharacters.size() != 0) {
-                listAdapter.submitList(myAnimeCharacters);
-            }
-        });
+        viewModel.getMyAnimeEpisodes().observe(getViewLifecycleOwner(), myAnimeEpisodesLists ->
+                listAdapter.submitList(myAnimeEpisodesLists));
     }
 
     private void setupSearchView() {

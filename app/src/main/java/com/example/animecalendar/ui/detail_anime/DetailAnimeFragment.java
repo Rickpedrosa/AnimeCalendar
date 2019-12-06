@@ -88,7 +88,8 @@ public class DetailAnimeFragment extends Fragment {
 
     private void setupButtons() {
         b.animeDetailed.btnEpisodes.setOnClickListener(v ->
-                viewModel.setCollapseEpisodes(!viewModel.isCollapseEpisodes()));
+                navController.navigate(DetailAnimeFragmentDirections
+                        .actionDetailAnimeFragmentToEpisodesFragment(animeId)));
         b.animeDetailed.btnSynopsis.setOnClickListener(v -> {
             if (!viewModel.isCollapseSynopsis()) {
                 b.animeDetailed.lblSynopsis.setVisibility(View.VISIBLE);
@@ -117,7 +118,8 @@ public class DetailAnimeFragment extends Fragment {
                                     //noinspection CatchMayIgnoreException
                                     try {
                                         setPaletteColoursToUI(myAnime);
-                                    } catch (java.lang.IllegalStateException e) { }
+                                    } catch (java.lang.IllegalStateException e) {
+                                    }
                                 }
 
                                 @Override

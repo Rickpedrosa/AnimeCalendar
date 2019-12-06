@@ -8,6 +8,7 @@ import com.example.animecalendar.data.local.entity.MyAnimeEpisode;
 import com.example.animecalendar.model.AnimeEpDateStatusPOJO;
 import com.example.animecalendar.model.AnimeEpisodeDateUpdatePOJO;
 import com.example.animecalendar.model.AnimeEpisodeDates;
+import com.example.animecalendar.model.AnimeEpisodeSingleItem;
 import com.example.animecalendar.model.AnimesForSeries;
 import com.example.animecalendar.model.CalendarAnime;
 import com.example.animecalendar.model.MyAnimeEpisodeListWithAnimeTitle;
@@ -72,4 +73,11 @@ public interface LocalRepository {
     LiveData<Integer> checkIfAnimeHasCharacters(long animeId);
 
     void updateEpisodeStatus(int value, int episodeId);
+
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query);
+
+    LiveData<AnimeEpisodeSingleItem> getAnimeEpisode(long id);
+
+    LiveData<MyAnimeCharacter> getAnimeCharacter(long characterId);
+
 }

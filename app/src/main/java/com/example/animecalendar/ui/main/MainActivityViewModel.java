@@ -1,6 +1,7 @@
 package com.example.animecalendar.ui.main;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -194,6 +195,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 synopsis = application.getResources().getString(R.string.episode_insert_synopsis_not);
             } else {
                 synopsis = animeEpisode.getData().get(i).getAttributes().getSynopsis();
+                Log.d("xd", synopsis);
             }
             if (animeEpisode.getData().get(i).getAttributes().getAirdate() == null) {
                 airDate = "Air date not available"; //UNUSED
@@ -385,12 +387,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                         .subscribeOn(Schedulers.io())
                         .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
                                 animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
-                        .flatMapIterable(new Function<List<DatumCharacter>, Iterable<? extends DatumCharacter>>() {
-                            @Override
-                            public Iterable<? extends DatumCharacter> apply(List<DatumCharacter> items) throws Exception {
-                                return items;
-                            }
-                        })
+                        .flatMapIterable(items -> items)
                         .flatMap(it -> {
                             informResource(application.getString(R.string.loading_character, it.getId()));
                             return animeRepository.getAnimeCharacterDetails(it.getId());

@@ -1,5 +1,6 @@
 package com.example.animecalendar.ui.assignment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class AssignmentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setHasOptionsMenu(true);
         viewModel = ViewModelProviders.of(this,
                 VMProvider.viewModelFragmentFactory(this, VMProvider.FRAGMENTS.ASSIGNMENT))
@@ -79,6 +81,7 @@ public class AssignmentFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         //viewModel.setAssignableDates(b.innerInclude.cosmoCalendar.getSelectedDates());
     }
 
