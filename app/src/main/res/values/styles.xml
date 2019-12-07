@@ -11,6 +11,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/colorPrimaryPogDark</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryPogDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorBottomItem</item>
         <item name="android:textColor">@android:color/background_light</item>
