@@ -14,34 +14,26 @@ public class DetailAnimeFragmentViewModel extends ViewModel {
 
     private final MainActivityViewModel viewModel;
     private boolean collapseSynopsis = false;
-    private boolean collapseEpisodes = false;
 
     public DetailAnimeFragmentViewModel(MainActivityViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
-    LiveData<MyAnime> getAnime(int id) {
+    LiveData<MyAnime> getAnime(long id) {
         return viewModel.getLocalRepository().getAnimeForDetail(id);
     }
 
-    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id) {
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(long id) {
         return viewModel.getLocalRepository().getAnimeEpisodes(id);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isCollapseSynopsis() {
         return collapseSynopsis;
     }
 
     void setCollapseSynopsis(boolean collapseSynopsis) {
         this.collapseSynopsis = collapseSynopsis;
-    }
-
-    boolean isCollapseEpisodes() {
-        return collapseEpisodes;
-    }
-
-    void setCollapseEpisodes(boolean collapseEpisodes) {
-        this.collapseEpisodes = collapseEpisodes;
     }
 
 }

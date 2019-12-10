@@ -25,7 +25,7 @@ public interface MyAnimesEpisodesDao {
 
     @Query("SELECT id, animeId, canonicalTitle, number, thumbnail, wasWatched, watchToDate  " +
             "FROM episodes WHERE animeId = :id ORDER BY number")
-    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(long id);
 
     @Query("SELECT canonicalTitle, thumbnail, synopsis " +
             "FROM episodes WHERE id = :id")
@@ -33,7 +33,7 @@ public interface MyAnimesEpisodesDao {
 
     @Query("SELECT id, animeId, canonicalTitle, number, thumbnail, wasWatched, watchToDate  " +
             "FROM episodes WHERE animeId = :id AND canonicalTitle LIKE :query ORDER BY number")
-    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query);
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(long id, String query);
 
     @Query("SELECT ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, an.canonicalTitle AS animeTitle " +
             "FROM episodes ep INNER JOIN anime an ON ep.animeId = an.id " +
@@ -59,7 +59,7 @@ public interface MyAnimesEpisodesDao {
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +
             "WHERE ep.animeId = :animeId AND ep.wasWatched = 0 " +
             "ORDER BY number")
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(long animeId);
 
     @Query("SELECT ani.canonicalTitle AS animeTitle, ep.id, ep.animeId, ep.canonicalTitle, ep.number, ep.thumbnail, ep.wasWatched, ep.watchToDate " +
             "FROM episodes ep INNER JOIN anime ani ON ep.animeId = ani.id " +

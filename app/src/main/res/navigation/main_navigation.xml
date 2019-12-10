@@ -60,8 +60,7 @@
             app:popUpToInclusive="false" />
         <argument
             android:name="animeId"
-            android:defaultValue="0"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/calendarEpisodesFragment"
@@ -69,7 +68,7 @@
         android:label="@string/calendarep_title">
         <argument
             android:name="animeId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/assignmentFragment"
@@ -77,7 +76,7 @@
         tools:layout="@layout/fragment_assignment_dates">
         <argument
             android:name="animeId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/daysFragment"
@@ -114,7 +113,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="animeId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/episodesFragment"
@@ -127,7 +126,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="animeId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/detailItemFragment"

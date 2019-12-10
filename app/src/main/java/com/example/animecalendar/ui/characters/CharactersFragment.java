@@ -34,7 +34,7 @@ public class CharactersFragment extends Fragment {
     private FragmentCharactersBinding b;
     private CharactersFragmentViewModel viewModel;
     private NavController navController;
-    private int animeId;
+    private long animeId;
     private SearchView searchView;
     private MenuItem mnuSearch;
     private CharactersFragmentViewAdapter listAdapter;

@@ -52,7 +52,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<MyAnime> getAnimeForDetail(int id) {
+    public LiveData<MyAnime> getAnimeForDetail(long id) {
         return myAnimesDao.getAnimeForDetail(id);
     }
 
@@ -62,12 +62,12 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void deleteAnime(int myAnime) {
+    public void deleteAnime(long myAnime) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.deleteAnime(myAnime));
     }
 
     @Override
-    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id) {
+    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(long id) {
         return myAnimesEpisodesDao.getAnimeEpisodes(id);
     }
 
@@ -77,7 +77,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void updateAnimeStatus(String status, int animeId) {
+    public void updateAnimeStatus(String status, long animeId) {
         AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimesDao.updateAnimeStatus(status, animeId));
     }
 
@@ -87,7 +87,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId) {
+    public LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(long animeId) {
         return myAnimesEpisodesDao.getAnimeEpisodesToAssignDate(animeId);
     }
 
@@ -127,11 +127,6 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public void deleteAnimeCharacters(long animeId) {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> myAnimeCharactersDao.deleteAnimeCharacters(animeId));
-    }
-
-    @Override
     public LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query) {
         return myAnimeCharactersDao.getAnimeCharactersByQuery(animeId, query);
     }
@@ -149,7 +144,7 @@ public class LocalRepositoryImpl implements LocalRepository {
     }
 
     @Override
-    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query) {
+    public LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(long id, String query) {
         return myAnimesEpisodesDao.getAnimeEpisodesWithQuery(id, query);
     }
 

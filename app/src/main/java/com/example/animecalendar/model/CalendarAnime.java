@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo;
 
 public class CalendarAnime {
     @ColumnInfo(name = "id")
-    private int id;
+    private long id;
     @ColumnInfo(name = "canonicalTitle")
     private String title;
     @ColumnInfo(name = "epCount")
@@ -15,7 +15,7 @@ public class CalendarAnime {
     private String tinyPosterImage;
 
 
-    public CalendarAnime(int id, String title, int epCount, int epWatchedCount, String tinyPosterImage) {
+    public CalendarAnime(long id, String title, int epCount, int epWatchedCount, String tinyPosterImage) {
         this.id = id;
         this.title = title;
         this.epCount = epCount;
@@ -23,11 +23,11 @@ public class CalendarAnime {
         this.tinyPosterImage = tinyPosterImage;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -24,7 +24,7 @@ public class CalendarFragmentViewModel extends ViewModel {
         return viewModel.getLocalRepository().getAnimesToExposeForCalendar();
     }
 
-    void updateAnimeStatus(int animeId){
+    void updateAnimeStatus(long animeId){
         viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_COMPLETED, animeId);
     }
 

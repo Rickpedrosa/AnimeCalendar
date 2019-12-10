@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ import static com.example.animecalendar.data.local.LocalRepository.WATCHED;
 public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFragment.Listener {
 
     private FragmentCalendarEpisodeBinding b;
-    private int animeId;
+    private long animeId;
     private CalendarEpisodesFragmentViewAdapter listAdapter;
     private CalendarEpisodesFragmentViewModel viewModel;
     private LinearLayoutManager linearLayoutManager;
@@ -65,8 +66,14 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        b = DataBindingUtil.inflate(inflater, R.layout.fragment_calendar_episode, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        b = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_calendar_episode,
+                container,
+                false);
         return b.getRoot();
     }
 
@@ -97,6 +104,15 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (isRemoving()) {
+            mListState = null;
+            mBundleRecyclerViewState = null;
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mBundleRecyclerViewState != null) {
@@ -109,7 +125,8 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     private void setupFab() {
-        b.fab.setOnClickListener(v -> linearLayoutManager.scrollToPositionWithOffset(getPositionToScroll(), 10));
+        b.fab.setOnClickListener(v -> linearLayoutManager
+                .scrollToPositionWithOffset(getPositionToScroll(), 10));
     }
 
     private void setupRecyclerView() {
@@ -186,10 +203,23 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
     }
 
     private void observeData() {
-        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodesLists -> {
-            listAdapter.submitList(myAnimeEpisodesLists);
-            checkForAnimeStatusUpdate(myAnimeEpisodesLists);
+        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), it -> {
+            listAdapter.submitList(it);
+            if (areAllWatched(it.size())) {
+                viewModel.updateAnimeStatus(animeId);
+                navController.popBackStack();
+            }
         });
+    }
+
+    private boolean areAllWatched(int sourceSize) {
+        boolean updateAndPop = false;
+        int counter = 0;
+        for (int i = 0; i < listAdapter.getItemCount(); i++) {
+            if (listAdapter.getItem(i).getWasWatched() == WATCHED) counter++;
+        }
+        if (counter == sourceSize - 1) updateAndPop = true;
+        return updateAndPop;
     }
 
     private List<AnimeEpisodeDateUpdatePOJO> getNonWatchedEpisodes(int position) throws ParseException {
@@ -208,22 +238,10 @@ public class CalendarEpisodesFragment extends Fragment implements YesNoDialogFra
         return mList;
     }
 
-    private void checkForAnimeStatusUpdate(List<MyAnimeEpisodesList> myAnimeEpisodes) {
-        int counter = 0;
-        for (int i = 0; i < myAnimeEpisodes.size(); i++) {
-            if (myAnimeEpisodes.get(i).getWasWatched() == WATCHED) {
-                counter++;
-            }
-        }
-        if (counter == (myAnimeEpisodes.size())) {
-            viewModel.updateAnimeStatus((int) myAnimeEpisodes.get(0).getAnimeId());
-            navController.popBackStack();
-
-        }
-    }
-
     private void obtainArguments() {
-        animeId = CalendarEpisodesFragmentArgs.fromBundle(Objects.requireNonNull(getArguments())).getAnimeId();
+        animeId = CalendarEpisodesFragmentArgs.fromBundle(Objects
+                .requireNonNull(getArguments()))
+                .getAnimeId();
     }
 
     @Override

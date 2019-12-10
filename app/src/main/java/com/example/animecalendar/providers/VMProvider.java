@@ -14,28 +14,34 @@ public class VMProvider {
         SEARCH, CALENDAR, SERIES, DETAIL_ANIME, DETAIL_ITEM, CALENDAR_EPISODES, ASSIGNMENT,
         DAYS, DAYS_EPISODE, CHARACTERS, EPISODES;
 
-        private int animeId;
+        private long animeId;
 
         FRAGMENTS() {
         }
 
-        public int getAnimeId() {
+        public long getAnimeId() {
             return animeId;
         }
 
-        public void setAnimeId(int animeId) {
+        public void setAnimeId(long animeId) {
             this.animeId = animeId;
         }
     }
 
-    public static ViewModelFragmentFactory viewModelFragmentFactory(Fragment fragment, FRAGMENTS enumFragment) {
+    public static ViewModelFragmentFactory viewModelFragmentFactory(
+            Fragment fragment,
+            FRAGMENTS enumFragment
+    ) {
         return new ViewModelFragmentFactory(androidx.lifecycle.ViewModelProviders.of(fragment,
                 new MainActivityViewModelFactory(fragment.requireActivity().getApplication(),
                         AppDatabase.getInstance(fragment.requireContext())))
                 .get(MainActivityViewModel.class), enumFragment);
     }
 
-    public static ViewModelFragmentFactory viewModelFragmentFactory(FragmentActivity activity, FRAGMENTS enumFragment) {
+    public static ViewModelFragmentFactory viewModelFragmentFactory(
+            FragmentActivity activity,
+            FRAGMENTS enumFragment
+    ) {
         return new ViewModelFragmentFactory(androidx.lifecycle.ViewModelProviders.of(activity,
                 new MainActivityViewModelFactory(activity.getApplication(),
                         AppDatabase.getInstance(activity.getApplicationContext())))

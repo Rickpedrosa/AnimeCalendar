@@ -35,7 +35,7 @@ public class DetailAnimeFragment extends Fragment {
     private FragmentAnimeDetailBinding b;
     private NavController navController;
     private DetailAnimeFragmentViewModel viewModel;
-    private int animeId;
+    private long animeId;
     private DetailAnimeFragmentViewAdapter listAdapter;
 
     @Override
@@ -48,8 +48,14 @@ public class DetailAnimeFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        b = DataBindingUtil.inflate(inflater, R.layout.fragment_anime_detail, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        b = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_anime_detail,
+                container,
+                false);
         return b.getRoot();
     }
 
@@ -98,10 +104,9 @@ public class DetailAnimeFragment extends Fragment {
             }
             viewModel.setCollapseSynopsis(!viewModel.isCollapseSynopsis());
         });
-        b.animeDetailed.btnCharacters.setOnClickListener(view -> { // todo cambiar
-            navController.navigate(DetailAnimeFragmentDirections
-                    .actionDetailAnimeFragmentToCharactersFragment(animeId));
-        });
+        b.animeDetailed.btnCharacters.setOnClickListener(view ->
+                navController.navigate(DetailAnimeFragmentDirections
+                        .actionDetailAnimeFragmentToCharactersFragment(animeId)));
     }
 
     private void observeData() {
@@ -154,15 +159,15 @@ public class DetailAnimeFragment extends Fragment {
     }
 
     private void setColorsToButtons(Palette palette) {
-        int defaultColor = Color.parseColor("#33ff33");
+        int defaultColor = Color.parseColor("#243447");
         b.collapsingToolbar.setExpandedTitleColor(Objects.requireNonNull(palette).getVibrantColor(defaultColor));
         b.collapsingToolbar.setCollapsedTitleTextColor(Objects.requireNonNull(palette).getLightVibrantColor(defaultColor));
         b.animeDetailed.btnCharacters.setBackgroundColor(Objects.requireNonNull(palette).getLightVibrantColor(defaultColor));
         b.animeDetailed.btnEpisodes.setBackgroundColor(Objects.requireNonNull(palette).getVibrantColor(defaultColor));
         b.animeDetailed.btnSynopsis.setBackgroundColor(Objects.requireNonNull(palette).getDarkVibrantColor(defaultColor));
-        b.animeDetailed.button.setBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(defaultColor));
-        b.animeDetailed.button3.setBackgroundColor(Objects.requireNonNull(palette).getMutedColor(defaultColor));
-        b.animeDetailed.button4.setBackgroundColor(Objects.requireNonNull(palette).getDarkMutedColor(defaultColor));
+//        b.animeDetailed.button.setBackgroundColor(Objects.requireNonNull(palette).getLightMutedColor(defaultColor));
+//        b.animeDetailed.button3.setBackgroundColor(Objects.requireNonNull(palette).getMutedColor(defaultColor));
+//        b.animeDetailed.button4.setBackgroundColor(Objects.requireNonNull(palette).getDarkMutedColor(defaultColor));
         if (palette.getLightVibrantSwatch() != null) {
             b.animeDetailed.btnCharacters.setTextColor(palette.getLightVibrantSwatch().getTitleTextColor());
         }
@@ -176,6 +181,5 @@ public class DetailAnimeFragment extends Fragment {
 
     private void restoreViews() {
         b.animeDetailed.lblSynopsis.setVisibility(!viewModel.isCollapseSynopsis() ? View.GONE : View.VISIBLE);
-//        b.animeDetailed.listEpisodes.setVisibility(!viewModel.isCollapseEpisodes() ? View.GONE : View.VISIBLE);
     }
 }

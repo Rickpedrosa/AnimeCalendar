@@ -15,21 +15,16 @@ import androidx.navigation.NavDeepLinkBuilder;
 
 import com.example.animecalendar.App;
 import com.example.animecalendar.R;
-import com.example.animecalendar.ui.days.DaysFragmentDirections;
-import com.example.animecalendar.ui.days_episodes.DaysEpisodesFragmentArgs;
 import com.example.animecalendar.utils.CustomTimeUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import static com.example.animecalendar.ui.main.MainActivity.BIG_CONTENT_EXTRA;
 import static com.example.animecalendar.ui.main.MainActivity.CONTENT_EXTRA;
 import static com.example.animecalendar.ui.main.MainActivity.TITLE_EXTRA;
-import static com.example.animecalendar.utils.CustomTimeUtils.ONE_MINUTE_MILLISECONDS;
 
 public class AlertReceiver extends BroadcastReceiver {
 

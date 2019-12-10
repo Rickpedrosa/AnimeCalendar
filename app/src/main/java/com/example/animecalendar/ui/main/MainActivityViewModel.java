@@ -154,7 +154,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         return localRepository;
     }
 
-    public void retrieveRetroEpisodes(int animeId, boolean replace) {
+    public void retrieveRetroEpisodes(long animeId, boolean replace) {
         disposable = getEpisodesFromResponse(String.valueOf(animeId), 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -236,21 +236,18 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Observable<AnimeEpisode> getEpisodesFromResponse(String id, int offset) {
         return RXJavaProvider.episodeObservableFlatMapped(animeRepository.getAnimeEpisodes(
                 id,
-                offset,
-                AnimeService.LIMIT))
+                offset))
                 .concatMap(animeEpisode -> {
                     if (animeEpisode.getLinks().getNext() == null) {
                         return RXJavaProvider.episodeObservableFlatMapped(
                                 animeRepository.getAnimeEpisodes(
                                         id,
-                                        offset,
-                                        AnimeService.LIMIT));
+                                        offset));
                     } else {
                         return Observable.zip(RXJavaProvider.episodeObservableFlatMapped(
                                 animeRepository.getAnimeEpisodes(
                                         id,
-                                        offset,
-                                        AnimeService.LIMIT)),
+                                        offset)),
                                 getEpisodesFromResponse(
                                         id,
                                         (offset + AnimeService.PLUS_OFFSET)),
@@ -381,7 +378,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         }
     }
 
-    public void testAnimeCharacterIDSApiCall(int id) {
+    public void testAnimeCharacterIDSApiCall(long id) {
         Single<List<AnimeCharacterDetail>> pog =
                 animeRepository.getAnimeCharactersIds(String.valueOf(id))
                         .subscribeOn(Schedulers.io())

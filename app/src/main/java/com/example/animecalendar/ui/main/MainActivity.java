@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupProgressBarVisibility() {
         ProgressBar progressBar = ActivityCompat.requireViewById(this, R.id.progressBar3);
         progressBar.setVisibility(View.INVISIBLE);
-        viewModel.getProgressBarController().observe(this, aBoolean -> progressBar.setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE));
+        viewModel.getProgressBarController().observe(this, aBoolean ->
+                progressBar.setVisibility(aBoolean ? View.VISIBLE : View.INVISIBLE));
     }
 
     private void setupBottomNavigationView() {

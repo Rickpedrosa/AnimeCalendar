@@ -30,21 +30,21 @@ public interface LocalRepository {
 
     LiveData<List<AnimesForSeries>> getAnimesToExpose();
 
-    LiveData<MyAnime> getAnimeForDetail(int id);
+    LiveData<MyAnime> getAnimeForDetail(long id);
 
     void addAnime(MyAnime myAnime);
 
-    void deleteAnime(int id);
+    void deleteAnime(long id);
 
-    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(int id);
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodes(long id);
 
     void addEpisodes(List<MyAnimeEpisode> episodes);
 
-    void updateAnimeStatus(String status, int animeId);
+    void updateAnimeStatus(String status, long animeId);
 
     LiveData<List<CalendarAnime>> getAnimesToExposeForCalendar();
 
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(int animeId);
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getAnimeEpisodesToAssignDate(long animeId);
 
     void updateEpisodeDateToWatchPojoVersion(List<AnimeEpisodeDateUpdatePOJO> episodes);
 
@@ -66,15 +66,13 @@ public interface LocalRepository {
 
     void addAnimeCharacters(List<MyAnimeCharacter> characters);
 
-    void deleteAnimeCharacters(long animeId);
-
     LiveData<List<MyAnimeCharacter>> getAnimeCharactersByQuery(long animeId, String query);
 
     LiveData<Integer> checkIfAnimeHasCharacters(long animeId);
 
     void updateEpisodeStatus(int value, int episodeId);
 
-    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(int id, String query);
+    LiveData<List<MyAnimeEpisodesList>> getAnimeEpisodesWithQuery(long id, String query);
 
     LiveData<AnimeEpisodeSingleItem> getAnimeEpisode(long id);
 

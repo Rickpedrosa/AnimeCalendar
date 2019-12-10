@@ -5,7 +5,7 @@ import androidx.room.Ignore;
 
 public class AnimesForSeries {
     @ColumnInfo(name = "id")
-    private int id;
+    private long id;
     @ColumnInfo(name = "canonicalTitle")
     private String title;
     @ColumnInfo(name = "status")
@@ -18,7 +18,7 @@ public class AnimesForSeries {
     @ColumnInfo(name = "epsWatched")
     private int epWatchedCount;
 
-    public AnimesForSeries(int id, String title, String status, String poster, int epCount) {
+    public AnimesForSeries(long id, String title, String status, String poster, int epCount) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -26,7 +26,7 @@ public class AnimesForSeries {
         this.epCount = epCount;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

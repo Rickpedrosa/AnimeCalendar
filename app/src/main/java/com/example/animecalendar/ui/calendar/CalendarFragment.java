@@ -79,14 +79,18 @@ public class CalendarFragment extends Fragment {
 
     private void setupRecyclerView() {
         listAdapter = new CalendarFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) -> navController.navigate(CalendarFragmentDirections
-                .actionCalendarFragmentToCalendarEpisodesFragment(listAdapter.getItem(position).getId())));
+        listAdapter.setOnItemClickListener((view, position) -> navigateToEpisodes(position));
         b.listEpisodesCalendar
                 .setItemAnimator(new DefaultItemAnimator());
         b.listEpisodesCalendar
                 .setLayoutManager(new LinearLayoutManager(requireContext()));
         b.listEpisodesCalendar
                 .setAdapter(listAdapter);
+    }
+
+    private void navigateToEpisodes(int position) {
+        navController.navigate(CalendarFragmentDirections
+                .actionCalendarFragmentToCalendarEpisodesFragment(listAdapter.getItem(position).getId()));
     }
 
     private void observeData() {

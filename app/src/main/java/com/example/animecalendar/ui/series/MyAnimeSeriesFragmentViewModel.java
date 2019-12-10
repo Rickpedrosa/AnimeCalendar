@@ -74,11 +74,11 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         this.itemPosition = itemPosition;
     }
 
-    void deleteAnime(int id) {
+    void deleteAnime(long id) {
         viewModel.getLocalRepository().deleteAnime(id);
     }
 
-    void updateStatus(@SuppressWarnings("SameParameterValue") String status, int id) {
+    void updateStatus(@SuppressWarnings("SameParameterValue") String status, long id) {
         viewModel.getLocalRepository().updateAnimeStatus(status, id);
     }
 
@@ -98,7 +98,7 @@ public class MyAnimeSeriesFragmentViewModel extends ViewModel {
         return viewModel.getDefaultListTypePreference();
     }
 
-    void retrieveEpisodes(int animeId) {
+    void retrieveEpisodes(long animeId) {
         viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_FINISHED, animeId);
         viewModel.retrieveRetroEpisodes(animeId, true);
     }

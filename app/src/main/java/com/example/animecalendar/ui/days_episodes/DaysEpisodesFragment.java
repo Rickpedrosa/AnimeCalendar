@@ -28,7 +28,6 @@ import com.example.animecalendar.utils.CustomTimeUtils;
 import com.example.animecalendar.utils.ValidationUtils;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Objects;
 
 import static com.example.animecalendar.data.local.LocalRepository.NOT_WATCHED;
@@ -108,7 +107,8 @@ public class DaysEpisodesFragment extends Fragment {
         viewModel.getEpisodes(date).observe(getViewLifecycleOwner(), list -> {
             listAdapter.submitList(list);
             if (list.size() == 0) {
-                NavHostFragment.findNavController(this).popBackStack(R.id.calendarFragment, false);
+                NavHostFragment.findNavController(this)
+                        .popBackStack(R.id.calendarFragment, false);
             }
         });
     }

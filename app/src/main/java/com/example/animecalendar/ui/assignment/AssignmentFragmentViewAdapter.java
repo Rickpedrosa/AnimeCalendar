@@ -26,7 +26,7 @@ public class AssignmentFragmentViewAdapter extends BaseListAdapter<MyAnimeEpisod
         }
     };
 
-    public AssignmentFragmentViewAdapter() {
+    AssignmentFragmentViewAdapter() {
         super(diffUtilItemCallback);
     }
 

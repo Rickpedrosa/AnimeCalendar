@@ -21,11 +21,11 @@ public class CalendarEpisodesFragmentViewModel extends ViewModel {
         this.viewModel = viewModel;
     }
 
-    LiveData<List<MyAnimeEpisodesList>> getEpisodes(int animeId) {
+    LiveData<List<MyAnimeEpisodesList>> getEpisodes(long animeId) {
         return viewModel.getLocalRepository().getAnimeEpisodes(animeId);
     }
 
-    void updateAnimeStatus(int animeId) {
+    void updateAnimeStatus(long animeId) {
         viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_COMPLETED, animeId);
     }
 

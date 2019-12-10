@@ -32,7 +32,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
         calendarLiveData.setValue(days);
     }
 
-    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getEpisodes(int id) {
+    LiveData<List<MyAnimeEpisodeListWithAnimeTitle>> getEpisodes(long id) {
         return viewModel.getLocalRepository().getAnimeEpisodesToAssignDate(id);
     }
 
@@ -48,7 +48,7 @@ public class AssignmentFragmentViewModel extends ViewModel {
         viewModel.assignDateToEpisodes(days, caps);
     }
 
-    void updateStatus(int id) {
+    void updateStatus(long id) {
         viewModel.getLocalRepository().updateAnimeStatus(LocalRepository.STATUS_FOLLOWING, id);
     }
 

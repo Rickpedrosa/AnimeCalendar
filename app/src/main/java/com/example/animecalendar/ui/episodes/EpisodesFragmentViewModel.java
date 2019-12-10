@@ -17,7 +17,7 @@ public class EpisodesFragmentViewModel extends ViewModel {
     private LiveData<List<MyAnimeEpisodesList>> myAnimeEpisodes;
     private boolean searchViewExpanded;
 
-    public EpisodesFragmentViewModel(MainActivityViewModel mainActivityViewModel, int animeId) {
+    public EpisodesFragmentViewModel(MainActivityViewModel mainActivityViewModel, long animeId) {
         this.viewModel = mainActivityViewModel;
         this.searchQuery.setValue("");
         this.myAnimeEpisodes = Transformations.switchMap(searchQuery,
@@ -32,7 +32,7 @@ public class EpisodesFragmentViewModel extends ViewModel {
                 });
     }
 
-    public LiveData<List<MyAnimeEpisodesList>> getMyAnimeEpisodes() {
+    LiveData<List<MyAnimeEpisodesList>> getMyAnimeEpisodes() {
         return myAnimeEpisodes;
     }
 

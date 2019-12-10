@@ -27,6 +27,7 @@ import com.example.animecalendar.providers.VMProvider;
 import com.example.animecalendar.utils.ValidationUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ public class AssignmentFragment extends Fragment {
     private FragmentAssignmentDatesBinding b;
     private AssignmentFragmentViewModel viewModel;
     private AssignmentFragmentViewAdapter listAdapter;
-    private int animeId;
+    private long animeId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,8 +62,15 @@ public class AssignmentFragment extends Fragment {
         setupRecyclerView();
         setupToolbar();
         observeData();
-        restoreDataFromDeviceRotation();
+        // restoreDataFromDeviceRotation();
         pickDateRange();
+    }
+
+    private void setupInitialLabel(int episodesAmount) {
+//        b.innerInclude.listEpisodesAssign.postDelayed(() -> , 200);
+        b.innerInclude.textviewlol.setText(
+                getResources().getString(R.string.assign_resume,
+                        episodesAmount));
     }
 
     private void pickDateRange() {
@@ -74,6 +82,8 @@ public class AssignmentFragment extends Fragment {
                 viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
                 b.innerInclude.textviewlol.setText(viewModel.getSchedule());
                 //toggleSelectedDays();
+            } else {
+                b.innerInclude.textviewlol.setText("El número de días excede el número de capítulos");
             }
         }));
     }
@@ -110,17 +120,22 @@ public class AssignmentFragment extends Fragment {
     }
 
     private void observeData() {
-        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), myAnimeEpisodeListWithAnimeTitles -> {
-            setToolbarTitle(myAnimeEpisodeListWithAnimeTitles.get(0).getAnimeTitle());
-            listAdapter.submitList(myAnimeEpisodeListWithAnimeTitles);
-        });
-        viewModel.getCalendarLiveData().observe(getViewLifecycleOwner(), calendars -> {
-            if (calendars.size() > 0) {
-                enableFab();
-            } else {
-                b.fab.hide();
-            }
-        });
+        viewModel.getEpisodes(animeId).observe(getViewLifecycleOwner(), this::setupViews);
+        viewModel.getCalendarLiveData().observe(getViewLifecycleOwner(), this::setupFabBehaviour);
+    }
+
+    private void setupFabBehaviour(List<Calendar> calendars) {
+        if (ValidationUtils.assignmentController(calendars.size(), listAdapter.getItemCount())) {
+            enableFab();
+        } else {
+            b.fab.hide();
+        }
+    }
+
+    private void setupViews(List<MyAnimeEpisodeListWithAnimeTitle> it) {
+        setToolbarTitle(it.get(0).getAnimeTitle());
+        setupInitialLabel(it.size());
+        listAdapter.submitList(it);
     }
 
     private void setToolbarTitle(String title) {
@@ -172,16 +187,16 @@ public class AssignmentFragment extends Fragment {
         if (viewModel.getAssignableDates() != null) {
             if (ValidationUtils.assignmentController(viewModel.getAssignableDates().size(), listAdapter.getItemCount())) {
                 viewModel.commitEpisodesDateAssignation(viewModel.getAssignableDates(), getAllEpisodes());
-                viewModel.updateStatus((int) listAdapter.getItem(0).getAnimeId());
+                viewModel.updateStatus(listAdapter.getItem(0).getAnimeId());
                 Toast.makeText(requireContext(), getResources().getString(R.string.assign_success,
                         listAdapter.getItem(0).getAnimeTitle()), Toast.LENGTH_SHORT).show();
                 NavHostFragment.findNavController(this).popBackStack();
 
             } else {
-                Toast.makeText(requireContext(), getResources().getString(R.string.warning_pick_assign), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getResources().getString(R.string.warning_assign), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(requireContext(), getResources().getString(R.string.warning_assign), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getResources().getString(R.string.warning_pick_assign), Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -18,15 +18,14 @@ public interface AnimeRepository {
     Observable<Response<Anime>> getAnime(@Path("id") String id);
 
     @GET("anime")
-    Observable<Response<AnimationList>> getAnimesByFilterText(@Query("filter[text]") String title, @Query("page[limit]") int limit);
+    Observable<Response<AnimationList>> getAnimesByFilterText(@Query("filter[text]") String title,
+                                                              @Query("page[limit]") int limit);
 
     //https://kitsu.io/api/edge/anime/21/episodes
 
-    @GET("anime/{id}/episodes")
-    Observable<Response<AnimeEpisode>> getAnimeEpisodes(@Path("id") String id, @Query("page[offset]") int offset, @Query("page[limit]") int limit);
-
-    @GET("anime/{id}/episodes")
-    Observable<AnimeEpisode> getAnimeEpisodesV2(@Path("id") String id, @Query("page[offset]") int offset, @Query("page[limit]") int limit);
+    @GET("anime/{id}/episodes?page[offset]=20")
+    Observable<Response<AnimeEpisode>> getAnimeEpisodes(@Path("id") String id,
+                                                        @Query("page[offset]") int offset);
 
     @GET("anime/{id}/relationships/characters")
     Observable<AnimeCharacterIDs> getAnimeCharactersIds(@Path("id") String id);

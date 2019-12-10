@@ -23,19 +23,10 @@ public class AnimeRepositoryImpl implements AnimeRepository {
     }
 
     @Override
-    public Observable<Response<AnimeEpisode>> getAnimeEpisodes(String id, int offset, int limit) {
+    public Observable<Response<AnimeEpisode>> getAnimeEpisodes(String id, int offset) {
         return AnimeService.getInstance().getAnimeRepository().getAnimeEpisodes(
                 id,
-                offset,
-                limit);
-    }
-
-    @Override
-    public Observable<AnimeEpisode> getAnimeEpisodesV2(String id, int offset, int limit) {
-        return AnimeService.getInstance().getAnimeRepository().getAnimeEpisodesV2(
-                id,
-                offset,
-                limit);
+                offset);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class CharactersFragmentViewModel extends ViewModel {
     private LiveData<List<MyAnimeCharacter>> myAnimeCharacters;
     private boolean searchViewExpanded;
 
-    public CharactersFragmentViewModel(MainActivityViewModel viewModel, int animeId) {
+    public CharactersFragmentViewModel(MainActivityViewModel viewModel, long animeId) {
         this.viewModel = viewModel;
         this.searchQuery.setValue("");
         this.myAnimeCharacters = Transformations.switchMap(searchQuery,
@@ -36,7 +36,7 @@ public class CharactersFragmentViewModel extends ViewModel {
         return viewModel.getProgressBarCharacterController();
     }
 
-    void retrieveCharacters(int id) {
+    void retrieveCharacters(long id) {
         viewModel.testAnimeCharacterIDSApiCall(id);
     }
 

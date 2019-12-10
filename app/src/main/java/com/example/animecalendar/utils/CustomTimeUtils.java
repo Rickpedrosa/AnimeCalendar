@@ -10,24 +10,15 @@ public class CustomTimeUtils {
 
     private static final String FORMAT = "yyyy/MM/dd";
     public static final long ONE_DAY_MILLISECONDS = 86400000L;
-    public static final long ONE_MINUTE_MILLISECONDS = 60000L;
-    private static final String FORMAT_HOUR = "dd/MM/yyyy HH:mm";
+    private static final long ONE_MINUTE_MILLISECONDS = 60000L;
+//    private static final String FORMAT_HOUR = "dd/MM/yyyy HH:mm";
 
     public static String getDateFormatted(Date date) {
         return new SimpleDateFormat(FORMAT, Locale.getDefault()).format(date);
     }
 
-    public static String getDateFormattedHour(long date) {
-        return new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault()).format(new Date(date));
-    }
-
     public static long dateFromStringToLong(String date) throws ParseException {
         return Objects.requireNonNull(new SimpleDateFormat(FORMAT, Locale.getDefault())
-                .parse(date)).getTime();
-    }
-
-    public static long dateFromStringToLongTime(String date) throws ParseException {
-        return Objects.requireNonNull(new SimpleDateFormat(FORMAT_HOUR, Locale.getDefault())
                 .parse(date)).getTime();
     }
 

@@ -51,14 +51,14 @@ public interface MyAnimesDao {
     LiveData<List<String>> getTodayItems(String today);
 
     @Query("SELECT * FROM anime WHERE id = :id")
-    LiveData<MyAnime> getAnimeForDetail(int id);
+    LiveData<MyAnime> getAnimeForDetail(long id);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void addAnime(MyAnime myAnime);
 
     @Query("DELETE FROM anime WHERE id = :id")
-    void deleteAnime(int id);
+    void deleteAnime(long id);
 
     @Query("UPDATE anime SET status = :status WHERE id = :animeId")
-    void updateAnimeStatus(String status, int animeId);
+    void updateAnimeStatus(String status, long animeId);
 }

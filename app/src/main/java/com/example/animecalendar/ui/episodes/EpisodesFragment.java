@@ -26,7 +26,6 @@ import com.example.animecalendar.R;
 import com.example.animecalendar.databinding.FragmentCharactersBinding;
 import com.example.animecalendar.providers.AppbarConfigProvider;
 import com.example.animecalendar.providers.VMProvider;
-import com.example.animecalendar.ui.characters.CharactersFragmentDirections;
 
 import java.util.Objects;
 
@@ -35,7 +34,7 @@ public class EpisodesFragment extends Fragment {
     private FragmentCharactersBinding b;
     private EpisodesFragmentViewModel viewModel;
     private NavController navController;
-    private int animeId;
+    private long animeId;
     private SearchView searchView;
     private MenuItem mnuSearch;
     private EpisodesFragmentViewAdapter listAdapter;
@@ -76,12 +75,11 @@ public class EpisodesFragment extends Fragment {
 
     private void setupAdapter() {
         listAdapter = new EpisodesFragmentViewAdapter();
-        listAdapter.setOnItemClickListener((view, position) -> {
-            navController.navigate(EpisodesFragmentDirections
-                    .actionEpisodesFragmentToDetailItemFragment(
-                            listAdapter.getItem(position).getId(),
-                            -1));
-        });
+        listAdapter.setOnItemClickListener((view, position) ->
+                navController.navigate(EpisodesFragmentDirections
+                        .actionEpisodesFragmentToDetailItemFragment(
+                                listAdapter.getItem(position).getId(),
+                                -1)));
         b.listCharacters.setItemAnimator(new DefaultItemAnimator());
         b.listCharacters.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
         b.listCharacters.setLayoutManager(new LinearLayoutManager(requireContext()));

@@ -158,8 +158,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         listAdapter = new MyAnimeSeriesFragmentViewAdapter(this::setOnOptionsClickAnimeItem);
         listAdapter.setOnItemClickListener((view, position) ->
                 navController.navigate(MyAnimeSeriesFragmentDirections
-                        .actionMyAnimeSeriesFragmentToDetailAnimeFragment()
-                        .setAnimeId(listAdapter.getItem(position).getId())));
+                        .actionMyAnimeSeriesFragmentToDetailAnimeFragment(
+                                listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
         b.listAnimes.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
         b.listAnimes.setLayoutManager(manager);
@@ -181,6 +181,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel.getAnimesToExposeByCategory().observe(getViewLifecycleOwner(), animesForSeries -> {
             b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(animesForSeries);
+            b.listAnimes.scrollToPosition(0);
         });
 
 //        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -220,12 +221,13 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         dialog.dismiss();
     }
 
-    private void updateStatus() {
+    private void updateStatusToFinished() {
         viewModel.updateStatus(LocalRepository.STATUS_FINISHED, listAdapter.getItem(viewModel.getItemPosition()).getId());
         //TODO CAMBIAR ESTADO DE EPISODIOS POR VER A NULL, ES DECIR, A - (OPT?)
         Snackbar.make(b.listAnimes,
                 getResources().getString(R.string.update_anime_status,
-                        listAdapter.getItem(viewModel.getItemPosition()).getTitle(), LocalRepository.STATUS_FINISHED),
+                        listAdapter.getItem(viewModel.getItemPosition()).getTitle(),
+                        getResources().getString(R.string.finished_val)),
                 Snackbar.LENGTH_LONG).show();
 
     }
@@ -270,7 +272,7 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
             case LocalRepository.STATUS_FOLLOWING:
                 switch (item.getItemId()) {
                     case R.id.dialog_following_unfollow:
-                        updateStatus();
+                        updateStatusToFinished();
                         dialog.dismiss();
                         return true;
                     case R.id.dialog_following_delete:
