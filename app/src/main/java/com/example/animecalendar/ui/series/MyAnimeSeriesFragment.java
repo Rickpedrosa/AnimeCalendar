@@ -1,6 +1,5 @@
 package com.example.animecalendar.ui.series;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,11 +19,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animecalendar.R;
 import com.example.animecalendar.base.EventObserver;
-import com.example.animecalendar.base.SimpleDividerItemDecoration;
 import com.example.animecalendar.base.dialogs.DirectSelectionDialogFragmentMaterial;
 import com.example.animecalendar.data.local.LocalRepository;
 import com.example.animecalendar.databinding.FragmentMyanimesBinding;
@@ -161,7 +161,9 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
                         .actionMyAnimeSeriesFragmentToDetailAnimeFragment(
                                 listAdapter.getItem(position).getId())));
         b.listAnimes.setItemAnimator(new DefaultItemAnimator());
-        b.listAnimes.addItemDecoration(new SimpleDividerItemDecoration(Color.parseColor("#FFA823"), 1));
+        b.listAnimes.addItemDecoration(
+                new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        );
         b.listAnimes.setLayoutManager(manager);
         b.listAnimes.setAdapter(listAdapter);
     }
@@ -181,23 +183,8 @@ public class MyAnimeSeriesFragment extends Fragment implements DirectSelectionDi
         viewModel.getAnimesToExposeByCategory().observe(getViewLifecycleOwner(), animesForSeries -> {
             b.lblNoAnimes.setVisibility(animesForSeries.size() == 0 ? View.VISIBLE : View.INVISIBLE);
             listAdapter.submitList(animesForSeries);
-            b.listAnimes.scrollToPosition(0);
         });
 
-//        viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(), aBoolean -> {
-//            if (!aBoolean.hasBeenHandled()) {
-//                if (aBoolean.getContentIfNotHandled()) {
-//                    Toast.makeText(requireContext(),
-//                            getResources().getString(R.string.series_warning_update),
-//                            Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(requireContext(),
-//                            getResources().getString(R.string.series_warning_update_okay),
-//                            Toast.LENGTH_LONG).show();
-//                    viewModel.retrieveEpisodes(listAdapter.getItem(viewModel.getItemPosition()).getId());
-//                }
-//            }
-//        });
         viewModel.getUpdateTrigger().observe(getViewLifecycleOwner(),
                 new EventObserver<>(this::onCheckAnimeCurrentStatus));
     }

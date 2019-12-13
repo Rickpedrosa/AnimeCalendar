@@ -96,4 +96,5 @@
     <string name="reorder_summary">Enable this option to activate double check to watch an episode with a date higher than today</string>
     <string name="pref_title_notif">Notifications</string>
     <string name="pref_title_eps">Episodes</string>
+    <string name="assignment_error">Days exceeds number of chapters</string>
 </resources>

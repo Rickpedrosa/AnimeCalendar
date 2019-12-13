@@ -109,8 +109,8 @@
         <action
             android:id="@+id/action_charactersFragment_to_detailItemFragment"
             app:destination="@id/detailItemFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/slideupp"
+            app:popExitAnim="@anim/slidedown" />
         <argument
             android:name="animeId"
             app:argType="long" />
@@ -122,8 +122,8 @@
         <action
             android:id="@+id/action_episodesFragment_to_detailItemFragment"
             app:destination="@id/detailItemFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/slideupp"
+            app:popExitAnim="@anim/slidedown" />
         <argument
             android:name="animeId"
             app:argType="long" />

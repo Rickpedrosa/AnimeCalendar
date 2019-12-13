@@ -160,14 +160,14 @@ public class MainActivityViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> progressBarLoading())
                 .subscribe(animeEpisode -> setupEpisodesForInsertion(animeId, animeEpisode, replace),
-                        throwable -> asyncStateInform(throwable.getLocalizedMessage()),
-                        () -> asyncStateInform(application.getResources().getString(R.string.ep_fetching_completed)));
+                        throwable -> asyncStateInform(throwable.getLocalizedMessage()));
     }
 
     private void setupEpisodesForInsertion(long animeId, AnimeEpisode animeEpisode, boolean replace) {
         List<MyAnimeEpisode> listEpisodes = new ArrayList<>();
         MyAnimeEpisode episode;
 
+        Log.d("WTF", String.valueOf(animeEpisode.getData().size()));
         String thumb, title, synopsis, airDate;
         int seasonNumber, number, length;
         for (int i = 0; i < animeEpisode.getData().size(); i++) {
@@ -227,6 +227,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         } else {
             addEpisodesToDatabase(listEpisodes);
         }
+        asyncStateInform(application.getResources().getString(R.string.ep_fetching_completed));
     }
 
     private void addEpisodesToDatabase(List<MyAnimeEpisode> list) {

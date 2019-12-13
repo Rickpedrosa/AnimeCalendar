@@ -23,7 +23,7 @@ public interface AnimeRepository {
 
     //https://kitsu.io/api/edge/anime/21/episodes
 
-    @GET("anime/{id}/episodes?page[offset]=20")
+    @GET("anime/{id}/episodes?page[limit]=20")
     Observable<Response<AnimeEpisode>> getAnimeEpisodes(@Path("id") String id,
                                                         @Query("page[offset]") int offset);
 

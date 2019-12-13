@@ -2,7 +2,6 @@ package com.example.animecalendar.ui.assignment;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +61,10 @@ public class AssignmentFragment extends Fragment {
         setupRecyclerView();
         setupToolbar();
         observeData();
-        // restoreDataFromDeviceRotation();
         pickDateRange();
     }
 
     private void setupInitialLabel(int episodesAmount) {
-//        b.innerInclude.listEpisodesAssign.postDelayed(() -> , 200);
         b.innerInclude.textviewlol.setText(
                 getResources().getString(R.string.assign_resume,
                         episodesAmount));
@@ -81,9 +78,8 @@ public class AssignmentFragment extends Fragment {
                 Toast.makeText(requireContext(), String.valueOf(viewModel.getAssignableDates().size()), Toast.LENGTH_SHORT).show();
                 viewModel.setSchedule(viewModel.assignDateToEpisodes(viewModel.getAssignableDates(), getAllEpisodes()));
                 b.innerInclude.textviewlol.setText(viewModel.getSchedule());
-                //toggleSelectedDays();
             } else {
-                b.innerInclude.textviewlol.setText("El número de días excede el número de capítulos");
+                b.innerInclude.textviewlol.setText(getResources().getString(R.string.assignment_error));
             }
         }));
     }
@@ -166,15 +162,15 @@ public class AssignmentFragment extends Fragment {
         }
     }
 
-    private void restoreDataFromDeviceRotation() {
-        new Handler().postDelayed(() -> b.innerInclude.textviewlol.setText(viewModel.getSchedule() == null ?
-                getResources().getString(R.string.assign_resume, listAdapter.getItemCount()) : viewModel.getSchedule()), 100);
-        if (viewModel.getAssignableDates() != null) {
-            if (viewModel.getAssignableDates().size() > 0) {
-                toggleSelectedDays();
-            }
-        }
-    }
+//    private void restoreDataFromDeviceRotation() {
+//        new Handler().postDelayed(() -> b.innerInclude.textviewlol.setText(viewModel.getSchedule() == null ?
+//                getResources().getString(R.string.assign_resume, listAdapter.getItemCount()) : viewModel.getSchedule()), 100);
+//        if (viewModel.getAssignableDates() != null) {
+//            if (viewModel.getAssignableDates().size() > 0) {
+//                toggleSelectedDays();
+//            }
+//        }
+//    }
 
     private void toggleSelectedDays() {
         b.innerInclude.cosmoCalendar.getSelectionManager().toggleDay(new Day(viewModel.getAssignableDates().get(0)));
