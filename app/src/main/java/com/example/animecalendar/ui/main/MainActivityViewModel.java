@@ -383,12 +383,24 @@ public class MainActivityViewModel extends AndroidViewModel {
         Single<List<AnimeCharacterDetail>> pog =
                 animeRepository.getAnimeCharactersIds(String.valueOf(id))
                         .subscribeOn(Schedulers.io())
-                        .flatMap((Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>)
-                                animeCharacterIDs -> Observable.just(animeCharacterIDs.getData()))
-                        .flatMapIterable(items -> items)
-                        .flatMap(it -> {
-                            informResource(application.getString(R.string.loading_character, it.getId()));
-                            return animeRepository.getAnimeCharacterDetails(it.getId());
+                        .flatMap(new Function<AnimeCharacterIDs, ObservableSource<List<DatumCharacter>>>() {
+                            @Override
+                            public ObservableSource<List<DatumCharacter>> apply(AnimeCharacterIDs animeCharacterIDs) throws Exception {
+                                return Observable.just(animeCharacterIDs.getData());
+                            }
+                        })
+                        .flatMapIterable(new Function<List<DatumCharacter>, Iterable<? extends DatumCharacter>>() {
+                            @Override
+                            public Iterable<? extends DatumCharacter> apply(List<DatumCharacter> items) throws Exception {
+                                return items;
+                            }
+                        })
+                        .flatMap(new Function<DatumCharacter, ObservableSource<? extends AnimeCharacterDetail>>() {
+                            @Override
+                            public ObservableSource<? extends AnimeCharacterDetail> apply(DatumCharacter it) throws Exception {
+                                MainActivityViewModel.this.informResource(application.getString(R.string.loading_character, it.getId()));
+                                return animeRepository.getAnimeCharacterDetails(it.getId());
+                            }
                         })
                         .subscribeOn(Schedulers.io())
                         .onErrorResumeNext(Observable.empty())// DA ERRORES 404 INUTIL ASI QUE HAY QUE PONER ESTO
